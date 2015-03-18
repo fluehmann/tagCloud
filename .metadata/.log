@@ -18,3 +18,15 @@ Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product org.eclipse.
 
 !ENTRY org.eclipse.core.net 1 0 2015-03-18 15:12:53.927
 !MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.egit.core 4 0 2015-03-18 15:22:46.006
+!MESSAGE An exception occurred during push on URI https://github.com/fluehmann/tagCloud.git: Nothing to push.
+!STACK 0
+org.eclipse.jgit.errors.TransportException: Nothing to push.
+	at org.eclipse.jgit.transport.Transport.push(Transport.java:1170)
+	at org.eclipse.egit.core.op.PushOperation.run(PushOperation.java:197)
+	at org.eclipse.egit.ui.internal.push.PushWizard$PushJob.run(PushWizard.java:298)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+
+!ENTRY org.eclipse.egit.ui 4 0 2015-03-18 15:22:46.013
+!MESSAGE Can't connect to any repository: https://github.com/fluehmann/tagCloud.git (Nothing to push.)
