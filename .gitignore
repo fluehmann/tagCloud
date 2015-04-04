@@ -1,12 +1,4 @@
-/bin/
 
-target/
-.idea/*
-*.iml
-.settings/*
-javadocs/*
-.classpath
-.project
 .metadata
 .DS_Store
 .log
