@@ -4,6 +4,8 @@ target
 ##ignore only top level data dir - local node data files for unit tests
 /data
 
+.project
+.classpath
 
 .metadata
 .DS_Store
