@@ -63,6 +63,14 @@ public class App
 								.field("postDate", new Date())
 								.field("message", "how smart is Elasticsearch?")
 								.endObject()).execute().actionGet();
+		
+		IndexResponse response4 = client
+				.prepareIndex("twitter", "tweet", "4")
+				.setSource(
+						jsonBuilder().startObject().field("user", "random magic")
+								.field("postDate", new Date())
+								.field("message", "Motherfucker Jones?")
+								.endObject()).execute().actionGet();
 
      // on shutdown
      //node.close();
