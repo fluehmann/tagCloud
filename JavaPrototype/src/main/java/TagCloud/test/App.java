@@ -64,7 +64,7 @@ public class App
 								.field("message", "how smart is Elasticsearch?")
 								.endObject()).execute().actionGet();
 		
-		IndexResponse response4 = client
+		IndexResponse response5 = client
 				.prepareIndex("twitter", "tweet", "4")
 				.setSource(
 						jsonBuilder().startObject().field("user", "random magic")
