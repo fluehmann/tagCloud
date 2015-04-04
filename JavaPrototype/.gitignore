@@ -5,6 +5,9 @@ target
 /data
 
 /plugins
+/target
+
+.class
 
 .metadata
 .DS_Store
