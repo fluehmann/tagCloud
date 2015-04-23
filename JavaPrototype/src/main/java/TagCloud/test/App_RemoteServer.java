@@ -33,11 +33,11 @@ public class App_RemoteServer
 		//Add transport addresses and do something with the client...
 		
 		IndexResponse response2 = client
-				.prepareIndex("games", "game", "1")
+				.prepareIndex("weapon", "sig226", "1")
 				.setSource(
-						jsonBuilder().startObject().field("title", "battlefield hardline")
+						jsonBuilder().startObject().field("title", "sig sauer")
 								.field("postDate", new Date())
-								.field("message", "GTA, motherfucker!")
+								.field("message", "9mm")
 								.endObject()).execute().actionGet();
     }   
 }
