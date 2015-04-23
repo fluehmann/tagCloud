@@ -5,8 +5,8 @@
 
   </head>
 
-  <form action="crawl.jsp" method="GET">
-    <p>URL:<input type="text" name="urltocrawl">
+  <form action="crawlingServlet" method="GET">
+    RL:<input type="text" name="urltocrawl">
     <input type="submit" value="Submit">
   </form>
     
