@@ -19,8 +19,8 @@ public class GetSearchResult {
 		        .put("cluster.name", "elasticsearch").build();
 		
 		Client client =    new TransportClient(settings)
-		.addTransportAddress(new InetSocketTransportAddress("localhost", 9300))
-		.addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
+		.addTransportAddress(new InetSocketTransportAddress("192.168.56.101", 9300))
+		.addTransportAddress(new InetSocketTransportAddress("192.168.56.101", 9300));
 		//Add transport addresses and do something with the client...
 		
 		//SearchResponse response = client.prepareSearch()
@@ -31,7 +31,7 @@ public class GetSearchResult {
 		//==========================================
 		
 		SearchRequestBuilder srb1 = client
-			    .prepareSearch().setQuery(QueryBuilders.queryString("ubisoft")).setSize(1);
+			    .prepareSearch().setQuery(QueryBuilders.queryString("audi")).setSize(1);
 			//SearchRequestBuilder srb2 = client
 			    //.prepareSearch().setQuery(QueryBuilders.matchQuery("user", "ubi")).setSize(1);
 

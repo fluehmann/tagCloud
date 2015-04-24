@@ -28,16 +28,16 @@ public class App_RemoteServer
 		Settings settings = ImmutableSettings.settingsBuilder()
 		        .put("cluster.name", "elasticsearch").build();
 		Client client =    new TransportClient(settings)
-							.addTransportAddress(new InetSocketTransportAddress("localhost", 9300))
-							.addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
+							.addTransportAddress(new InetSocketTransportAddress("192.168.56.101", 9300))
+							.addTransportAddress(new InetSocketTransportAddress("192.168.56.101", 9300));
 		//Add transport addresses and do something with the client...
 		
 		IndexResponse response2 = client
-				.prepareIndex("weapon", "sig226", "1")
+				.prepareIndex("auto", "audi", "3")
 				.setSource(
-						jsonBuilder().startObject().field("title", "sig sauer")
+						jsonBuilder().startObject().field("title", "audi mustang")
 								.field("postDate", new Date())
-								.field("message", "9mm")
+								.field("message", "brumm... audi")
 								.endObject()).execute().actionGet();
     }   
 }
