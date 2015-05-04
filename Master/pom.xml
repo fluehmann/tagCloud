@@ -4,7 +4,7 @@
 
   <groupId>TagCloud</groupId>
   <artifactId>Main</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
   <packaging>pom</packaging>
 
   <name>Main</name>
@@ -29,8 +29,10 @@
 </dependency>
   </dependencies>
   <modules>
+  	<module>CrawlerService</module>
   	<module>../WebView</module>
-
-    <module>CrawlerService</module>
+  	
+  	<module>CrawlerService</module>
+  	<module>../CrawlerService</module>
   </modules>
 </project>

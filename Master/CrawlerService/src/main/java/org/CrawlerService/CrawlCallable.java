@@ -14,7 +14,7 @@ public class CrawlCallable implements Callable {
 		this.startURL = startURL;
 	}
 
-	public HashMap<String, Document> call() throws Exception {
+	public HashMap<String, Object> call() throws Exception {
 		
 		URL url = new URL(startURL);
 		

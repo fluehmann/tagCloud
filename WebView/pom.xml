@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0   http://maven.apache.org/maven-v4_0_0.xsd">
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>TagCloudWebView</artifactId>
+  <artifactId>WebView</artifactId>
   <packaging>war</packaging>
   
   <name>TagCloud Webapp</name>
@@ -37,6 +37,11 @@
        
   </build>
 
-  <groupId>TagCloud</groupId>
   <version>1.0.0</version>
+  <parent>
+  	<groupId>TagCloud</groupId>
+  	<artifactId>Main</artifactId>
+  	<version>0.0.1</version>
+  	<relativePath>../Master</relativePath>
+  </parent>
 </project>
