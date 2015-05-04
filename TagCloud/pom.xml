@@ -8,6 +8,7 @@
   <modules>
     <module>TagCloud.Crawling</module>
   	<module>TagCloud.WebView</module>
+  	<module>TagCloud.Indexer</module>
   </modules>
   <dependencies>
   	<dependency>
