@@ -44,4 +44,5 @@
   	<version>0.0.1</version>
   	<relativePath>../Master</relativePath>
   </parent>
+  <groupId>TagCloud</groupId>
 </project>

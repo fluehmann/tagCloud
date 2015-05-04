@@ -29,10 +29,7 @@
 </dependency>
   </dependencies>
   <modules>
-  	<module>CrawlerService</module>
   	<module>../WebView</module>
-  	
-  	<module>CrawlerService</module>
-  	<module>../CrawlerService</module>
+   	<module>../CrawlerService</module>
   </modules>
 </project>
