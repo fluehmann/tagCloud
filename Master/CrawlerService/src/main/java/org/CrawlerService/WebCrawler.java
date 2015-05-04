@@ -51,14 +51,16 @@ public class WebCrawler implements Crawler{
 				
 		urlsToVisit.add(startUrl);
 		
-		try {
-			Document doc = Jsoup.connect("http://www.mit.edu/").get();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		System.out.println(doc);
+//		Document doc;
+//		try {
+//			doc = Jsoup.connect("http://example.com/").get();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		String title = doc.title();
+//		
+//		System.out.println(doc);
 
 		
 		
