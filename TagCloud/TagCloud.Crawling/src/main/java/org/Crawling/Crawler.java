@@ -17,6 +17,9 @@ public interface Crawler {
      * @return a list of uris that are reachable from {@code src}
      */
     List<String> crawl(String src);
+    
+    // indexDocument();
+    // interface indexable implementiert alle indexierbaren dokumente
 
 
 }

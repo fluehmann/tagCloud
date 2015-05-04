@@ -8,7 +8,7 @@
   <h1>TagCloud Web</h1>
 <p>
 
-  <form action="crawl.jsp" method="GET">
+  <form action="/crawler/start crawl.jsp" method="GET">
     URL:<input type="text" name="urltocrawl">
     <input type="submit" value="Submit" preview="http://wwww.example.com">
   </form>

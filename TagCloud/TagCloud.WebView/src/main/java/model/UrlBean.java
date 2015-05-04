@@ -5,7 +5,7 @@ package model;
 
 /**
  * @author simonfluhmann
- *
+ * 
  */
 public class UrlBean {
 	

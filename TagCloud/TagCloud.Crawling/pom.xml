@@ -4,13 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>TagCloud</groupId>
-    <artifactId>Project</artifactId>
+    <artifactId>TagCloud</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>TagCloud</groupId>
-  <artifactId>Crawling</artifactId>
+  <artifactId>TagCloud.Crawling</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Crawling</name>
+  <name>TagCloud Crawling</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
