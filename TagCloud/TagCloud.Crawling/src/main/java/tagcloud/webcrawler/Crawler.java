@@ -6,7 +6,7 @@ package tagcloud.webcrawler;
 import java.util.List;
 
 /**
- * Interface for crawler
+ * Interface for crawlers. All crawler types need to implement this interface.
  * @author simonfluhmann
  */
 public interface Crawler {
@@ -18,6 +18,7 @@ public interface Crawler {
      */
     List<String> crawl(String src);
     
+    // see method from indexer
     // indexDocument();
     // interface indexable implementiert alle indexierbaren dokumente
 
