@@ -1,4 +1,4 @@
-package tagcloud.crawling;
+package tagcloud.webcrawler;
 
 import java.io.BufferedInputStream;
 import java.net.URL;

@@ -1,11 +1,13 @@
-package tagcloud.crawling;
+package tagcloud.doccrawler;
 
 import java.io.File;
-
 import java.util.List;
 
 import org.jsoup.nodes.Document;
 
+import tagcloud.webcrawler.Crawler;
+
+// For later implementation of a Document (pdf, office, etc.) crawler 
 public class DocCrawler implements Crawler {
 	
 	// Parse the contents of a file as HTML. The location of the file is used as the base URI to qualify relative URLs.

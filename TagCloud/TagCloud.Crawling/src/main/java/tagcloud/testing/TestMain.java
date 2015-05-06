@@ -1,6 +1,6 @@
 package tagcloud.testing;
 
-import tagcloud.crawling.CrawlCallable;
+import tagcloud.webcrawler.CrawlCallable;
 
 public class TestMain {
 

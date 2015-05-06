@@ -1,7 +1,7 @@
 /**
  * 
  */
-package tagcloud.crawling;
+package tagcloud.webcrawler;
 
 import java.util.List;
 

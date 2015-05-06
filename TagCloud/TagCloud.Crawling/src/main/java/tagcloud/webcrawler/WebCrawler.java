@@ -1,7 +1,7 @@
 /**
  * 
  */
-package tagcloud.crawling;
+package tagcloud.webcrawler;
 
 import java.io.IOException;
 import java.util.ArrayList;
