@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.Crawling;
+package tagcloud.crawling;
 
 import java.util.List;
 
