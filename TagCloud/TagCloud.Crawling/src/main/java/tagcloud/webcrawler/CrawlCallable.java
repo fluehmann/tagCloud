@@ -56,10 +56,11 @@ public class CrawlCallable implements Callable<List<String>> {
 				for (Element link : urls) {
 					String linkString = link.absUrl("href");
 					if (linkString.startsWith("http")) {
-						extractedLinks.add(linkString); }
+						extractedLinks.add(linkString);
+						System.out.println("new Link added to queue: " + linkString);}
 				}
 				
-				new Cleaner(doc,startURL);
+//				new Cleaner(doc,startURL);
 				
 				
 			} finally {

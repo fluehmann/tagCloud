@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import tagcloud.webcrawler.CrawlCallable;
+import tagcloud.webcrawler.WebCrawler;
 import tagcloud.webcrawler.webPage;
 
 public class TestMain {
@@ -34,21 +35,28 @@ public class TestMain {
 //			e.printStackTrace();
 //		}
 		
-		List<String> links = null;
+//		List<String> links = null;
+//		
+//		try {
+//			links = new CrawlCallable(url).call();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		for (String link : links){
+//			System.out.println(link);
+//		}
 		
-		try {
-			links = new CrawlCallable(url).call();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
+		WebCrawler x = new WebCrawler();
+		List<String> result = x.crawl(url);
+		
+		
+		for (String entry : result){
+			System.out.println(entry);
 		}
-		
-		for (String link : links){
-			System.out.println(link);
-		}
-		
-		
-		
+		System.out.println(result.size());
 		
 		
 	}

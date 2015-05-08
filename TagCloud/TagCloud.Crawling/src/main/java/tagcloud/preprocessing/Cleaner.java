@@ -12,12 +12,12 @@ import tagcloud.indexer.IndexAdapter;
 public class Cleaner {
 	
 	public Cleaner(Document doc, String url) throws ElasticsearchException, IOException {
-		System.out.println("doc ready to be cleaned");
-		System.out.println(doc);
+		System.out.println("doc ready to be cleaned" + " " + url);
+//		System.out.println(doc);
 		
 //		Send it to ElasticSearch
-		IndexAdapter x = new Adapter("elasticsearch", "127.0.0.1");
-		x.indexDocument("indexname", "website", url, new HashMap<String, String>());
+//		IndexAdapter x = new Adapter("elasticsearch", "127.0.0.1");
+//		x.indexDocument("indexname", "website", url, new HashMap<String, String>());
 		
 		
 		
