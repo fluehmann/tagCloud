@@ -1,7 +1,9 @@
 package tagcloud.preprocessing;
 
+import java.io.IOException;
 import java.util.HashMap;
 
+import org.elasticsearch.ElasticsearchException;
 import org.jsoup.nodes.Document;
 
 import tagcloud.indexer.Adapter;
@@ -9,7 +11,7 @@ import tagcloud.indexer.IndexAdapter;
 
 public class Cleaner {
 	
-	public Cleaner(Document doc, String url) {
+	public Cleaner(Document doc, String url) throws ElasticsearchException, IOException {
 		System.out.println("doc ready to be cleaned");
 		System.out.println(doc);
 		
