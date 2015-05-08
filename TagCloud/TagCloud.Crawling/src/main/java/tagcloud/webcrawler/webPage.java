@@ -1,5 +1,7 @@
 package tagcloud.webcrawler;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,10 +20,12 @@ public class webPage {
 
 	final private String url;
 	final private Document source;
+	final private LocalDateTime dateCrawled;
 
 	public webPage(String url, Document source) {
 		this.url = url;
 		this.source = source;
+		dateCrawled = LocalDateTime.now();
 		extractLinks();
 	}
 	
