@@ -1,19 +1,18 @@
-package tagcloud.webcrawler;
+package tagcloud.backup;
 
 import java.io.BufferedInputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
-import tagcloud.preprocessing.*;
+import tagcloud.indexer.Adapter;
+import tagcloud.indexer.IndexAdapter;
+import tagcloud.webcrawler.webPage;
 
 /**
  * A task that returns a result and may throw an exception. The Callable returns
@@ -24,25 +23,25 @@ import tagcloud.preprocessing.*;
  * @param <V>
  */
 
-public class CrawlCallable implements Callable<List<String>> {
+public class CrawlCallable_old implements Callable<HashMap<String, webPage>> {
 
 	private final String startURL;
 
-	public CrawlCallable(String startURL) {
+	public CrawlCallable_old(String startURL) {
 		this.startURL = startURL;
 	}
 
 	// nimmt als Parameter eine URL
 	// gibt die URL zurück und die Page als Document
-	public List<String> call() throws Exception {
+	public HashMap<String, webPage> call() throws Exception {
 
 		// Open connection to startURL
 		URL url = new URL(startURL);
 		URLConnection conn = url.openConnection();
 		conn.setRequestProperty("User-Agent", "TagCloudWebCrawler/0.1 Mozilla/5.0");
-		
-		// list to store links
-		List<String> extractedLinks = new LinkedList<String>();
+
+		// Initialize Hashmap to store websites & to check progress in URLs
+		HashMap<String, webPage> entry = new HashMap<String, webPage>();
 
 		// check if content of URL is HTML
 		String contentType = conn.getContentType();
@@ -51,22 +50,29 @@ public class CrawlCallable implements Callable<List<String>> {
 
 			try {
 				pageInputStream = new BufferedInputStream(conn.getInputStream());
+
+				// fetch source from URL into doc
 				Document doc = Jsoup.parse(pageInputStream, null, startURL);
-				Elements urls = doc.select("a[href]");
-				for (Element link : urls) {
-					String linkString = link.absUrl("href");
-					if (linkString.startsWith("http")) {
-						extractedLinks.add(linkString); }
-				}
+
+				// create new webpage Object to put into hashmap
+				webPage pageX = new webPage(startURL, doc);
+				entry.put(startURL, pageX);
 				
-				new Cleaner(doc,startURL);
+//				Send it to ElasticSearch
+//				IndexAdapter x = new Adapter("elasticsearch", "127.0.0.1");
+//				x.indexDocument(contentType, contentType, contentType, null);
 				
+//				System.out.println(doc);
+				
+//				catch (InterruptedException e) {
+//			        e.printStackTrace();
+//			    }
 				
 			} finally {
 				pageInputStream.close();
 			}
 		}
 
-		return extractedLinks;
+		return entry;
 	}
 }

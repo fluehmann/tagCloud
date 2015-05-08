@@ -22,8 +22,8 @@ public class TestMain {
 //		}
 		
 //		try {
-//			Document doc = new CrawlCallable("http://www.emmental.ch/").call().get("http://www.emmental.ch/");
-//			webPage x = new webPage("http://www.emmental.ch/", doc);
+//			Document doc = new CrawlCallable(url).call().get(url);
+//			webPage x = new webPage(url, doc);
 //			List<String> links = x.extractLinks();
 //			
 //			for (String link : links ){
@@ -34,11 +34,17 @@ public class TestMain {
 //			e.printStackTrace();
 //		}
 		
+		List<String> links = null;
+		
 		try {
-			System.out.println(new CrawlCallable(url).call().get(url).extractLinks());
+			links = new CrawlCallable(url).call();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
+		for (String link : links){
+			System.out.println(link);
 		}
 		
 		
