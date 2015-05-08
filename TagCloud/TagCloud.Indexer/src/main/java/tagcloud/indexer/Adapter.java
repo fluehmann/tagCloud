@@ -14,7 +14,7 @@ public class Adapter implements IndexAdapter {
 		idx = new Indexer(clustername, ip);
 	}
 
-	public void indexDocument(String indexName, String type, String id, HashMap<String, String> json) throws ElasticsearchException, IOException, SQLException {
+	public void indexDocument(String indexName, String type, String id, HashMap<String, String> json) throws ElasticsearchException, IOException {
 
 		idx.index(indexName, type, id, json);
 		

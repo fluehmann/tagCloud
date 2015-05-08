@@ -8,5 +8,5 @@ import org.elasticsearch.ElasticsearchException;
 
 public interface IndexAdapter {
 
-	public void indexDocument(String indexName, String type, String id, HashMap<String, String> json) throws ElasticsearchException, IOException, SQLException;
+	public void indexDocument(String indexName, String type, String id, HashMap<String, String> json) throws ElasticsearchException, IOException;
 }

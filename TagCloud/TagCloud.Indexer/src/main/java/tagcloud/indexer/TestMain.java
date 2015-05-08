@@ -8,7 +8,7 @@ import org.elasticsearch.ElasticsearchException;
 
 public class TestMain {
 
-	public static void main(String[] args) throws ElasticsearchException, IOException, SQLException {
+	public static void main(String[] args) throws ElasticsearchException, IOException {
 		// TODO Auto-generated method stub
 		HashMap<String, String> fields = new HashMap<String, String>();
 		fields.put("date", "2015-04-08 14:00:00");
