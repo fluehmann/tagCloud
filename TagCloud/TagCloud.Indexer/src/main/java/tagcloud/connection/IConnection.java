@@ -1,4 +1,4 @@
-package tagcloud.indexer;
+package tagcloud.connection;
 
 import org.elasticsearch.client.Client;
 
