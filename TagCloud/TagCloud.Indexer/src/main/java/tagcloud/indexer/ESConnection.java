@@ -6,7 +6,7 @@ import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 
-public class Connection implements IConnection {
+public class ESConnection implements IConnection {
 
 	private static final int PORT = 9300;
 	

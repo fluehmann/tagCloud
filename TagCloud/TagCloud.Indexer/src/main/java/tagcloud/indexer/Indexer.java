@@ -1,6 +1,10 @@
 package tagcloud.indexer;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.elasticsearch.ElasticsearchException;
@@ -13,13 +17,16 @@ import static org.elasticsearch.common.xcontent.XContentFactory.*;
 public class Indexer {
 
 	Client client;
+	Database db;
 	
 	public Indexer(String clustername, String ip) {
-		client = new Connection().connect(clustername, ip);
 		
+		client = new ESConnection().connect(clustername, ip);
+		db = Database.getDbCon();
 	}
 	
-	public boolean index(String index, String type, String id, HashMap<String, String> fields) throws ElasticsearchException, IOException {
+	public boolean index(String index, String type, String id, HashMap<String, String> fields) throws ElasticsearchException, IOException, SQLException {
+		
 		XContentBuilder builder = jsonBuilder();
 		builder.startObject();
 		for( String key : fields.keySet() ) {
@@ -27,8 +34,50 @@ public class Indexer {
 		}		
 		builder.endObject();
 			    
-		IndexResponse response = client .prepareIndex(index, type, id)
-									.setSource(builder).execute().actionGet();
+		//IndexResponse response = client.prepareIndex(index, type, id).setSource(builder).execute().actionGet();
+		processKeywords(index, id, fields);
 		return true;
+	}
+	
+	private void processKeywords(String hostname, String id, HashMap<String, String> fields) throws SQLException{
+		String statement;
+		PreparedStatement ps = db.conn.prepareStatement ("INSERT INTO tc_index (hostname, urlidx) VALUES(?, ?)");
+		ps.setString(1, hostname);
+		ps.setString(2, id);
+		statement = ps.toString();
+		System.out.println(statement);
+		//db.insert(statement);
+		statement = "INSERT INTO tc_index (hostname, urlidx) VALUES('" + hostname + "', '" + id + "')";
+		db.insert(statement);
+		
+		ResultSet rs = db.query("SELECT id FROM tc_index WHERE hostname = '" + hostname + "'");
+		int fk = 0;
+		if ( rs.next() ){
+			fk = rs.getInt(1);
+			
+			//delete existing tag for reindexing
+			db.insert("DELETE FROM tc_keywords WHERE indexid = " + fk);
+		}
+		
+		
+		String tags[] = getTags(fields);
+		for(String tag : tags) {
+			db.insert("INSERT INTO tc_keywords (indexid, word) VALUES(" + Integer.toString(fk) + ", '" + tag + "')");
+		}
+	}
+	
+	private String[] getTags(HashMap<String, String> fields){
+		//ArrayList<String> tags;
+		String body = null;
+		for( String key : fields.keySet() ) {
+			if ( key == "body" ){
+				body = fields.get(key);
+				break;
+			}
+		}
+		
+		String[] tags = body.split(" ");
+		
+		return tags;		
 	}
 }

@@ -1,6 +1,7 @@
 package tagcloud.indexer;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 import org.elasticsearch.ElasticsearchException;
@@ -13,7 +14,7 @@ public class Adapter implements IndexAdapter {
 		idx = new Indexer(clustername, ip);
 	}
 
-	public void indexDocument(String indexName, String type, String id, HashMap<String, String> json) throws ElasticsearchException, IOException {
+	public void indexDocument(String indexName, String type, String id, HashMap<String, String> json) throws ElasticsearchException, IOException, SQLException {
 
 		idx.index(indexName, type, id, json);
 		
