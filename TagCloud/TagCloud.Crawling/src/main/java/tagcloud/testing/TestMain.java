@@ -14,7 +14,7 @@ public class TestMain {
 	public static void main(String[] args) {
 		
 		
-		final String url = "http://www.fhnw.ch/";
+		final String url = "http://www.20min.ch/";
 	
 //		try {
 //			System.out.println(new CrawlCallable("http://www.fhnw.ch/").call());
@@ -51,13 +51,12 @@ public class TestMain {
 		
 		WebCrawler x = new WebCrawler();
 		List<String> result = x.crawl(url);
-		
+				
 		
 		for (String entry : result){
 			System.out.println(entry);
 		}
-		System.out.println(result.size());
-		
+		System.out.println(".. all these links have been crawled: " + result.size());
 		
 	}
 

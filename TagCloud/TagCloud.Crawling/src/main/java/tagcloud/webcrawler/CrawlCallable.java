@@ -32,6 +32,7 @@ public class CrawlCallable implements Callable<List<String>> {
 		this.startURL = startURL;
 	}
 
+	// one crawling task - executed by a thread
 	// nimmt als Parameter eine URL
 	// gibt die URL zurück und die Page als Document
 	public List<String> call() throws Exception {
@@ -57,10 +58,11 @@ public class CrawlCallable implements Callable<List<String>> {
 					String linkString = link.absUrl("href");
 					if (linkString.startsWith("http")) {
 						extractedLinks.add(linkString);
-						System.out.println("new Link added to queue: " + linkString);}
+//						System.out.println("new Link added to queue: " + linkString);
+						}
 				}
 				
-//				new Cleaner(doc,startURL);
+				new Cleaner(doc,startURL);
 				
 				
 			} finally {
