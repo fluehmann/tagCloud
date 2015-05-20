@@ -67,7 +67,7 @@ public class Retriever {
         SearchResponse sr = null;
         sr = client.prepareSearch(indexName).execute().actionGet();
 
-        System.out.println( sr.getHits().getTotalHits() );
+        System.out.println( "Total hits: " + sr.getHits().getTotalHits() );
 		return sr;
     }
 
