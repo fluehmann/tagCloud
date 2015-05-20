@@ -21,6 +21,13 @@ public class Retriever {
 		client = new ESConnection().connect(clustername, ip);
 	}
 
+	/**
+	 * 
+	 * @param indexName Hostname
+	 * @param indexType specify the index type ("page" or "document")
+	 * @param indexId (oprional) if needed or known, an unique identifier such as URL can be given
+	 * @return response from Elasticseach in json
+	 */
 	public GetResponse retrieve(String indexName, String indexType, @Nullable String indexId) {
 
 		// 1.Param = index; 2.Param = Type; 3.Param = id(optional)
@@ -29,6 +36,12 @@ public class Retriever {
 		return response;
 	}
 
+	/**
+	 * 
+	 * @param indexName Hostname
+	 * @param tag An Keyword which is part of the search term 
+	 * @return Response from Elasticsearch in json
+	 */
 	public SearchResponse retrieve(String indexName, String tag) {
 
 		QueryBuilder multiMatch = QueryBuilders.multiMatchQuery(tag, "body");
@@ -37,7 +50,27 @@ public class Retriever {
 		        .execute().actionGet();
 		
 		return response;
-		
+	}	
+	
+	/**
+	 * Retrieve all indexed document by hostname
+	 * @param indexName Hostname
+	 * @return Response from Elasticseach in json
+	 * @throws Exception
+	 */
+	public SearchResponse retrieveByIndexname(String indexName) throws Exception {
+        //QueryBuilder qb = null;
+        // create the query
+        //qb = QueryBuilders.idsQuery().ids("beer_1", "beer_2");
+
+        // Execute the query
+        SearchResponse sr = null;
+        sr = client.prepareSearch(indexName).execute().actionGet();
+
+        System.out.println( sr.getHits().getTotalHits() );
+		return sr;
+    }
+
 //		SearchResponse response = client.prepareSearch("mongoindex")
 //				.setSearchType(SearchType.QUERY_AND_FETCH)
 //				.setQuery(fieldQuery("body", tag)).setFrom(0).setSize(60)
@@ -50,5 +83,5 @@ public class Retriever {
 //			Map<String, Object> result = hit.getSource(); // the retrieved
 //															// document
 //		}
-	}
+	
 }

@@ -26,6 +26,16 @@ public class Indexer {
 		//db = Database.getDbCon();
 	}
 	
+	/**
+	 * 
+	 * @param index Name of the index which is usually the hostname in our case
+	 * @param type Define which type of source we want to index. We differ between "page" and "document"
+	 * @param id An unique identifier of each indexed source. An URL would be a good choice for web usage
+	 * @param fields A Collection with key and value fields to generate a json file within this method
+	 * @return
+	 * @throws ElasticsearchException
+	 * @throws IOException
+	 */
 	public boolean index(String index, String type, String id, HashMap<String, String> fields) throws ElasticsearchException, IOException {
 		
 		XContentBuilder builder = jsonBuilder();
@@ -68,6 +78,11 @@ public class Indexer {
 //		}
 //	}
 	
+	/**
+	 * 
+	 * @param fields
+	 * @return
+	 */
 	private String[] getTags(HashMap<String, String> fields){
 		//ArrayList<String> tags;
 		String body = null;
