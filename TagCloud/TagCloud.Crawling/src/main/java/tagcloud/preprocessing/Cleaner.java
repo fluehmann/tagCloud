@@ -6,7 +6,7 @@ import java.util.HashMap;
 import org.elasticsearch.ElasticsearchException;
 import org.jsoup.nodes.Document;
 
-import tagcloud.indexer.Adapter;
+import tagcloud.core.Adapter;
 import tagcloud.indexer.IndexAdapter;
 
 public class Cleaner {

@@ -8,9 +8,8 @@
 		<artifactId>TagCloud</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>TagCloud</groupId>
+	
 	<artifactId>TagCloud.Indexer</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>TagCloud Indexer</name>
 	<url>http://maven.apache.org</url>
 	<properties>

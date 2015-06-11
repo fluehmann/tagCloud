@@ -9,6 +9,7 @@
     <module>TagCloud.Crawling</module>
   	<module>TagCloud.WebView</module>
   	<module>TagCloud.Indexer</module>
+  	<module>TagCloud.Server</module>
   </modules>
   <dependencies>
   	<dependency>

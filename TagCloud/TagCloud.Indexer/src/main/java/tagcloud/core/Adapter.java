@@ -1,14 +1,10 @@
 package tagcloud.core;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.HashMap;
 
 import org.elasticsearch.ElasticsearchException;
-import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.common.inject.internal.Nullable;
-
 import tagcloud.indexer.IndexAdapter;
 import tagcloud.indexer.Indexer;
 import tagcloud.retriever.RetrieveAdapter;
