@@ -14,7 +14,8 @@ public class RetrieveController {
 		retriever = new Adapter("elasticsearch", "127.0.0.1");
 	}
 	
-	public ArrayList<String> get(String indexName) throws Exception {
+	public ArrayList<String> get(String hostname) throws Exception {
+		String indexName = hostname.replace("http://", "").replace("/", "");
 		String result = retriever.retrieveByIndexname(indexName).toString();
 
 		// System.out.println(result);

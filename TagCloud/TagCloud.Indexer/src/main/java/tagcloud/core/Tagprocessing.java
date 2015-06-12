@@ -28,7 +28,7 @@ public class Tagprocessing {
 		{
 		    String indexUrl = arr.getJSONObject(i).getString("_id");
 			indecies.add(indexUrl);
-		    String indexTitle = arr.getJSONObject(i).getJSONObject("_source").getString("Title");
+		    //String indexTitle = arr.getJSONObject(i).getJSONObject("_source").getString("Title");
 		    //indecies.add(indexTitle);
 		}
 		
