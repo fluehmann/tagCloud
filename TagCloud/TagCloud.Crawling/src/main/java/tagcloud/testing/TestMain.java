@@ -20,7 +20,7 @@ public class TestMain {
 //		}
 
 		
-		List<String> result = new WebCrawler("TestIndexSF").crawl(url);	
+		List<String> result = new WebCrawler(url).crawl(url);	
 		System.out.println(result);
 		System.out.println("nr of results: " + result.size());
 		
