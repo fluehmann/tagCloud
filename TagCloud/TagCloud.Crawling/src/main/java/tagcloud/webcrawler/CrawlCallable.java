@@ -65,7 +65,8 @@ public class CrawlCallable implements Callable<List<String>> {
 				}
 				
 				// send to DB
-				new Cleaner(x,doc,startURL,hostname);
+//				new Cleaner(x,doc,startURL,hostname);
+				System.out.println("dini MUETER: " + doc);
 				
 				
 			} finally {

@@ -19,7 +19,7 @@ public class Cleaner {
 //		IndexAdapter x = new Adapter("elasticsearch", "127.0.0.1");
 		String indexName = hostname.replace("http://", "").replace("/", "");
 		
-		x.indexDocument(indexName, "website", url, new HashMap<String, String>());
+		x.indexDocument(indexName, "website", url, extractJson(url,doc));
 		
 		
 		
@@ -31,8 +31,14 @@ public class Cleaner {
 		
 	}
 	
-	public void extractJson(){
+	public HashMap<String, String> extractJson(String url, Document doc){
 		
+		// remove html tags and stuff
+		String parsedBody = doc.toString();
+			
+		HashMap<String, String> json = new HashMap<String, String>();
+		json.put(url, parsedBody);
+		return json;
 	}
 
 }
