@@ -9,12 +9,13 @@
 
 	CrawlController ccntl = new CrawlController();
 	ccntl.crawl(hostname);
+	response.sendRedirect("tagcloud.jsp?host="+hostname);
 	
-	RetrieveController rcntrl = new RetrieveController();
-	// testindexsimon
-	ArrayList<String> al = rcntrl.get(hostname);
+// 	RetrieveController rcntrl = new RetrieveController();
+// 	// testindexsimon
+// 	ArrayList<String> al = rcntrl.get(hostname);
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -22,10 +23,10 @@
 </head>
 <body>
 	<%
-		for (String item : al) {
-			out.print(item);
-			out.print("<br />");
-		}
+// 		for (String item : al) {
+// 			out.print(item);
+// 			out.print("<br />");
+// 		}
 	%>
 </body>
 </html>

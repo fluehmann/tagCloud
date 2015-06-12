@@ -38,7 +38,7 @@ public class Indexer {
 	 * @throws IOException
 	 */
 	public boolean index(String index, String type, String id, HashMap<String, String> fields) throws ElasticsearchException, IOException {
-		
+System.out.println("indexName before saving: " + index);
 		// check if indexName already exists
 		if (!checkIfIndexExists(index)){
 			Settings indexSettings = ImmutableSettings.settingsBuilder()
@@ -48,6 +48,7 @@ public class Indexer {
 			//create index if not exists
 			CreateIndexRequest indexRequest = new CreateIndexRequest(index, indexSettings);
 			client.admin().indices().create(indexRequest).actionGet();
+System.out.println("index '" + index + "' created");
 		}
 		
 		XContentBuilder builder = jsonBuilder();
@@ -56,9 +57,9 @@ public class Indexer {
 			builder.field( key, fields.get(key) );
 		}		
 		builder.endObject();
-		//System.out.println(builder.string());   
+System.out.println("JSON: " + builder.string());   
 		IndexResponse response = client.prepareIndex(index, type, id).setSource(builder).execute().actionGet();
-		System.out.println(response.toString());
+System.out.println("Document stored. " + response.toString());
 		//processKeywords(index, id, fields);
 		return true;
 	}

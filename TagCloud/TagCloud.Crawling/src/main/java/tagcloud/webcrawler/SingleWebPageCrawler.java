@@ -11,9 +11,10 @@ public class SingleWebPageCrawler {
 
 	int i = 0;
 	private PageParser parser = new SimplePageParser();
+	private String hostname;
 
-	public SingleWebPageCrawler() {
-
+	public SingleWebPageCrawler(String hostname) {
+		this.hostname = hostname;
 	}
 
 	public void crawl(String startUrl) throws Exception {

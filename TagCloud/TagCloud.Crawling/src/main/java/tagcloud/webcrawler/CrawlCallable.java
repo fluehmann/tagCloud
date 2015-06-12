@@ -24,11 +24,13 @@ import tagcloud.preprocessing.Cleaner;
 public class CrawlCallable implements Callable<List<String>> {
 
 	private final String startURL;
-	private final IndexAdapter x; 
+	private final IndexAdapter x;
+	private final String hostname;
 
-	public CrawlCallable(String startURL, IndexAdapter x) {
+	public CrawlCallable(String hostname, String startURL, IndexAdapter x) {
 		this.startURL = startURL;
 		this.x = x;
+		this.hostname = hostname;
 	}
 
 	// one crawling task - executed by a thread
@@ -63,7 +65,7 @@ public class CrawlCallable implements Callable<List<String>> {
 				}
 				
 				// send to DB
-				new Cleaner(x,doc,startURL);
+				new Cleaner(x,doc,startURL,hostname);
 				
 				
 			} finally {

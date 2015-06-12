@@ -15,6 +15,6 @@ public class CrawlController {
 	}
 	
 	public List<String> crawl(String hostname){
-		return new WebCrawler().crawl(hostname);
+		return new WebCrawler(hostname).crawl(hostname);
 	}
 }
