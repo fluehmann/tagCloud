@@ -3,52 +3,40 @@ package tagcloud.webcrawler;
 import java.io.BufferedInputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.Callable;
+import java.util.Set;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import tagcloud.indexer.IndexAdapter;
 import tagcloud.preprocessing.Cleaner;
 
-/**
- * A task that returns a result and may throw an exception. The Callable returns
- * a Hashmap with the specified URL as the ID and the a doc that containing the
- * source of the webpage.
- */
+public class SimplePageParser implements PageParser {
 
-public class CrawlCallable implements Callable<List<String>> {
+	public SimplePageParser() {
 
-	private final String startURL;
-	private final IndexAdapter x; 
-
-	public CrawlCallable(String startURL, IndexAdapter x) {
-		this.startURL = startURL;
-		this.x = x;
 	}
 
-	// one crawling task - executed by a thread
-	// nimmt als Parameter eine URL
-	// gibt die URL zurück und die Page als Document
-	public List<String> call() throws Exception {
+	public Set<String> parsePageByUrlAndGetLinks(String startURL) throws Exception {
 
 		// Open connection to startURL
 		URL url = new URL(startURL);
 		URLConnection conn = url.openConnection();
-		conn.setRequestProperty("User-Agent", "TagCloudWebCrawler/0.1 Mozilla/5.0");
-		
+		conn.setRequestProperty("User-Agent",
+				"TagCloudWebCrawler/0.1 Mozilla/5.0");
+
 		// list to store links
-		List<String> extractedLinks = new LinkedList<String>();
+		Set<String> extractedLinks = new HashSet<String>();
 
 		// check if content of URL is HTML
 		String contentType = conn.getContentType();
 		if (contentType != null && contentType.startsWith("text/html")) {
-			BufferedInputStream pageInputStream = null;
 
+			BufferedInputStream pageInputStream = null;
 			try {
 				pageInputStream = new BufferedInputStream(conn.getInputStream());
 				Document doc = Jsoup.parse(pageInputStream, null, startURL);
@@ -57,20 +45,22 @@ public class CrawlCallable implements Callable<List<String>> {
 				for (Element link : urls) {
 					String linkString = link.absUrl("href");
 					if (linkString.startsWith("http")) {
+						linkString.toLowerCase();
 						extractedLinks.add(linkString);
-//						System.out.println("new Link added to queue: " + linkString);
-						}
+
+					}
 				}
-				
-				// send to DB
-				new Cleaner(x,doc,startURL);
-				
+
+//				new Cleaner(doc,startURL);
+			} catch (Exception e){
+				e.printStackTrace();
 				
 			} finally {
-				pageInputStream.close();
+//				pageInputStream.close();
 			}
 		}
 
 		return extractedLinks;
 	}
+
 }

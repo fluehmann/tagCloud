@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package tagcloud.webcrawler;
 
 import java.util.ArrayList;
@@ -16,18 +14,24 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import tagcloud.core.Adapter;
+import tagcloud.indexer.IndexAdapter;
 import tagcloud.webcrawler.Crawler;
 
 /**
  * Implementation of a Webcrawler
  * 
- * @author simonfluhmann
- *
  */
 public class WebCrawler implements Crawler {
 
-	private final int POOL_SIZE = 20;
-	private final int MAX_NR_OF_URLS = 50;
+	private final int POOL_SIZE = 100;
+	private final int MAX_NR_OF_URLS = 5000;
+	private final IndexAdapter x;
+	
+	public WebCrawler(){
+		IndexAdapter x = new Adapter("elasticsearch", "127.0.0.1");
+		this.x = x;
+	}
 
 	/**
 	 * Crawls the www starting at {@code startURL}
@@ -38,16 +42,17 @@ public class WebCrawler implements Crawler {
 	 */
 	public List<String> crawl(final String startURL) {
 
-		final ExecutorService taskExecutor = Executors
-				.newFixedThreadPool(POOL_SIZE);
-		final CompletionService<List<String>> taskQueue = new ExecutorCompletionService<List<String>>(
-				taskExecutor);
+		// final ExecutorService taskExecutor = Executors.newFixedThreadPool(POOL_SIZE);
+		final ExecutorService taskExecutor = Executors.newCachedThreadPool();
+		final CompletionService<List<String>> taskQueue = new ExecutorCompletionService<List<String>>(taskExecutor);
+
 
 		/*
-		 * Contains all discovered urls. Needs to be a set A collection that
+		 * Contains all discovered urls. Needs to be a set - a collection that
 		 * contains no duplicate elements.
 		 */
 		final Set<String> urlsCrawled = new HashSet<String>();
+
 
 		/*
 		 * Contains the urls to be visited. A collection designed for holding
@@ -57,38 +62,43 @@ public class WebCrawler implements Crawler {
 		urlsToVisit.add(startURL);
 		System.out.println("urlsToVisit: " + urlsToVisit);
 
+
 		// As long as the URL list with urls to visit contains elements
 		// submit a new thread/task for every url in the list
+		// start all the tasks as new Callables - clear list when tasks were submitted
+
 		// while ((!urlsToVisit.isEmpty()) && urlsFound.size() < POOL_SIZE) {
-		while (!urlsToVisit.isEmpty() && urlsCrawled.size() < MAX_NR_OF_URLS) {
+		// while (urlsCrawled.size() < MAX_NR_OF_URLS) {
+		while (!urlsToVisit.isEmpty()) {
+
+			// TaskQueue füllen mit Arbeit
 			for (String url : urlsToVisit) {
-				taskQueue.submit(new CrawlCallable(url));
+				taskQueue.submit(new CrawlCallable(url,x));
 				urlsCrawled.add(url);
-			}
-			urlsToVisit.clear(); // all tasks started - task queue can be
-									// cleared
+			} urlsToVisit.clear(); 
+
 
 			try {
-				List<String> urlsList = taskQueue.take().get(); // wait for the
-																// first result
+				List<String> urlsList = taskQueue.take().get(); // waits for the first result and removes it
 				// add new url to url queue
 				for (String url : urlsList) {
-					if (url.startsWith(startURL) && !urlsCrawled.contains(url)
-							&& !urlsToVisit.contains(url)) {
+					if (url.startsWith(startURL) && !urlsCrawled.contains(url) && !urlsToVisit.contains(url)) {
 						urlsToVisit.add(url);
-						// System.out.println(url + " was added to queue 1");
+						System.out.println(url + " was added to queue - 1");
 					}
 				}
 
 				Future<List<String>> myFuture;
-				// if (myFuture.isDone()) {
-				while ((myFuture = taskQueue.poll())!= null) { 
+
+				// Already new Results in the future available? 
+				// Blockierend warten?
+				while ((myFuture = taskQueue.poll()) != null) { 
+					System.err.println("--------------------DRINDRINDRIN--------------------");
+
 					for (String url : myFuture.get()) {
-						if (url.startsWith(startURL)
-								&& !urlsCrawled.contains(url)
-								&& !urlsToVisit.contains(url)) {
+						if (url.startsWith(startURL) && !urlsCrawled.contains(url) && !urlsToVisit.contains(url)) {
 							urlsToVisit.add(url);
-							System.out.println(url + " was added to queue 2");
+							System.out.println(url + " was added to queue - 2");
 						}
 					}
 				}
@@ -99,19 +109,21 @@ public class WebCrawler implements Crawler {
 
 		}
 
+
+		// should await termination...
+		taskExecutor.shutdownNow();
+		System.out.println("...Shut down...");
+
 		List<String> result = new ArrayList<String>(urlsCrawled.size());
 
+		int i = 0;
+		System.out.println(i);
 		Iterator<String> it = urlsCrawled.iterator();
-
-		while (it.hasNext()) {
+		while (i < MAX_NR_OF_URLS && it.hasNext()) {
 			result.add(it.next());
-
 		}
-		// taskExecutor.shutdownNow();
-		// if (urlsToVisit.isEmpty()){
-		// taskExecutor.shutdownNow();
-		// System.out.println("...Shut down...");
-		// }
+
+
 
 		return result;
 	}
