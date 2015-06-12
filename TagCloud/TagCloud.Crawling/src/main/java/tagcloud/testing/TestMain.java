@@ -12,17 +12,17 @@ public class TestMain {
 		
 		
 		final String url = "http://www.fhnw.ch/";
-		try {
-			new SingleWebPageCrawler().crawl(url);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			new SingleWebPageCrawler().crawl(url);
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 
 		
-//		List<String> result = new WebCrawler().crawl(url);	
-//		System.out.println(result);
-//		System.out.println("nr of results: " + result.size());
+		List<String> result = new WebCrawler().crawl(url);	
+		System.out.println(result);
+		System.out.println("nr of results: " + result.size());
 		
 //		for (String entry : result){
 //			System.out.println(entry);
