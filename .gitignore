@@ -9,3 +9,6 @@
 .log
 .settings
 .class
+
+.classpath
+.project
