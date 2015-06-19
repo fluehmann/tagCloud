@@ -10,7 +10,7 @@ public class TestMain {
 
 	public static void main(String[] args) throws Exception {
 		
-		final String url = "http://www.fhnw.ch/";
+		final String url = "http://emmental.ch/";
 //		try {
 //			new SingleWebPageCrawler().crawl(url);
 //			

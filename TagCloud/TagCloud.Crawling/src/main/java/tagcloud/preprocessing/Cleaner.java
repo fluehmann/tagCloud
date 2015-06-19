@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.elasticsearch.ElasticsearchException;
+import org.jsoup.Jsoup;
+import org.jsoup.examples.HtmlToPlainText;
 import org.jsoup.nodes.Document;
+import org.jsoup.safety.Whitelist;
 
 import tagcloud.core.Adapter;
 import tagcloud.indexer.IndexAdapter;
@@ -19,12 +22,12 @@ public class Cleaner {
 //		IndexAdapter x = new Adapter("elasticsearch", "127.0.0.1");
 		String indexName = hostname.replace("http://", "").replace("/", "");
 		
+
 		x.indexDocument(indexName, "website", url, extractJson(url,doc));
 		
 		
 		
-		// 1st extract json parts
-		// 2nd get rid of html
+
 	}
 	
 	public void sendToIndex(){
@@ -33,11 +36,17 @@ public class Cleaner {
 	
 	public HashMap<String, String> extractJson(String url, Document doc){
 		
-		// remove html tags and stuff
-		String parsedBody = doc.toString();
-			
+		// chose different Whitelist for more tags & information:
+		// public static Whitelist basic()
+		Whitelist whitelist = Whitelist.simpleText();
+		whitelist.addAttributes("strong", "em", "b", "i");
+		String plain = Jsoup.clean(doc.html(), url, whitelist);
+		
+		
+//		String plain = new HtmlToPlainText().getPlainText(Jsoup.parse(raw));
+		
 		HashMap<String, String> json = new HashMap<String, String>();
-		json.put(url, parsedBody);
+		json.put(url, plain);
 		return json;
 	}
 
