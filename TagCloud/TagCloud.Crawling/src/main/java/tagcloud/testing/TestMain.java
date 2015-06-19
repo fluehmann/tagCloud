@@ -13,7 +13,7 @@ public class TestMain {
 	public static void main(String[] args) throws Exception {
 		
 		final String url = "http://www.fhnw.ch/";
-		IndexAdapter idxAdapter = new Adapter("elasticserach", "127.0.0.1");
+		//IndexAdapter idxAdapter = new Adapter("elasticserach", "127.0.0.1");
 //		try {
 //			new SingleWebPageCrawler().crawl(url);
 //			
@@ -22,7 +22,7 @@ public class TestMain {
 //		}
 
 		
-		List<String> result = new WebCrawler(url, idxAdapter).crawl(url);	
+		List<String> result = new WebCrawler(url).crawl(url);	
 		System.out.println(result);
 		System.out.println("nr of results: " + result.size());
 		

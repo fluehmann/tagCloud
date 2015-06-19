@@ -29,9 +29,9 @@ public class WebCrawler implements Crawler {
 	private final IndexAdapter idxAdapter;
 	private final String hostname;
 	
-	public WebCrawler(String hostname, IndexAdapter adapter){
+	public WebCrawler(String hostname){
 		//IndexAdapter x = new Adapter("elasticsearch", "127.0.0.1");
-		this.idxAdapter = adapter;
+		this.idxAdapter = new Adapter("elasticsearch", "127.0.0.1");
 		this.hostname = hostname;
 	}
 
