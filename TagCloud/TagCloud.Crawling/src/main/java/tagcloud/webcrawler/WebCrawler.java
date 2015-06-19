@@ -26,12 +26,12 @@ public class WebCrawler implements Crawler {
 
 	private final int POOL_SIZE = 100;
 	private final int MAX_NR_OF_URLS = 5000;
-	private final IndexAdapter x;
+	private final IndexAdapter idxAdapter;
 	private final String hostname;
 	
-	public WebCrawler(String hostname){
-		IndexAdapter x = new Adapter("elasticsearch", "127.0.0.1");
-		this.x = x;
+	public WebCrawler(String hostname, IndexAdapter adapter){
+		//IndexAdapter x = new Adapter("elasticsearch", "127.0.0.1");
+		this.idxAdapter = adapter;
 		this.hostname = hostname;
 	}
 
@@ -75,7 +75,7 @@ public class WebCrawler implements Crawler {
 
 			// TaskQueue füllen mit Arbeit
 			for (String url : urlsToVisit) {
-				taskQueue.submit(new CrawlCallable(hostname, url, x));
+				taskQueue.submit(new CrawlCallable(hostname, url, idxAdapter));
 				urlsCrawled.add(url);
 			} urlsToVisit.clear(); 
 

@@ -11,7 +11,7 @@ import tagcloud.indexer.IndexAdapter;
 
 public class Cleaner {
 	
-	public Cleaner(IndexAdapter x, Document doc, String url, String hostname) throws ElasticsearchException, IOException {
+	public Cleaner(IndexAdapter idxAdapter, Document doc, String url, String hostname) throws ElasticsearchException, IOException {
 //		System.out.println(url + ".. is indexed!");
 //		System.out.println(doc);
 		
@@ -19,7 +19,7 @@ public class Cleaner {
 //		IndexAdapter x = new Adapter("elasticsearch", "127.0.0.1");
 		String indexName = hostname.replace("http://", "").replace("/", "");
 		
-		x.indexDocument(indexName, "website", url, extractJson(url,doc));
+		idxAdapter.indexDocument(indexName, "website", url, extractJson(url, doc));
 		
 		
 		

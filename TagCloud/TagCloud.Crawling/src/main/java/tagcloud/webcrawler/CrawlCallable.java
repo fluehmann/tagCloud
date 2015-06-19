@@ -24,12 +24,12 @@ import tagcloud.preprocessing.Cleaner;
 public class CrawlCallable implements Callable<List<String>> {
 
 	private final String startURL;
-	private final IndexAdapter x;
+	private final IndexAdapter idxAdapter;
 	private final String hostname;
 
-	public CrawlCallable(String hostname, String startURL, IndexAdapter x) {
+	public CrawlCallable(String hostname, String startURL, IndexAdapter adapter) {
 		this.startURL = startURL;
-		this.x = x;
+		this.idxAdapter = adapter;
 		this.hostname = hostname;
 	}
 
@@ -65,8 +65,7 @@ public class CrawlCallable implements Callable<List<String>> {
 				}
 				
 				// send to DB
-//				new Cleaner(x,doc,startURL,hostname);
-//				System.out.println("dini MUETER: " + doc);
+				new Cleaner(idxAdapter, doc, startURL, hostname);
 				
 				
 			} finally {

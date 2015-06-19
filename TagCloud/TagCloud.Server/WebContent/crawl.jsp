@@ -1,14 +1,14 @@
-<%@ page import="tagcloud.server.controller.RetrieveController"%>
-<%@ page import="tagcloud.server.controller.CrawlController"%>
+<%@ page import="tagcloud.server.controller.*" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ page import="java.util.List,java.util.ArrayList,java.util.Iterator"%>
+<%@ page import="java.util.List,java.util.ArrayList,java.util.Iterator" %>
 
 <%
 	String hostname = request.getParameter("crawl_hostname");
+	hostname = "http://www.20min.ch";
 
-	CrawlController ccntl = new CrawlController();
-	ccntl.crawl(hostname);
+	CrawlController crawlctrl = new CrawlController();
+	crawlctrl.crawl(hostname);
 	response.sendRedirect("tagcloud.jsp?host="+hostname);
 	
 // 	RetrieveController rcntrl = new RetrieveController();
