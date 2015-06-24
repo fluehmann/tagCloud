@@ -5,11 +5,9 @@ import java.util.HashMap;
 
 import org.elasticsearch.ElasticsearchException;
 import org.jsoup.Jsoup;
-import org.jsoup.examples.HtmlToPlainText;
 import org.jsoup.nodes.Document;
 import org.jsoup.safety.Whitelist;
 
-import tagcloud.core.Adapter;
 import tagcloud.indexer.IndexAdapter;
 
 public class Cleaner {
@@ -46,7 +44,9 @@ public class Cleaner {
 //		String plain = new HtmlToPlainText().getPlainText(Jsoup.parse(raw));
 		
 		HashMap<String, String> json = new HashMap<String, String>();
-		json.put(url, plain);
+		//json.put(url, plain);
+		json.put("url", url);
+		json.put("content", plain);
 		return json;
 	}
 

@@ -1,7 +1,6 @@
 package tagcloud.webcrawler;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 

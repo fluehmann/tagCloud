@@ -14,14 +14,6 @@
 .project
 TagCloud/TagCloud.Indexer/.classpath
 
-TagCloud/TagCloud.Indexer/.classpath
+TagCloud/TagCloud.Crawler/.classpath
 
 TagCloud/TagCloud.Server/.classpath
-
-*.class
-
-*.class
-
-*.class
-
-*.class

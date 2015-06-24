@@ -1,9 +1,7 @@
 package tagcloud.testing;
 
-import java.util.HashSet;
 import java.util.List;
 
-import tagcloud.webcrawler.SingleWebPageCrawler;
 import tagcloud.webcrawler.WebCrawler;
 
 public class TestMain {

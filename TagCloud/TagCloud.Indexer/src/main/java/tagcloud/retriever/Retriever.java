@@ -1,5 +1,7 @@
 package tagcloud.retriever;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.elasticsearch.action.get.GetResponse;
@@ -65,11 +67,36 @@ public class Retriever {
 
         // Execute the query
         SearchResponse sr = null;
-        sr = client.prepareSearch(indexName).execute().actionGet();
+        sr = client.prepareSearch(indexName)
+        		.setQuery(QueryBuilders.matchAllQuery())
+                .setSize(100)
+                .execute()
+                .actionGet();
 
         System.out.println( "Total hits: " + sr.getHits().getTotalHits() );
 		return sr;
     }
+	
+	public List<Map<String, Object>> getAllDocs(String indexName, String indexType){
+        int scrollSize = 500;
+        List<Map<String,Object>> esData = new ArrayList<Map<String,Object>>();
+        SearchResponse response = null;
+        int i = 0;
+        while( response == null || response.getHits().hits().length != 0){
+            response = client.prepareSearch(indexName)
+                    .setTypes(indexType)
+                       .setQuery(QueryBuilders.matchAllQuery())
+                       .setSize(scrollSize)
+                       .setFrom(i * scrollSize)
+                    .execute()
+                    .actionGet();
+            for(SearchHit hit : response.getHits()){
+                esData.add(hit.getSource());
+            }
+            i++;
+        }
+        return esData;
+	}
 
 //		SearchResponse response = client.prepareSearch("mongoindex")
 //				.setSearchType(SearchType.QUERY_AND_FETCH)

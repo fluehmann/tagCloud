@@ -42,7 +42,7 @@
 
 		<dependency>
 			<groupId>TagCloud</groupId>
-			<artifactId>TagCloud.Crawling</artifactId>
+			<artifactId>TagCloud.Crawler</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
