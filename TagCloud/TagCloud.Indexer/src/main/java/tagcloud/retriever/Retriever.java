@@ -69,7 +69,7 @@ public class Retriever {
         SearchResponse sr = null;
         sr = client.prepareSearch(indexName)
         		.setQuery(QueryBuilders.matchAllQuery())
-                .setSize(100)
+                .setSize(50)
                 .execute()
                 .actionGet();
 

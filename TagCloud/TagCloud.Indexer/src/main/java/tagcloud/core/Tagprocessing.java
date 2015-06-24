@@ -1,19 +1,19 @@
 package tagcloud.core;
 
 import java.util.ArrayList;
-
+import java.util.Hashtable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Tagprocessing {
 
-	ArrayList<String> indecies;
+	ArrayList<Hashtable<String, String>> indecies;
 	
 	public Tagprocessing() {
-		indecies = new ArrayList<String>();
+		indecies = new ArrayList<Hashtable<String, String>>();
 	}
 	
-	public ArrayList<String> getKeywords(String jsonResult) {
+	public ArrayList<Hashtable<String, String>> getKeywords(String jsonResult) {
 		
 		// loop through hits and get the body of each found indecies
 		
@@ -27,7 +27,15 @@ public class Tagprocessing {
 		for (int i = 0; i < arr.length(); i++)
 		{
 		    String indexUrl = arr.getJSONObject(i).getString("_id");
-			indecies.add(indexUrl);
+		    // get nested json object
+		    String content = arr.getJSONObject(i).getJSONObject("_source").getString("content");
+		    Hashtable<String, String> dictionary = new Hashtable<String, String>(); 
+		    
+		    dictionary.put("url", indexUrl);
+		    dictionary.put("keyword", "sdsdsd");
+		    dictionary.put("content", content);
+			
+		    indecies.add(dictionary);
 		    //String indexTitle = arr.getJSONObject(i).getJSONObject("_source").getString("Title");
 		    //indecies.add(indexTitle);
 		}
