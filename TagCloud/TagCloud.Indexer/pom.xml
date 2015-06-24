@@ -8,7 +8,7 @@
 		<artifactId>TagCloud</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	
+
 	<artifactId>TagCloud.Indexer</artifactId>
 	<name>TagCloud Indexer</name>
 	<url>http://maven.apache.org</url>
@@ -31,13 +31,6 @@
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20141113</version>
-		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.17</version>
-			<type>jar</type>
-			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 </project>
