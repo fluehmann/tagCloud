@@ -1,7 +1,6 @@
 <%@ page import="tagcloud.server.controller.RetrieveController"%>
 <%@ page import="tagcloud.server.controller.CrawlController"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.List,java.util.ArrayList,java.util.Iterator"%>
 
 <%
@@ -10,10 +9,6 @@
 	CrawlController ccntl = new CrawlController();
 	ccntl.crawl(hostname);
 	response.sendRedirect("tagcloud.jsp?host="+hostname);
-	
-// 	RetrieveController rcntrl = new RetrieveController();
-// 	// testindexsimon
-// 	ArrayList<String> al = rcntrl.get(hostname);
 %>
 <!DOCTYPE html>
 <html>
@@ -22,11 +17,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<%
-// 		for (String item : al) {
-// 			out.print(item);
-// 			out.print("<br />");
-// 		}
-	%>
+
 </body>
 </html>

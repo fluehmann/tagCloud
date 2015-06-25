@@ -5,6 +5,11 @@
  * Copyright 2014 Damien "Mistic" Sorel (http://www.strangeplanet.fr)
  * Licensed under MIT (http://opensource.org/licenses/MIT)
  */
+ 
+ #cloudtest {
+  width: 80%;
+ }
+ 
 /* layout */
 div.jqcloud {
   overflow: hidden;

@@ -17,7 +17,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css" />
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jqcloud.min.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jqcloud.css">
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jqcloud.min.js"></script>
@@ -46,10 +46,8 @@ var words = [
 		{text: "Adipiscing", weight: 5},
 		<%
 		for (Hashtable<String, String> item : al) {
-			out.println("{text: '" + item.get("keyword") + "', weight: " + 10 + ", link: '" + item.get("url") + "'},");
+			out.println("{text: '" + item.get("keyword") + "', weight: " + 6 + ", link: '" + item.get("url") + "'},");
 //			out.print("{text: " + item.get("keyword") + ", weight: " + 10 + ", link: '" + item.get("url") + "'},");
-			//out.print("<a href='" + item.get("url") + "' rel='7'>" + item.get("keyword") + "</a>");
-			//out.print("<br />");
 		}
 		%>
 ];
