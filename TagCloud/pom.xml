@@ -7,7 +7,6 @@
   <description>Parent Project of TagCloud</description>
   <modules>
     <module>TagCloud.Crawler</module>
-  	<module>TagCloud.WebView</module>
   	<module>TagCloud.Indexer</module>
   	<module>TagCloud.Server</module>
   </modules>
