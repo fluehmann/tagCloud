@@ -36,7 +36,8 @@ public class Cleaner {
 		
 		// chose different Whitelist for more tags & information:
 		// public static Whitelist basic()
-		Whitelist whitelist = Whitelist.simpleText();
+//		Whitelist whitelist = Whitelist.simpleText();
+		Whitelist whitelist = Whitelist.none();
 		whitelist.addAttributes("strong", "em", "b", "i");
 		String plain = Jsoup.clean(doc.html(), url, whitelist);
 		
