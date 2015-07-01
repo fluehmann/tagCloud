@@ -6,14 +6,11 @@ import java.util.Map;
 
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.Nullable;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.search.MultiMatchQuery;
 import org.elasticsearch.search.SearchHit;
-
 import tagcloud.connection.ESConnection;
 
 public class Retriever {
@@ -61,9 +58,6 @@ public class Retriever {
 	 * @throws Exception
 	 */
 	public SearchResponse retrieveByIndexname(String indexName) throws Exception {
-        //QueryBuilder qb = null;
-        // create the query
-        //qb = QueryBuilders.idsQuery().ids("beer_1", "beer_2");
 
         // Execute the query
         SearchResponse sr = null;
@@ -75,7 +69,7 @@ public class Retriever {
 
         System.out.println( "Total hits: " + sr.getHits().getTotalHits() );
 		return sr;
-    }
+    }	
 	
 	public List<Map<String, Object>> getAllDocs(String indexName, String indexType){
         int scrollSize = 500;
@@ -97,18 +91,5 @@ public class Retriever {
         }
         return esData;
 	}
-
-//		SearchResponse response = client.prepareSearch("mongoindex")
-//				.setSearchType(SearchType.QUERY_AND_FETCH)
-//				.setQuery(fieldQuery("body", tag)).setFrom(0).setSize(60)
-//				.setExplain(true).execute().actionGet();
-//		SearchHit[] results = response.getHits().getHits();
-//
-//		for (SearchHit hit : results) {
-//			System.out.println(hit.getId()); // prints out the id of the
-//												// document
-//			Map<String, Object> result = hit.getSource(); // the retrieved
-//															// document
-//		}
 	
 }

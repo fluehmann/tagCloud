@@ -39,4 +39,10 @@ public class Adapter implements IndexAdapter, RetrieveAdapter{
 		
 		return retrv.retrieveByIndexname(indexName);
 	}
+
+	public SearchResponse retrieveSignificantTerms(String indexName) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

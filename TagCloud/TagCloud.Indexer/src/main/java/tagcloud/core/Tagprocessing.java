@@ -13,15 +13,12 @@ public class Tagprocessing {
 		indecies = new ArrayList<Hashtable<String, String>>();
 	}
 	
-	public ArrayList<Hashtable<String, String>> getKeywords(String jsonResult) {
+	public ArrayList<Hashtable<String, String>> getUrls(String jsonResult) {
 		
 		// loop through hits and get the body of each found indecies
 		
-		// todo TF/IDF compare with germanKorpus
-		
 		JSONObject obj = new JSONObject(jsonResult);
 		JSONArray pageName = obj.getJSONObject("hits").getJSONArray("hits");
-//System.out.println(pageName);
 
 		JSONArray arr = obj.getJSONObject("hits").getJSONArray("hits");
 		for (int i = 0; i < arr.length(); i++)
@@ -36,12 +33,14 @@ public class Tagprocessing {
 		    dictionary.put("content", content);
 			
 		    indecies.add(dictionary);
-		    //String indexTitle = arr.getJSONObject(i).getJSONObject("_source").getString("Title");
-		    //indecies.add(indexTitle);
 		}
+//System.out.println(indecies);
+		return indecies;
+	}
+	
+	public ArrayList<Hashtable<String, String>> getKeywords(String jsonResult) {
 		
 		return indecies;
-		
 	}
 	
 	

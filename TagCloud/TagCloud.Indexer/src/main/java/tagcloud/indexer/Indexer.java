@@ -42,8 +42,8 @@ System.out.println("indexName before saving: " + index);
 		// check if indexName already exists
 		if (!checkIfIndexExists(index)){
 			Settings indexSettings = ImmutableSettings.settingsBuilder()
-					.put("number_of_shard", 1)
-					.put("number_of_replicas", 1)
+					.put("number_of_shard", 10)
+					.put("number_of_replicas", 5)
 					.build();
 			//create index if not exists
 			CreateIndexRequest indexRequest = new CreateIndexRequest(index, indexSettings);

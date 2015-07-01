@@ -29,10 +29,10 @@
 		<% out.print("Gefundene URLs zu " + hostname); %>
 	</h1>
 
-<div id="cloudtest">
-</div>
+	<div id="cloudtest">
+	</div>
 	<div id="cloud">
-	
+		<% //out.print( rcntrl.test(hostname) ); %>
 	</div>
 </body>
 <script>
