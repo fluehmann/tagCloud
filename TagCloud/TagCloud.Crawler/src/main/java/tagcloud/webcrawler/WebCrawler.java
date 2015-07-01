@@ -21,10 +21,11 @@ import tagcloud.webcrawler.Crawler;
  * Implementation of a Webcrawler
  * 
  */
-public class WebCrawler implements Crawler {
+//public class WebCrawler implements Crawler {
+	public class WebCrawler {
 
 //	private final int POOL_SIZE = 100;
-	private final int POOL_SIZE = Runtime.getRuntime().availableProcessors()*200;
+	private final int POOL_SIZE = Runtime.getRuntime().availableProcessors()*10;
 	private final int MAX_NR_OF_URLS = 1000;
 	private final IndexAdapter x;
 	private final String hostname;
@@ -40,9 +41,10 @@ public class WebCrawler implements Crawler {
 	 * 
 	 * @param startURL
 	 *            the URI to start crawling any resource
+	 * @return 
 	 * @return a hashmap with URLs as Key and webPage Objects as values
 	 */
-	public List<String> crawl(final String startURL) {
+	public void crawl(final String startURL) {
 
 		 final ExecutorService taskExecutor = Executors.newFixedThreadPool(POOL_SIZE);
 //		 final ExecutorService taskExecutor = new ScheduledThreadPoolExecutor(300);
@@ -76,7 +78,7 @@ public class WebCrawler implements Crawler {
 //		while (!urlsToVisit.isEmpty() && urlsCrawled.size() < MAX_NR_OF_URLS) {
 //		while (urlsCrawled.size() < MAX_NR_OF_URLS) {
 
-		while (urlsCrawled.size() < MAX_NR_OF_URLS && !urlsToVisit.isEmpty()) {
+		while (urlsCrawled.size() < MAX_NR_OF_URLS || !urlsToVisit.isEmpty()) {
 			
 			// TaskQueue füllen mit Arbeit
 			for (String url : urlsToVisit) {
@@ -88,6 +90,7 @@ public class WebCrawler implements Crawler {
 			try {
 				urlsToVisit.clear(); 
 				List<String> urlsList = taskQueue.take().get(); // waits for the first result and removes it
+				if (urlsList != null){
 				// add new url to url queue
 				for (String url : urlsList) {
 //					if (url.startsWith(startURL) && !urlsCrawled.contains(url) && !urlsToVisit.contains(url)) {
@@ -112,9 +115,16 @@ public class WebCrawler implements Crawler {
 						}
 					}
 				}
+				} else {
+					
+					// if null
+					System.out.println("was null");
+				}
 
+			} catch (NullPointerException e) {
+//				 e.printStackTrace();
 			} catch (Exception e) {
-				// e.printStackTrace();
+				e.printStackTrace();
 			}
 
 		}
@@ -127,24 +137,33 @@ public class WebCrawler implements Crawler {
 		
 		taskExecutor.shutdown();
 		try {
-		  taskExecutor.awaitTermination(30, TimeUnit.SECONDS);
-		  System.out.println("await termination");
+			System.out.println("Termination started");
+		  taskExecutor.awaitTermination(10, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 		  System.out.println("Thread was interrupted - termination");
 		}
+		ThreadGroup currentGroup = 
+				Thread.currentThread().getThreadGroup();
+		int noThreads = currentGroup.activeCount();
+		Thread[] lstThreads = new Thread[noThreads];
+		currentGroup.enumerate(lstThreads);
+		for (int i = 0; i < noThreads; i++)
+			System.out.println("Thread No:" + i + " = "
+					+ lstThreads[i].getName());
+		System.out.println("Threads are shutting down");
 		
 
-		List<String> result = new ArrayList<String>(urlsCrawled.size());
+//		List<String> result = new ArrayList<String>(urlsCrawled.size());
+//
+//		int i = 0;
+//		System.out.println(i);
+//		Iterator<String> it = urlsCrawled.iterator();
+//		while (it.hasNext()) {
+//			result.add(it.next());
+//		}
 
-		int i = 0;
-		System.out.println(i);
-		Iterator<String> it = urlsCrawled.iterator();
-		while (i < MAX_NR_OF_URLS && it.hasNext()) {
-			result.add(it.next());
-		}
 
-
-		System.out.println(result);
-		return result;
+//		System.out.println(result);
+//		return result;
 	}
 }

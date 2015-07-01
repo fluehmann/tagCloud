@@ -14,7 +14,8 @@ public class CrawlController {
 		adapter = new Adapter("elasticsearch", "127.0.0.1");
 	}
 	
-	public List<String> crawl(String hostname){
-		return new WebCrawler(hostname).crawl(hostname);
+	public void crawl(String hostname){
+//		return new WebCrawler(hostname).crawl(hostname);
+		new WebCrawler(hostname).crawl(hostname);
 	}
 }

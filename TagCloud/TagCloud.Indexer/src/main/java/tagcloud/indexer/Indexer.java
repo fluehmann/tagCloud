@@ -38,7 +38,7 @@ public class Indexer {
 	 * @throws IOException
 	 */
 	public boolean index(String index, String type, String id, HashMap<String, String> fields) throws ElasticsearchException, IOException {
-System.out.println("indexName before saving: " + index);
+//System.out.println("indexName before saving: " + index);
 		// check if indexName already exists
 		if (!checkIfIndexExists(index)){
 			Settings indexSettings = ImmutableSettings.settingsBuilder()
@@ -57,9 +57,10 @@ System.out.println("index '" + index + "' created");
 			builder.field( key, fields.get(key) );
 		}		
 		builder.endObject();
-System.out.println("JSON: " + builder.string());   
+//System.out.println("JSON: " + builder.string());   
 		IndexResponse response = client.prepareIndex(index, type, id).setSource(builder).execute().actionGet();
-System.out.println("Document stored. " + response.toString());
+//System.out.println("Document stored. " + response.toString());
+System.out.println("Stored: " + id);
 		//processKeywords(index, id, fields);
 		return true;
 	}
