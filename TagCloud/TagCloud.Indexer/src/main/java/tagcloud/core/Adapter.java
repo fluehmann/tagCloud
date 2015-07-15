@@ -1,10 +1,12 @@
 package tagcloud.core;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.search.SearchResponse;
+
 import tagcloud.indexer.IndexAdapter;
 import tagcloud.indexer.Indexer;
 import tagcloud.retriever.RetrieveAdapter;
@@ -14,7 +16,7 @@ public class Adapter implements IndexAdapter, RetrieveAdapter{
 
 	private Indexer idx;
 	private Retriever retrv;
-	
+
 	/**
 	 * Establish connection to Elasticsearch node
 	 * @param clustername Name of Elasticsearch cluster. Default name is "elasticsearch"
@@ -25,18 +27,22 @@ public class Adapter implements IndexAdapter, RetrieveAdapter{
 		retrv = new Retriever(clustername, ip);
 	}
 
-	public void indexDocument(String indexName, String type, String id, HashMap<String, String> json) throws ElasticsearchException, IOException {
+	public void indexDocument(String indexName, String type, String id, HashMap<String, String> json)
+			throws ElasticsearchException, IOException {
 
-		idx.index(indexName, type, id, json);
+		Boolean status = idx.index(indexName, type, id, json);
+		if (status){
+			System.out.println("Document stored: " + id);
+		}
 	}
-	
+
 	public SearchResponse retriveDocument(String indexName, String tag) {
-		
+
 		return retrv.retrieve(indexName, tag);
 	}
 
 	public SearchResponse retrieveByIndexname(String indexName) throws Exception {
-		
+
 		return retrv.retrieveByIndexname(indexName);
 	}
 

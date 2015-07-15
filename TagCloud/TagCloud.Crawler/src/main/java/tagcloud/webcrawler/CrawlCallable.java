@@ -65,6 +65,7 @@ public class CrawlCallable implements Callable<List<String>> {
 			try {
 				pageInputStream = new BufferedInputStream(conn.getInputStream());
 				Document doc = Jsoup.parse(pageInputStream, null, startURL);
+				
 				// remove useless parts of website
 				doc.select("head, script, style, link, .hidden").remove();
 
@@ -82,7 +83,8 @@ public class CrawlCallable implements Callable<List<String>> {
 
 
 			} catch (Exception e){
-				System.err.println("Error ocurred" + e.getMessage());
+				System.err.println("Error ocurred while crawling: " + e.getMessage());
+				extractedLinks = null;
 
 
 			} finally {
