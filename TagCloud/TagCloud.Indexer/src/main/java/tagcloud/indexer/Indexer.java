@@ -42,7 +42,7 @@ public class Indexer {
 		if (!checkIfIndexExists(index)){
 			Settings indexSettings = ImmutableSettings.settingsBuilder()
 					.put("number_of_shards", 5)
-					.put("number_of_replicas", 0)
+					.put("number_of_replicas", 1)
 					.build();
 			//create index if not exists
 			CreateIndexRequest indexRequest = new CreateIndexRequest(index, indexSettings);
@@ -54,7 +54,7 @@ public class Indexer {
 		builder.startObject();
 		for( String key : fields.keySet() ) {
 			builder.field( key, fields.get(key) );
-		}		
+		}
 		builder.endObject();
    
 		IndexResponse response = client.prepareIndex(index, type, id).setSource(builder).execute().actionGet();
