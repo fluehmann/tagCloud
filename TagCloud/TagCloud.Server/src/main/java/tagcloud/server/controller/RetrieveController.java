@@ -31,7 +31,7 @@ public class RetrieveController {
 		String result = retriever.retrieveByIndexname(indexName).toString();
 		
 		// parse json to ArrayList with key-value entries
-		return new Tagprocessing().getUrls(result.toString());
+		return new Tagprocessing().getTags(result.toString());
 	}
 	
 	/**
@@ -56,21 +56,22 @@ public class RetrieveController {
 	 * @param hostname same as index name
 	 * @throws Exception
 	 */
-	public void getSigTerms(String hostname) throws Exception {
+	public ArrayList<Hashtable<String, String>> getSigTerms(String hostname) throws Exception {
 		
 		String indexName = hostname.replace("http://", "").replace("/", "");
 		
-		SearchResponse sr = retriever.retrieveSignificantTerms(indexName);
-System.out.println("SignificantTerms: " + sr.toString());
-		// sr is here your SearchResponse object
-		SignificantTerms agg = sr.getAggregations().get("significantTerms");
+		SearchResponse result = retriever.retrieveSignificantTerms(indexName);
+System.out.println("SignificantTerms: " + result.toString());
 
+		// sr is here your SearchResponse object
+		SignificantTerms agg = result.getAggregations().get("significant_keywords");
+		
 		// For each entry
 		for (SignificantTerms.Bucket entry : agg.getBuckets()) {
 		    entry.getKey();      // Term
 		    entry.getDocCount(); // Doc count
-		    
-		    System.out.println(entry.getKey());
+		    System.out.println( entry.getKey() + "  " + entry.getDocCount() );
 		}
+		return new Tagprocessing().getSignificantTags(result.toString());
 	}
 }

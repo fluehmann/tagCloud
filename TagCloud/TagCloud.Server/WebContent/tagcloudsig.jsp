@@ -10,7 +10,8 @@
 	String hostname = request.getParameter("host");
 
 	RetrieveController rcntrl = new RetrieveController();
-	ArrayList<Hashtable<String, String>> al = rcntrl.get(hostname);
+	ArrayList<Hashtable<String, String>> al = rcntrl.getSigTerms(hostname);
+	//rcntrl.getSigTerms(hostname);
 %>
 <!DOCTYPE html>
 <html>

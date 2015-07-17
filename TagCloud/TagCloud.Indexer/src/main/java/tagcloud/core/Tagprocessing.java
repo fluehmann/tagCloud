@@ -20,7 +20,7 @@ public class Tagprocessing {
 	 * @param jsonResult
 	 * @return
 	 */
-	public ArrayList<Hashtable<String, String>> getUrls(String jsonResult) {
+	public ArrayList<Hashtable<String, String>> getTags(String jsonResult) {
 		
 		// loop through hits and get the body of each found indecies
 		
@@ -46,4 +46,26 @@ public class Tagprocessing {
 		return tags;
 	}
 	
+	public ArrayList<Hashtable<String, String>> getSignificantTags(String jsonResult) {
+		
+		JSONObject obj = new JSONObject(jsonResult);
+		JSONArray arr = obj.getJSONObject("aggregations").getJSONObject("significant_keywords").getJSONArray("buckets");
+		
+		for (int i = 0; i < arr.length(); i++)
+		{
+			String keyword = arr.getJSONObject(i).getString("key");
+			//String docCount = arr.getJSONObject(i).getString("doc_count").toString();
+		    Hashtable<String, String> dictionary = new Hashtable<String, String>(); 
+		    
+		    // values from json
+		    dictionary.put("keyword", keyword);
+		    //dictionary.put("doc_count", docCount);
+		    
+		    // values which are not stored in the documents on elasticsearch
+		    //dictionary.put("keyword", "sdsdsd");
+			
+		    tags.add(dictionary);
+		}
+		return tags;
+	}
 }
