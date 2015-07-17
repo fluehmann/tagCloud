@@ -12,10 +12,9 @@ public class TestMain {
 
 	public static void main(String[] args) throws Exception {
 		
-		final String url = "http://emmental.ch/";
+//		final String url = "http://www.test.fhnw.ch/";
+		final String url = "http://www.fhnw.ch/";
 //		final String url = "http://www.bfh.ch/";
-//		final String url = "http://www.fhnw.ch/medien-und-oeffentlichkeit/news/";
-
 		
 //		List<String> links = new CrawlCallable(url, url, x).call();
 		
@@ -27,6 +26,8 @@ public class TestMain {
 //			System.out.println(x);
 //		}
 
+//		CrawlCallable huerenutte = new CrawlCallable("dini mer", url,  x);
+//		huerenutte.call();
 		new WebCrawler(url).crawl(url);
 		
 //		List<String> result = new WebCrawler(url).crawl(url);	
