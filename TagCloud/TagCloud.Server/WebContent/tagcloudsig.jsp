@@ -32,7 +32,7 @@
 	<div id="cloudtest">
 	</div>
 	<div id="cloud">
-		<% //out.print( rcntrl.test(hostname) ); %>
+		<% rcntrl.getSigTerms(hostname); %>
 	</div>
 </body>
 <script>

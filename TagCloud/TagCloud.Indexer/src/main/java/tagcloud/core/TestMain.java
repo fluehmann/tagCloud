@@ -30,7 +30,7 @@ public class TestMain {
 		String result = retriver.retrieveByIndexname("gamesource.ch").toString();
 		
 		//System.out.println(result);
-		System.out.println(new Tagprocessing().getKeywords(result));
+		//System.out.println(new Tagprocessing().getKeywords(result));
 	}
 
 }
