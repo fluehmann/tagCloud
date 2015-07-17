@@ -54,13 +54,13 @@ public class Tagprocessing {
 		for (int i = 0; i < arr.length(); i++)
 		{
 			String keyword = arr.getJSONObject(i).getString("key");
-			//String docCount = arr.getJSONObject(i).getString("doc_count").toString();
+			double score = arr.getJSONObject(i).getDouble("score")*1000;
 		    Hashtable<String, String> dictionary = new Hashtable<String, String>(); 
 		    
 		    // values from json
 		    dictionary.put("keyword", keyword);
-		    //dictionary.put("doc_count", docCount);
-		    
+		    dictionary.put("score", Double.toString(score));
+//System.out.println(score);		    
 		    // values which are not stored in the documents on elasticsearch
 		    //dictionary.put("keyword", "sdsdsd");
 			

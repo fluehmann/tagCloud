@@ -57,21 +57,28 @@ public class RetrieveController {
 	 * @throws Exception
 	 */
 	public ArrayList<Hashtable<String, String>> getSigTerms(String hostname) throws Exception {
+		//ArrayList<Hashtable<String, String>> tags = new ArrayList<Hashtable<String, String>>();
+		//Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		
 		String indexName = hostname.replace("http://", "").replace("/", "");
 		
 		SearchResponse result = retriever.retrieveSignificantTerms(indexName);
-System.out.println("SignificantTerms: " + result.toString());
+		System.out.println("SignificantTerms: " + result.toString());
 
 		// sr is here your SearchResponse object
-		SignificantTerms agg = result.getAggregations().get("significant_keywords");
-		
+		SignificantTerms agg = result.getAggregations().get("significant_keywords");		
+		 
 		// For each entry
 		for (SignificantTerms.Bucket entry : agg.getBuckets()) {
-		    entry.getKey();      // Term
-		    entry.getDocCount(); // Doc count
-		    System.out.println( entry.getKey() + "  " + entry.getDocCount() );
+		    entry.getKey();      			// Term
+		    entry.getDocCount(); 			// Doc count
+		    entry.getSignificanceScore(); 	//Score
+		    
+		    //dictionary.put("keyword", entry.getKey());
+		    //dictionary.put("score", Long.toString((entry.getDocCount()*10)));
 		}
+		//tags.add(dictionary);
 		return new Tagprocessing().getSignificantTags(result.toString());
+		
 	}
 }

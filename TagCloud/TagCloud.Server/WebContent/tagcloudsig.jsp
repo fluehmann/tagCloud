@@ -38,16 +38,16 @@
 </body>
 <script>
 var words = [
-		{text: "Lorem", weight: 13},
+		/*{text: "Lorem", weight: 13},
 		{text: "Ipsum", weight: 10.5},
 		{text: "Dolor", weight: 9.4},
 		{text: "Sit", weight: 8},
 		{text: "Amet", weight: 6.2},
 		{text: "Consectetur", weight: 5},
-		{text: "Adipiscing", weight: 5},
+		{text: "Adipiscing", weight: 5},*/
 		<%
 		for (Hashtable<String, String> item : al) {
-			out.println("{text: '" + item.get("keyword") + "', weight: " + 6 + ", link: '" + item.get("url") + "'},");
+			out.println("{text: '" + item.get("keyword") + "', weight: " + item.get("score") + ", link: '" + item.get("url") + "'},");
 //			out.print("{text: " + item.get("keyword") + ", weight: " + 10 + ", link: '" + item.get("url") + "'},");
 		}
 		%>
