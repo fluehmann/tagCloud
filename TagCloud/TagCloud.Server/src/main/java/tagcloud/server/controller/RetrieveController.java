@@ -20,7 +20,7 @@ public class RetrieveController {
 	}
 	
 	/**
-	 * Calls adapter class amd return documents by a given index name. the amount of results depends on the settings
+	 * Calls adapter class and return documents by a given index name. the amount of results depends on the settings
 	 * @param hostname Is equal to index name
 	 * @return
 	 * @throws Exception
@@ -29,6 +29,22 @@ public class RetrieveController {
 		String indexName = hostname.replace("http://", "").replace("/", "");
 		// SearchResponse as String (json)
 		String result = retriever.retrieveByIndexname(indexName).toString();
+		
+		// parse json to ArrayList with key-value entries
+		return new Tagprocessing().getTags(result.toString());
+	}
+	
+	/**
+	 * 
+	 * @param hostname
+	 * @param keyword
+	 * @return
+	 * @throws Exception
+	 */
+	public ArrayList<Hashtable<String, String>> get(String hostname, String keyword) throws Exception {
+		String indexName = hostname.replace("http://", "").replace("/", "");
+		// SearchResponse as String (json)
+		String result = retriever.retrieveByKeyword(indexName, keyword).toString();
 		
 		// parse json to ArrayList with key-value entries
 		return new Tagprocessing().getTags(result.toString());

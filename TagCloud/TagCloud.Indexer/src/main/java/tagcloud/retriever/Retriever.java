@@ -44,18 +44,18 @@ public class Retriever {
 	}
 
 	/**
-	 * 
+	 * Get documents which match by a specific tag
 	 * @param indexName Hostname
 	 * @param tag An Keyword which is part of the search term 
 	 * @return Response from Elasticsearch in json
 	 */
-	public SearchResponse retrieve(String indexName, String tag) {
+	public SearchResponse retrieveByKeyword(String indexName, String keyword) {
 
-		QueryBuilder multiMatch = QueryBuilders.multiMatchQuery(tag, "body");
+		QueryBuilder multiMatch = QueryBuilders.multiMatchQuery(keyword, "content");
 		SearchResponse response = client.prepareSearch(indexName)
 		        .setQuery(multiMatch)
 		        .execute().actionGet();
-		
+System.out.println(response.toString());		
 		return response;
 	}	
 	

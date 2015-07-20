@@ -7,10 +7,10 @@
 
 <%
 	String hostname = request.getParameter("host");
+  String keyword = request.getParameter("keyword");
 
 	RetrieveController rcntrl = new RetrieveController();
-	ArrayList<Hashtable<String, String>> al = rcntrl.getSigTerms(hostname);
-	//rcntrl.getSigTerms(hostname);
+	ArrayList<Hashtable<String, String>> al = rcntrl.get(hostname, keyword);
 %>
 <!DOCTYPE html>
 <html>
@@ -21,7 +21,6 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/dashboard.css" />
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jqcloud.min.js"></script>
 
 <title>Insert title here</title>
 </head>
@@ -31,41 +30,21 @@
 <!-- End Sidebar -->
 <content>
 	<h1>
-		<% out.print("Gefundene URLs zu " + hostname); %>
+		<% out.print("Gefundene URLs zu " + keyword); %>
 	</h1>
 
-	<div id="cloudtest">
-	</div>
-	<div id="cloud">
-		<% rcntrl.getSigTerms(hostname); %>
+	<div>
+		<ol>
+		<% for (Hashtable<String, String> item : al) {
+		 			String link = item.get("url");
+		 			String content = item.get("content");
+		%>
+			<li><a href="<% out.print(link); %>" target="_blank"><% out.print(link); %></a></li>
+		<% 			
+			 }
+		%>
+		</ol>
 	</div>
 </content>
 </body>
-<script>
-var words = [
-		/*{text: "Lorem", weight: 13},
-		{text: "Ipsum", weight: 10.5},
-		{text: "Dolor", weight: 9.4},
-		{text: "Sit", weight: 8},
-		{text: "Amet", weight: 6.2},
-		{text: "Consectetur", weight: 5},
-		{text: "Adipiscing", weight: 5},*/
-		<%
-		for (Hashtable<String, String> item : al) {
-			String keyword = item.get("keyword");
-			String score = item.get("score");
-			String link = "indexDetail.jsp?host=" + hostname + "&keyword=" + keyword;
-			
-			out.println("{text: '" + keyword + "', weight: " + score + ", link: '" + link + "'},");
-//			out.print("{text: " + item.get("keyword") + ", weight: " + 10 + ", link: '" + item.get("url") + "'},");
-		}
-		%>
-];
-           
-$('#cloudtest').jQCloud(words, {
-	  width: 1000,
-	  height: 600
-	});
-</script>
-<script src="http://d3js.org/d3.v3.min.js"></script>
 </html>

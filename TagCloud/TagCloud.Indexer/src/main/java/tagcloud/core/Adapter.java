@@ -41,8 +41,8 @@ public class Adapter implements IndexAdapter, RetrieveAdapter{
 	/**
 	 * 
 	 */
-	public SearchResponse retriveDocument(String indexName, String tag) {		
-		return retrv.retrieve(indexName, tag);
+	public SearchResponse retrieveByKeyword(String indexName, String keyword) {		
+		return retrv.retrieveByKeyword(indexName, keyword);
 	}
 
 	/**
