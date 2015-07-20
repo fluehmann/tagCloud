@@ -9,13 +9,3 @@
 	ccntl.crawl(hostname);
 	response.sendRedirect("tagcloud.jsp?host=" + hostname);
 %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
-</head>
-<body>
-
-</body>
-</html>

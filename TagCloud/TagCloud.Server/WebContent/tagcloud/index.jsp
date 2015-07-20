@@ -19,6 +19,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jqcloud.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/dashboard.css" />
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jqcloud.min.js"></script>
@@ -26,6 +27,10 @@
 <title>Insert title here</title>
 </head>
 <body>
+<!-- Begin Sidebar -->
+<%@include file="../sidebar.jsp" %>
+<!-- End Sidebar -->
+<content>
 	<h1>
 		<% out.print("Gefundene URLs zu " + hostname); %>
 	</h1>
@@ -35,6 +40,7 @@
 	<div id="cloud">
 		<% rcntrl.getSigTerms(hostname); %>
 	</div>
+</content>
 </body>
 <script>
 var words = [
