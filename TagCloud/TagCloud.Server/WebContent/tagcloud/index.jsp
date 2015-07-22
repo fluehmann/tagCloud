@@ -29,7 +29,7 @@
 <!-- Begin Sidebar -->
 <%@include file="../sidebar.jsp" %>
 <!-- End Sidebar -->
-<content>
+<div class="content">
 	<h1>
 		<% out.print("Gefundene URLs zu " + hostname); %>
 	</h1>
@@ -39,7 +39,7 @@
 	<div id="cloud">
 		<% rcntrl.getSigTerms(hostname); %>
 	</div>
-</content>
+</div>
 </body>
 <script>
 var words = [

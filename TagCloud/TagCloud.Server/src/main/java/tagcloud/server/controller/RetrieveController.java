@@ -1,22 +1,25 @@
 package tagcloud.server.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
 import tagcloud.core.Adapter;
+import tagcloud.core.Functions;
 import tagcloud.core.Tagprocessing;
 import tagcloud.retriever.RetrieveAdapter;
 
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.common.hppc.ObjectLookupContainer;
 import org.elasticsearch.search.aggregations.bucket.significant.SignificantTerms;
 
 public class RetrieveController {
 
 	RetrieveAdapter retriever;
+	Functions helperfunc;
 	
 	public RetrieveController() {
 		retriever = new Adapter("elasticsearch", "127.0.0.1");
+		helperfunc = new Functions();
 	}
 	
 	/**
@@ -62,6 +65,9 @@ public class RetrieveController {
 		ArrayList<String> result = new ArrayList<String>();
 		for(int i=0; i < indeces.length; i++){
 			result.add(indeces[i].toString());
+			
+			// create stopword file
+			helperfunc.createStopwordFile(indeces[i].toString());
 		}
 		return result;
 	}
@@ -82,19 +88,8 @@ public class RetrieveController {
 		System.out.println("SignificantTerms: " + result.toString());
 
 		// sr is here your SearchResponse object
-		SignificantTerms agg = result.getAggregations().get("significant_keywords");		
-		 
-		// For each entry
-		for (SignificantTerms.Bucket entry : agg.getBuckets()) {
-		    entry.getKey();      			// Term
-		    entry.getDocCount(); 			// Doc count
-		    entry.getSignificanceScore(); 	//Score
-		    
-		    //dictionary.put("keyword", entry.getKey());
-		    //dictionary.put("score", Long.toString((entry.getDocCount()*10)));
-		}
-		//tags.add(dictionary);
-		return new Tagprocessing().getSignificantTags(result.toString());
+		//SignificantTerms agg = result.getAggregations().get("tagcloud_keywords");		
 		
+		return new Tagprocessing().getSignificantTags(result.toString());
 	}
 }

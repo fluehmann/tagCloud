@@ -7,5 +7,5 @@
 
 	CrawlController ccntl = new CrawlController();
 	ccntl.crawl(hostname);
-	response.sendRedirect("tagcloud.jsp?host=" + hostname);
+	response.sendRedirect("../tagcloud/?host=" + hostname);
 %>

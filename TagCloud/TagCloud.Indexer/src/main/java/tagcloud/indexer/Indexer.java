@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.Requests;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
@@ -14,21 +13,24 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 
 import tagcloud.connection.ESConnection;
+import tagcloud.core.Functions;
 import static org.elasticsearch.common.xcontent.XContentFactory.*;
 
 public class Indexer {
 
 	Client client;
+	Functions helperfunc;
 	
 	public Indexer(String clustername, String ip) {
 		client = new ESConnection().connect(clustername, ip);
+		helperfunc = new Functions();
 	}
 	
 	/**
 	 * Save a new document based on the given parameters. The HashMap will be used to create a json object
 	 * If the index (hostname) not exists on the node, it will be created
 	 * 
-	 * @param index Name of the index which is usually the hostname in our case
+	 * @param indexName Name of the index which is usually the hostname in our case
 	 * @param type Define which type of source we want to index. We differ between "page" and "document"
 	 * @param id An unique identifier of each indexed source. An URL would be a good choice for web usage
 	 * @param fields A Collection with key and value fields to generate a json file within this method. Fields structure can be changes anytime
@@ -36,18 +38,28 @@ public class Indexer {
 	 * @throws ElasticsearchException
 	 * @throws IOException
 	 */
-	public boolean index(String index, String type, String id, HashMap<String, String> fields) throws ElasticsearchException, IOException {
-		//System.out.println("indexName before saving: " + index);
+	public boolean index(String indexName, String type, String id, HashMap<String, String> fields) throws ElasticsearchException, IOException {
+
 		// check if indexName already exists
-		if (!checkIfIndexExists(index)){
+		if (!checkIfIndexExists(indexName)){
+			
 			Settings indexSettings = ImmutableSettings.settingsBuilder()
 					.put("number_of_shards", 5)
 					.put("number_of_replicas", 1)
+//					.put("refresh_interval", -1)
+					// German stopwords
+// JAVA API TRANSPORT API CONSTRUCTION
+ .put("analysis.analyzer.events.type", "german")
+ .put("analysis.analyzer.events.stopwords", "_german_")
 					.build();
-			//create index if not exists
-			CreateIndexRequest indexRequest = new CreateIndexRequest(index, indexSettings);
+			
+			// create index
+			CreateIndexRequest indexRequest = new CreateIndexRequest(indexName, indexSettings);
 			client.admin().indices().create(indexRequest).actionGet();
-			System.out.println("index '" + index + "' created");
+			System.out.println("index '" + indexName + "' created");
+			
+			// create stopwords file
+			helperfunc.createStopwordFile(indexName);
 		}
 		
 		XContentBuilder builder = jsonBuilder();
@@ -57,10 +69,9 @@ public class Indexer {
 		}
 		builder.endObject();
    
-		IndexResponse response = client.prepareIndex(index, type, id).setSource(builder).execute().actionGet();
-		//System.out.println("Document stored. " + response.toString());
-		System.out.println("Stored: " + id);
-		//processKeywords(index, id, fields);
+		client.prepareIndex(indexName, type, id).setSource(builder).execute().actionGet();
+		System.out.println("Document saved: " + id);
+
 		return true;
 	}
 	
@@ -99,4 +110,6 @@ public class Indexer {
 		
 		return tags;		
 	}
+	
+	
 }

@@ -28,7 +28,7 @@
 <!-- Begin Sidebar -->
 <%@include file="../sidebar.jsp" %>
 <!-- End Sidebar -->
-<content>
+<div class="content">
 	<h1>
 		<% out.print("Gefundene URLs zu " + keyword); %>
 	</h1>
@@ -40,11 +40,11 @@
 		 			String content = item.get("content");
 		%>
 			<li><a href="<% out.print(link); %>" target="_blank"><% out.print(link); %></a></li>
-		<% 			
+		<% 
 			 }
 		%>
 		</ol>
 	</div>
-</content>
+</div>
 </body>
 </html>

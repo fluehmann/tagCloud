@@ -49,7 +49,7 @@ public class Tagprocessing {
 	public ArrayList<Hashtable<String, String>> getSignificantTags(String jsonResult) {
 		
 		JSONObject obj = new JSONObject(jsonResult);
-		JSONArray arr = obj.getJSONObject("aggregations").getJSONObject("significant_keywords").getJSONArray("buckets");
+		JSONArray arr = obj.getJSONObject("aggregations").getJSONObject("tagcloud_keywords").getJSONArray("buckets");
 		
 		for (int i = 0; i < arr.length(); i++)
 		{

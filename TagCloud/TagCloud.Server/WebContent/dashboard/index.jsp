@@ -17,10 +17,10 @@
 <!-- Begin Sidebar -->
 <%@include file="../sidebar.jsp" %>
 <!-- End Sidebar -->
-<content>
+<div class="content">
 
 // kein Content
   
-</content>
+</div>
 </body>
 </html>

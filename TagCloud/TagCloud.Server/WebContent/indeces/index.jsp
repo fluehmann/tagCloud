@@ -23,7 +23,7 @@
 <!-- Begin Sidebar -->
 <%@include file="../sidebar.jsp" %>
 <!-- End Sidebar -->
-<content>
+<div class="content">
 
 	<ul class="sticker-tiles">
 	<% 
@@ -33,6 +33,6 @@
   %>
 	</ul>
   
-</content>
+</div>
 </body>
 </html>
