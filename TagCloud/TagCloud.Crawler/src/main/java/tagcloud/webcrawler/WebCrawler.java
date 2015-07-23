@@ -79,8 +79,8 @@ public class WebCrawler {
 		// while (!urlsToVisit.isEmpty() && urlsCrawled.size() < MAX_NR_OF_URLS) {
 		// while (urlsCrawled.size() < MAX_NR_OF_URLS) {
 
-		// while (urlsCrawled.size() < MAX_NR_OF_URLS || !urlsToVisit.isEmpty()) {
-		// while (!urlsToVisit.isEmpty()) {
+//		 while (urlsCrawled.size() < MAX_NR_OF_URLS || !urlsToVisit.isEmpty()) {
+//		 while (!urlsToVisit.isEmpty()) {
 		// BIG QUESTIONMARK - could even be a while(true) - once is done - executor service will terminate by itself. Would'nt it?
 		while (!Thread.currentThread().isInterrupted()){
 
