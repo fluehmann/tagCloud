@@ -82,8 +82,10 @@ public class Indexer {
 		String JsonMappings = null;
 		try {
 			InputStream fis;
-//			fis = new FileInputStream("settings.json");
-			fis = new FileInputStream("/Users/fluehmann_mbp/Desktop/tagCloud/TagCloud/TagCloud.Indexer/mappings.json");
+			fis = new FileInputStream("mappings.json");
+			
+
+			
 			StringBuilder sb = new StringBuilder();
 		    Reader r = new InputStreamReader(fis);
 		    int ch = r.read();
@@ -93,13 +95,14 @@ public class Indexer {
 		    }
 		    r.close();
 		    JsonMappings = sb.toString();
+		    System.out.println(JsonMappings);
 		    
 		} catch (FileNotFoundException e) {
-			System.err.println("Settings-File not found: " + e.getMessage());
+			System.err.println("Mapping-File not found: " + e.getMessage());
 		} catch (UnsupportedEncodingException e) {
-			System.err.println("Settings-File Encoding Exception: " + e.getMessage());
+			System.err.println("Mapping-File Encoding Exception: " + e.getMessage());
 		} catch (IOException e) {
-			System.err.println("Failed to load Settings-File: " + e.getMessage());
+			System.err.println("Failed to load Mapping-File: " + e.getMessage());
 		}
 	return JsonMappings;
 	}
@@ -109,8 +112,7 @@ public class Indexer {
 		String JsonSettings = null;
 			try {
 				InputStream fis;
-//				fis = new FileInputStream("settings.json");
-				fis = new FileInputStream("/Users/fluehmann_mbp/Desktop/tagCloud/TagCloud/TagCloud.Indexer/settings.json");
+				fis = new FileInputStream("settings.json");
 				StringBuilder sb = new StringBuilder();
 			    Reader r = new InputStreamReader(fis);
 			    int ch = r.read();
