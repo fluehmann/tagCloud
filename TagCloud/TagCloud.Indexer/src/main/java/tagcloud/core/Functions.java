@@ -13,6 +13,8 @@ public class Functions {
 		File catalinaBase = new File( System.getProperty( "catalina.base" ) ).getAbsoluteFile();
 		File folder = new File( catalinaBase, "wtpwebapps/TagCloud.Server/_blacklist" );
 
+		System.out.println(folder);
+		
 		try {
 			f = new File(folder + "/" + indexName + ".txt");
 			

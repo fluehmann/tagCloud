@@ -42,10 +42,15 @@ public class Cleaner {
 		Whitelist whitelist = Whitelist.none();
 		String plain = Jsoup.clean(raw, url, whitelist);
 				
-		// Build up the JSON File to transmit to ES
+		// Build up the JSON File to transmit to ES - here the magic happens
 		HashMap<String, String> json = new HashMap<String, String>();
 		json.put("url", url);
 		json.put("content", plain);
+
+		// put date
+		String timeStamp = new SimpleDateFormat("HH:mm:ss, dd.MM.yyyy").format(Calendar.getInstance().getTime());
+		json.put("timestamp", timeStamp);
+		
 		return json;
 	}
 

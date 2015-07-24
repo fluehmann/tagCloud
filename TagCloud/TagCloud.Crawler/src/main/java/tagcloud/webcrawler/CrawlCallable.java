@@ -77,7 +77,7 @@ public class CrawlCallable implements Callable<List<String>> {
 						extractedLinks.add(linkString);
 					}
 				}
-
+				
 				// Send the source to the cleaner to clean it and store it in the ES index
 				new Cleaner(x,doc,startURL,hostname);
 

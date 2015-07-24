@@ -35,7 +35,11 @@ public class Adapter implements IndexAdapter, RetrieveAdapter{
 	 * @param json Pre-created json as string with field-value entries
 	 */
 	public void indexDocument(String indexName, String type, String id, HashMap<String, String> json) throws ElasticsearchException, IOException {
-		idx.index(indexName, type, id, json);
+		
+		Boolean status = idx.index(indexName, type, id, json);
+		if (status){
+			System.out.println("Document stored: " + id);
+		}
 	}
 	
 	/**

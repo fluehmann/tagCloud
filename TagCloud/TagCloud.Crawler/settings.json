@@ -1,0 +1,10 @@
+{
+        "analysis": {
+            "analyzer": {
+                "de_std": {
+                    "type":      "standard",
+                    "stopwords": "_german_"
+                }
+            }
+        }
+    }
