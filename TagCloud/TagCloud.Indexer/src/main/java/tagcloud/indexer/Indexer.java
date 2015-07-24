@@ -81,9 +81,13 @@ public class Indexer {
 	private String getMappingsJsonString() {
 		String JsonMappings = null;
 		try {
-			InputStream fis;
-			fis = new FileInputStream("mappings.json");
+//			InputStream fis;
+//			fis = new FileInputStream("mappings.json");
 			
+			File catalinaBase = new File( System.getProperty( "catalina.base" ) ).getAbsoluteFile();
+			File folder = new File( catalinaBase, "wtpwebapps/TagCloud.Server/mappings.json" );
+			
+			InputStream fis = new FileInputStream(folder);
 
 			
 			StringBuilder sb = new StringBuilder();
@@ -111,8 +115,15 @@ public class Indexer {
 	public String getSettingsJsonString() {
 		String JsonSettings = null;
 			try {
-				InputStream fis;
-				fis = new FileInputStream("settings.json");
+//				InputStream fis;
+//				fis = new FileInputStream("settings.json");
+				
+				File catalinaBase = new File( System.getProperty( "catalina.base" ) ).getAbsoluteFile();
+				File folder = new File( catalinaBase, "wtpwebapps/TagCloud.Indexer/settings.json" );
+				
+				InputStream fis = new FileInputStream(folder);
+				
+				
 				StringBuilder sb = new StringBuilder();
 			    Reader r = new InputStreamReader(fis);
 			    int ch = r.read();
@@ -122,6 +133,7 @@ public class Indexer {
 			    }
 			    r.close();
 			    JsonSettings = sb.toString();
+			    System.out.println(JsonSettings);
 			    
 			} catch (FileNotFoundException e) {
 				System.err.println("Settings-File not found: " + e.getMessage());
