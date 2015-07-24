@@ -15,10 +15,11 @@ public class TestMain {
 //		final String url = "http://www.test.fhnw.ch/";
 //		final String url = "http://www.fhnw.ch/";
 //		final String url = "https://www.bfh.ch/";
-		final String url = "http://emmental.ch/";
-//		final String url = "http://emmental-tours.ch/";
+//		final String url = "http://emmental.ch/";
+		final String url = "http://emmental-tours.ch/";
 //		final String url = "http://www.20min.ch/";
 //		final String url = "http://www.blick.ch/";
+//		final String url = "http://www.greenpeace.org/";
 		
 		
 //		List<String> links = new CrawlCallable(url, url, x).call();

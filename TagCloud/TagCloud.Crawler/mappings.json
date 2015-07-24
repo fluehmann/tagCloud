@@ -1,13 +1,13 @@
 {
-         website": {
+         "website": {
             "properties": {
                "content": {
-                  "type": "string"
+                  "type": "string",
                   "analyzer": "de_std"
-               }
+                  },
                "timestamp": {
                   "type": "string"
-               }
+               },
                "url": {
                   "type": "string"
                }

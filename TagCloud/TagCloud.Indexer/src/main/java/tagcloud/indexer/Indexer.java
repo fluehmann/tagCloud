@@ -58,7 +58,7 @@ public class Indexer {
 			//create index if not exists
 			CreateIndexRequest indexRequest = new CreateIndexRequest(index, indexSettings);
 			indexRequest.settings(getSettingsJsonString());
-			indexRequest.mapping(getMappingsJsonString());
+			indexRequest.mapping("website", getMappingsJsonString());
 
 			client.admin().indices().create(indexRequest).actionGet();
 
@@ -81,14 +81,19 @@ public class Indexer {
 	private String getMappingsJsonString() {
 		String JsonMappings = null;
 		try {
+			
 //			InputStream fis;
+//			fis = new FileInputStream("/Users/fluehmann_mbp/Desktop/tagCloud/TagCloud/TagCloud.Indexer/mappings.json");
 //			fis = new FileInputStream("mappings.json");
 			
-			File catalinaBase = new File( System.getProperty( "catalina.base" ) ).getAbsoluteFile();
-			File folder = new File( catalinaBase, "wtpwebapps/TagCloud.Server/mappings.json" );
+//			File catalinaBase = new File( System.getProperty( "catalina.base" ) ).getAbsoluteFile();
+//			File folder = new File( catalinaBase, "wtpwebapps/TagCloud.Server/mappings.json" );
+//			
+//			InputStream fis = new FileInputStream(folder);
 			
-			InputStream fis = new FileInputStream(folder);
-
+			File f = new File("mappings.json");
+			String path = f.getAbsolutePath();
+			InputStream fis = new FileInputStream(path);
 			
 			StringBuilder sb = new StringBuilder();
 		    Reader r = new InputStreamReader(fis);
@@ -118,11 +123,9 @@ public class Indexer {
 //				InputStream fis;
 //				fis = new FileInputStream("settings.json");
 				
-				File catalinaBase = new File( System.getProperty( "catalina.base" ) ).getAbsoluteFile();
-				File folder = new File( catalinaBase, "wtpwebapps/TagCloud.Indexer/settings.json" );
-				
-				InputStream fis = new FileInputStream(folder);
-				
+				File f = new File("settings.json");
+				String path = f.getAbsolutePath();
+				InputStream fis = new FileInputStream(path);
 				
 				StringBuilder sb = new StringBuilder();
 			    Reader r = new InputStreamReader(fis);
