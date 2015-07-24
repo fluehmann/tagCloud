@@ -67,7 +67,7 @@ public class RetrieveController {
 			result.add(indeces[i].toString());
 			
 			// create stopword file
-			helperfunc.createStopwordFile(indeces[i].toString());
+			helperfunc.createFile("_blacklist", indeces[i].toString());
 		}
 		return result;
 	}

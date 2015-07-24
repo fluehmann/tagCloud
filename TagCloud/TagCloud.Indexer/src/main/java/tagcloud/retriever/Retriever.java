@@ -121,7 +121,7 @@ public class Retriever {
 		AggregationBuilder<?> aggregation = AggregationBuilders
 				.significantTerms("tagcloud_keywords")
 				.field("content")
-				.exclude(helperfunc.getExcludedTerms(indexName))
+				.exclude(helperfunc.getExcludedTerms("_blacklist", indexName))
 				.size(30);
 
 		SearchResponse sr = client.prepareSearch(indexName)
