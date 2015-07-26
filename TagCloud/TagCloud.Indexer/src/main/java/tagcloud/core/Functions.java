@@ -9,17 +9,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 
 public class Functions {
 
+	/**
+	 * Create a file if not exists in the data folder of the tomcat installation
+	 * @param folderName
+	 * @param indexName
+	 * @return
+	 */
 	public File createFile(String folderName, String indexName) {
 		File f = null;
-		File catalinaBase = new File(System.getProperty("catalina.base")).getAbsoluteFile();
-		File folder = new File(catalinaBase, "wtpwebapps/TagCloud.Server/" + folderName);
+		File catalinaBase = new File(System.getProperty("catalina.home")).getAbsoluteFile();
+		File folder = new File(catalinaBase, "data/" + folderName);
 
-		System.out.println(folder);
-
+		//System.out.println("home: " + System.getProperty("catalina.home"));
+		//System.out.println("base: " + System.getProperty("catalina.base"));
+		//System.out.println(folder);
 		try {
 			f = new File(folder + "/" + indexName + ".txt");
 
@@ -36,6 +42,12 @@ public class Functions {
 		return f;
 	}
 
+	/**
+	 * Get all lines from the text file which named same as the index as a string
+	 * @param folderName
+	 * @param indexName
+	 * @return
+	 */
 	public String getExcludedTerms(String folderName, String indexName) {
 		String line;
 		StringBuilder sb;
@@ -68,86 +80,93 @@ public class Functions {
 		return excludedKeywords;
 	}
 
-	public String getMappingsJsonString() {
-		String JsonMappings = null;
-		try {
+//	public String getMappingsJsonString() {
+//		String JsonMappings = null;
+//		try {
+//
+//			File f = new File("mappings.json");
+//			String path = f.getAbsolutePath();
+//			InputStream fis = new FileInputStream(path);
+//
+//			StringBuilder sb = new StringBuilder();
+//			Reader r = new InputStreamReader(fis);
+//			int ch = r.read();
+//			while (ch >= 0) {
+//				sb.append((char) ch);
+//				ch = r.read();
+//			}
+//			r.close();
+//			JsonMappings = sb.toString();
+//			System.out.println(JsonMappings);
+//
+//		} catch (FileNotFoundException e) {
+//			System.err.println("Mapping-File not found: " + e.getMessage());
+//		} catch (UnsupportedEncodingException e) {
+//			System.err.println("Mapping-File Encoding Exception: "
+//					+ e.getMessage());
+//		} catch (IOException e) {
+//			System.err
+//					.println("Failed to load Mapping-File: " + e.getMessage());
+//		}
+//		return JsonMappings;
+//	}
+//
+//	// retrieve JSON Settings file
+//	public String getSettingsJsonString() {
+//		String JsonSettings = null;
+//		try {
+//			// InputStream fis;
+//			// fis = new FileInputStream("settings.json");
+//
+//			File f = new File("settings.json");
+//			String path = f.getAbsolutePath();
+//			InputStream fis = new FileInputStream(path);
+//
+//			StringBuilder sb = new StringBuilder();
+//			Reader r = new InputStreamReader(fis);
+//			int ch = r.read();
+//			while (ch >= 0) {
+//				sb.append((char) ch);
+//				ch = r.read();
+//			}
+//			r.close();
+//			JsonSettings = sb.toString();
+//			System.out.println(JsonSettings);
+//
+//		} catch (FileNotFoundException e) {
+//			System.err.println("Settings-File not found: " + e.getMessage());
+//		} catch (UnsupportedEncodingException e) {
+//			System.err.println("Settings-File Encoding Exception: "
+//					+ e.getMessage());
+//		} catch (IOException e) {
+//			System.err.println("Failed to load Settings-File: "
+//					+ e.getMessage());
+//		}
+//		return JsonSettings;
+//	}
 
-			File f = new File("mappings.json");
-			String path = f.getAbsolutePath();
-			InputStream fis = new FileInputStream(path);
-
-			StringBuilder sb = new StringBuilder();
-			Reader r = new InputStreamReader(fis);
-			int ch = r.read();
-			while (ch >= 0) {
-				sb.append((char) ch);
-				ch = r.read();
-			}
-			r.close();
-			JsonMappings = sb.toString();
-			System.out.println(JsonMappings);
-
-		} catch (FileNotFoundException e) {
-			System.err.println("Mapping-File not found: " + e.getMessage());
-		} catch (UnsupportedEncodingException e) {
-			System.err.println("Mapping-File Encoding Exception: "
-					+ e.getMessage());
-		} catch (IOException e) {
-			System.err
-					.println("Failed to load Mapping-File: " + e.getMessage());
-		}
-		return JsonMappings;
-	}
-
-	// retrieve JSON Settings file
-	public String getSettingsJsonString() {
-		String JsonSettings = null;
-		try {
-			// InputStream fis;
-			// fis = new FileInputStream("settings.json");
-
-			File f = new File("settings.json");
-			String path = f.getAbsolutePath();
-			InputStream fis = new FileInputStream(path);
-
-			StringBuilder sb = new StringBuilder();
-			Reader r = new InputStreamReader(fis);
-			int ch = r.read();
-			while (ch >= 0) {
-				sb.append((char) ch);
-				ch = r.read();
-			}
-			r.close();
-			JsonSettings = sb.toString();
-			System.out.println(JsonSettings);
-
-		} catch (FileNotFoundException e) {
-			System.err.println("Settings-File not found: " + e.getMessage());
-		} catch (UnsupportedEncodingException e) {
-			System.err.println("Settings-File Encoding Exception: "
-					+ e.getMessage());
-		} catch (IOException e) {
-			System.err.println("Failed to load Settings-File: "
-					+ e.getMessage());
-		}
-		return JsonSettings;
-	}
-
+	/**
+	 * Read the content from a file and give it back as a string
+	 * @param folderName
+	 * @param fileName
+	 * @return
+	 * @throws IOException
+	 */
 	public String getJsonFile(String folderName, String fileName) throws IOException {
 		
-		File catalinaBase = new File(System.getProperty("catalina.base")).getAbsoluteFile();
-		File folder = new File(catalinaBase, "wtpwebapps/TagCloud.Server/" + folderName);
-		
-		//String path = System.getProperty("user.dir") + "/jsonfiles/";
-		//File directory = new File(folder + "/" + fileName);
-		
-		File file = new File(folder + "/" + fileName);
-		
-		if (!file.exists()){
-			folder.mkdirs();
-			file.createNewFile();
-		}
-		InputStream fis = new FileInputStream(file);
+//		File catalinaBase = new File(System.getProperty("catalina.home")).getAbsoluteFile();
+//		File folder = new File(catalinaBase, "data/" + folderName);
+//		
+//		//String path = System.getProperty("user.dir") + "/jsonfiles/";
+//		//File directory = new File(folder + "/" + fileName);
+//		
+//		File file = new File(folder + "/" + fileName);
+//		
+//		if (!file.exists()){
+//			folder.mkdirs();
+//			file.createNewFile();
+//		}
+		InputStream fis = new FileInputStream(createFile(folderName, fileName));
 
 		StringBuilder sb = new StringBuilder();
 		Reader r = new InputStreamReader(fis);
@@ -159,7 +178,7 @@ public class Functions {
 		r.close();
 //		String base = "/var/data";
 //		String relative = new File(base).toURI().relativize(new File(path).toURI()).getPath();
-System.out.println(file);
+//System.out.println(file);
 System.out.println(sb.toString());
 		return sb.toString();
 	}

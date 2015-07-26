@@ -50,7 +50,8 @@ public class Retriever {
 	}
 
 	/**
-	 * Get documents which match by a specific tag
+	 * Get documents which match by a specific tag and show the results as a link to the source website
+	 * in addition show a snipped of the text which contains this keyword
 	 * 
 	 * @param indexName
 	 *            Hostname
@@ -60,9 +61,16 @@ public class Retriever {
 	 */
 	public SearchResponse retrieveByKeyword(String indexName, String keyword) {
 
-		QueryBuilder multiMatch = QueryBuilders.multiMatchQuery(keyword, "content");
-		SearchResponse response = client.prepareSearch(indexName)
-				.setQuery(multiMatch).execute().actionGet();
+//		QueryBuilder multiMatch = QueryBuilders.multiMatchQuery(keyword, "content");
+//		SearchResponse response = client.prepareSearch(indexName)
+//				.setQuery(multiMatch).execute().actionGet();
+		
+		QueryBuilder qb = QueryBuilders.matchPhraseQuery("content", keyword);
+		SearchResponse response =  client.prepareSearch(indexName)
+				.setQuery(qb)
+				.addHighlightedField("content")
+				.execute().actionGet();
+		
 		System.out.println(response.toString());
 		return response;
 	}

@@ -37,9 +37,12 @@
 		<ol>
 		<% for (Hashtable<String, String> item : al) {
 		 			String link = item.get("url");
-		 			String content = item.get("content");
+		 			String content = item.get("highlight");
 		%>
-			<li><a href="<% out.print(link); %>" target="_blank"><% out.print(link); %></a></li>
+			<li>
+				<a href="<% out.print(link); %>" target="_blank"><% out.print(link); %></a>
+				<p><% out.print(content); %></p>
+			</li>
 		<% 
 			 }
 		%>
