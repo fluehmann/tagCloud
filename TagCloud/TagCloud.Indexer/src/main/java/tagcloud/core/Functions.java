@@ -18,7 +18,7 @@ public class Functions {
 	 * @param indexName
 	 * @return
 	 */
-	public File createFile(String folderName, String indexName) {
+	public File createFile(String folderName, String fileName) {
 		File f = null;
 		File catalinaBase = new File(System.getProperty("catalina.home")).getAbsoluteFile();
 		File folder = new File(catalinaBase, "data/" + folderName);
@@ -27,14 +27,14 @@ public class Functions {
 		//System.out.println("base: " + System.getProperty("catalina.base"));
 		//System.out.println(folder);
 		try {
-			f = new File(folder + "/" + indexName + ".txt");
+			f = new File(folder + "/" + fileName);
 
 			if (!f.exists()) {
 				folder.mkdirs();
 				f.createNewFile();
-				System.out.println("File '" + indexName + "' created");
+				System.out.println("File '" + fileName + "' created");
 			} else {
-				System.out.println("File '" + indexName + "' alredy exists");
+				System.out.println("File '" + fileName + "' alredy exists");
 			}
 		} catch (IOException e) {
 			System.out.println("Pfad falsch");
