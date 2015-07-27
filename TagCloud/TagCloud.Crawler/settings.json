@@ -1,10 +1,22 @@
 {
         "analysis": {
             "analyzer": {
-                "de_std": {
-                    "type":      "standard",
-                    "stopwords": "_german_"
-                }
+                "normal": {
+                    "type":      "stop",
+                    "stopwords": "_german_",
+                    "stopwords": "_english_",
+                    "stemmer" : "light_german"
+                    
+                },
+                "german": {
+                	"type" : "stop",
+                	"stopwords" : "_german_"
+                },
+                	
+                "english": {
+                	"type" : "stop",
+                	"stopwords" : "_english_"
+                	}
             }
         }
     }

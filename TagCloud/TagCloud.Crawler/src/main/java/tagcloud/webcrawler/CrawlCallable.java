@@ -3,8 +3,11 @@ package tagcloud.webcrawler;
 import java.io.BufferedInputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.io.IOUtils;
@@ -32,70 +35,87 @@ import tagcloud.preprocessing.Cleaner;
 public class CrawlCallable implements Callable<List<String>> {
 
 	private final String startURL;
-	private final IndexAdapter x;
+	private final IndexAdapter indexAdapter;
 	private final String hostname;
 
-	public CrawlCallable(String hostname, String startURL, IndexAdapter x) {
+	public CrawlCallable(String hostname, String startURL, IndexAdapter indexAdapter) {
 		this.startURL = startURL;
-		this.x = x;
+		this.indexAdapter = indexAdapter;
 		this.hostname = hostname;
 	}
 
 	/**
-	 * Method to crawl a specific website.
+	 * Call-Method of the Callable representing the task to crawl a specific website.
 	 * @returns: A list with new links to be crawled
 	 */
 	public List<String> call() throws Exception {
 
-		// Open connection to startURL
+		// open connection to startURL
 		URL url = new URL(startURL);
 		URLConnection conn = url.openConnection();
 		conn.setRequestProperty("User-Agent", "TagCloudWebCrawler/0.1 Mozilla/5.0");
 
-		// list to store links
-		List<String> extractedLinks = new LinkedList<String>();
+		// set to store links that have been found on website
+		Set<String> extractedLinks = new HashSet<String>();
 
+		// manually entered blacklist for certain urls
+		Set<String> blackList = new HashSet<String>();
+			blackList.add("http://www.himmelblau.ch/");
+			blackList.add("http://www.himmelblau.ch/angebote/");
+			blackList.add("http://www.himmelblau.ch/team/");
+		
 		// check if content of URL is HTML
 		String contentType = conn.getContentType();
 		if (contentType != null && contentType.startsWith("text/html")) {
 
 			// Build up InputStream to start loading source
 			BufferedInputStream pageInputStream = null;
-
+			
 			try {
 				pageInputStream = new BufferedInputStream(conn.getInputStream());
 				Document doc = Jsoup.parse(pageInputStream, null, startURL);
-				
+
 				// remove useless parts of website
 				doc.select("head, script, style, link, .hidden").remove();
+
+				// Send the source to the cleaner to clean it and store it in the ES index
+				new Cleaner(indexAdapter,doc,startURL,hostname);
 
 				// extract all links out of the websites source and add them to a list
 				Elements urls = doc.select("a[href]");
 				for (Element link : urls) {
 					String linkString = link.absUrl("href");
-					if (linkString.startsWith("http")) {
+					if (linkString.startsWith("http") &&
+							!linkString.endsWith(".jpg") &&
+							!linkString.endsWith(".png") &&
+							!linkString.endsWith(".gif") &&
+							!linkString.contains("#") &&
+							!linkString.contains("@") &&
+							!linkString.contains("publikationen") &&
+							!linkString.startsWith("http://www.fhnw.ch/ph"))
+							{
 						extractedLinks.add(linkString);
 					}
 				}
+				// slows down the crawler significantly
+				extractedLinks.removeAll(blackList);	
 				
-				// Send the source to the cleaner to clean it and store it in the ES index
-				new Cleaner(x,doc,startURL,hostname);
-
-
 			} catch (Exception e){
-				System.err.println("Error ocurred while crawling: " + e.getMessage());
+				System.err.println("Error ocurred while crawling in CrawlCallable: " + e.getMessage());
 				extractedLinks = null;
-
 
 			} finally {
 				// IOUtils closes the stream without caring about exceptions and errors
 				IOUtils.closeQuietly(pageInputStream);
-				
-				//pageInputStream.close();
+
+				// alternative way to close the stream
+				// pageInputStream.close();
 			}
 		}
 
+		// convert Set to ArrayList to conform to Callable-Interface
 		// return the list with all the extracted links from the website
-		return extractedLinks;
+		List<String> linkList = new ArrayList<String>(extractedLinks);
+		return linkList;
 	}
 }

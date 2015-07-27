@@ -136,7 +136,6 @@ public class Indexer {
 			    }
 			    r.close();
 			    JsonSettings = sb.toString();
-			    System.out.println(JsonSettings);
 			    
 			} catch (FileNotFoundException e) {
 				System.err.println("Settings-File not found: " + e.getMessage());

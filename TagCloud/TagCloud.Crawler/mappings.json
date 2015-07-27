@@ -3,7 +3,7 @@
             "properties": {
                "content": {
                   "type": "string",
-                  "analyzer": "de_std"
+                  "analyzer": "normal"
                   },
                "timestamp": {
                   "type": "string"

@@ -1,9 +1,7 @@
 
 package tagcloud.webcrawler;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletionService;
@@ -12,10 +10,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import tagcloud.core.Adapter;
 import tagcloud.indexer.IndexAdapter;
-import tagcloud.webcrawler.Crawler;
+
 
 /**
  * Implementation of a Webcrawler
@@ -24,12 +23,22 @@ import tagcloud.webcrawler.Crawler;
 //public class WebCrawler implements Crawler {
 public class WebCrawler {
 
-	//	private final int POOL_SIZE = 100;
-	//	private final int POOL_SIZE = Runtime.getRuntime().availableProcessors()*10;
+	// Unleash ultimate power - hold your horses!
+//	private final int POOL_SIZE = Runtime.getRuntime().availableProcessors()*10;
 	private final int POOL_SIZE = Runtime.getRuntime().availableProcessors();
-	private final int MAX_NR_OF_URLS = 1000;
 	private final IndexAdapter idxAdptr;
 	private final String hostname;
+
+
+
+	// Counters to control the progression of the ExecutorService.
+	// Each entry in the queue increments @submittedTasks
+	// Each submitted task increments @completedTasks
+	// ExecutorService terminates as soon as @completedTasks = @submittedTasks
+//	private final AtomicInteger openTasks = new AtomicInteger(0);
+	private final AtomicInteger completedTasks = new AtomicInteger(0);
+
+
 
 	public WebCrawler(String hostname){
 		IndexAdapter idxAdptr = new Adapter("elasticsearch", "127.0.0.1");
@@ -40,117 +49,88 @@ public class WebCrawler {
 	/**
 	 * Crawls the www starting at {@code startURL}
 	 * 
-	 * @param startURL
-	 *            the URI to start crawling any resource
-	 * @return 
+	 * @param startURL the URI to start crawling any resource
 	 * @return a hashmap with URLs as Key and webPage Objects as values
 	 */
 	public void crawl(final String startURL) {
 
-
-		// three times faster than normal loop
 		final ExecutorService taskExecutor = Executors.newFixedThreadPool(POOL_SIZE);
-		// final ExecutorService taskExecutor = new ScheduledThreadPoolExecutor(300);
-		// final ExecutorService taskExecutor = Executors.newCachedThreadPool();
 		final CompletionService<List<String>> taskQueue = new ExecutorCompletionService<List<String>>(taskExecutor);
 
 
-		/*
-		 * Contains all discovered urls. Needs to be a set - a collection that
-		 * contains no duplicate elements.
-		 */
-		final Set<String> urlsCrawled = new HashSet<String>();
+		// contains all urls that have been submitted to the @taskQueue
+		final Set<String> urlsSubmitted = new HashSet<String>();
 
-
-		/*
-		 * Contains the urls to be visited. 
-		 */
+		// contains all urls still to be visited 
 		final Set<String> urlsToVisit = new HashSet<String>();
 		urlsToVisit.add(startURL);
-		System.out.println("urlsToVisit: " + urlsToVisit);
-
 
 		// As long as the URL list with urls to visit contains elements
 		// submit a new thread/task for every url in the list
 		// start all the tasks as new Callables - clear list when tasks were submitted
-
-		// while ((!urlsToVisit.isEmpty()) && urlsFound.size() < POOL_SIZE) {
-		// while (urlsCrawled.size() < MAX_NR_OF_URLS) {
-		// while (!urlsToVisit.isEmpty() && urlsCrawled.size() < MAX_NR_OF_URLS) {
-		// while (urlsCrawled.size() < MAX_NR_OF_URLS) {
-
-//		 while (urlsCrawled.size() < MAX_NR_OF_URLS || !urlsToVisit.isEmpty()) {
-//		 while (!urlsToVisit.isEmpty()) {
-		// BIG QUESTIONMARK - could even be a while(true) - once is done - executor service will terminate by itself. Would'nt it?
-//		while (!Thread.currentThread().isInterrupted()){
-//			while (!taskExecutor.isTerminated()){
-			while (!taskExecutor.isShutdown()){
-			
-			
-
+		// System.out.println("open: "+ openTasks.get() + " vs completed " + completedTasks.get());
+//		while (true) {
+//		while (completedTasks.get() != openTasks.get()-1) {
+		while (completedTasks.get() != urlsSubmitted.size()-1) {
 
 			// TaskQueue füllen mit Arbeit
 			for (String url : urlsToVisit) {
-				taskQueue.submit(new CrawlCallable(hostname, url, idxAdptr));
-				urlsCrawled.add(url);
+				taskQueue.submit(new CrawlCallable(hostname, url, idxAdptr)); // füllen der Queue
+				urlsSubmitted.add(url); // rename to submittedTasks
+//				openTasks.incrementAndGet();
 			} 
+			// clear todo list - all tasks started
 			urlsToVisit.clear(); 
 
 
 			try {
-				List<String> urlsList = taskQueue.take().get(); // waits for the first result and removes it
-				if (urlsList != null){
+				List<String> urlsList;
+				if ((urlsList = taskQueue.take().get()) != null){ //start work
+					// take first result 
+					completedTasks.incrementAndGet();
+				}
+				if (urlsList != null) {
 					for (String url : urlsList) {
-						// add new url to url queue
-						// if (url.startsWith(startURL) && !urlsCrawled.contains(url) && !urlsToVisit.contains(url)) {
-						if (url.startsWith(startURL) && !urlsCrawled.contains(url)) {
+						// add new url to url task queue
+						if (url.startsWith(startURL) && !urlsSubmitted.contains(url)) {
 							urlsToVisit.add(url);
 						}
 					}
 
 					Future<List<String>> myFuture;
-
-
-					while ((myFuture = taskQueue.poll()) != null) { 
+					while ((myFuture = taskQueue.poll()) != null) { // start work 
+						completedTasks.incrementAndGet();
 
 						for (String url : myFuture.get()) {
-							// add new url to url queue
-							// if (url.startsWith(startURL) && !urlsCrawled.contains(url) && !urlsToVisit.contains(url)) {
-							if (url.startsWith(startURL) && !urlsCrawled.contains(url)) {
+							// add url to urlsToVisit tasklist
+							if (url.startsWith(startURL) && !urlsSubmitted.contains(url)) {
 								urlsToVisit.add(url);
 							}
 						}
 					}
 				} else {
 					// Result is null if there was a Server Error while trying to crawl a URL
+					System.err.println("Bad server response (403, 404, 406, 500, 503, etc.");
+					completedTasks.incrementAndGet();
 				}
 
-			} catch (NullPointerException e) {
-				// Ignore Exception - go on crawling
+			
 			} catch (Exception e) {
-				e.printStackTrace();
+				// Ignore Exception - continue crawling
+				System.err.println("Error ocurred while crawling in Crawler-Module: " + e.getMessage());
+				completedTasks.incrementAndGet();
 			}
-
 		}
 
-
-
-		taskExecutor.shutdown();
 		try {
-			System.out.println("Termination started");
-			taskExecutor.awaitTermination(10, TimeUnit.SECONDS);
+			taskExecutor.shutdown();
+			System.out.println("Starting termination of Crawler...");
+			
+			// wait 100 seconds to finish possible pending futures
+			taskExecutor.awaitTermination(100, TimeUnit.SECONDS);
+			java.awt.Toolkit.getDefaultToolkit().beep();
 		} catch (InterruptedException e) {
-			System.out.println("Thread was interrupted - termination");
+			System.err.println("Termination was interrupted");
 		}
-		ThreadGroup currentGroup = 
-				Thread.currentThread().getThreadGroup();
-		int noThreads = currentGroup.activeCount();
-		Thread[] lstThreads = new Thread[noThreads];
-		currentGroup.enumerate(lstThreads);
-		for (int i = 0; i < noThreads; i++)
-			System.out.println("Thread No:" + i + " = "
-					+ lstThreads[i].getName());
-		System.out.println("Threads are shutting down");
-
 	}
 }
