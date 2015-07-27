@@ -7,10 +7,11 @@
 <%@ page import="java.util.List,java.util.Hashtable"%>
 
 <%
-	String hostname = request.getParameter("host");
+	//String hostname = request.getParameter("host");
 
 	RetrieveController rcntrl = new RetrieveController();
 	ArrayList<String> al = rcntrl.getIndeces();
+	ArrayList<String> al2 = rcntrl.getHostnames();
 %>
 <!DOCTYPE html>
 <html>
@@ -29,6 +30,15 @@
 	<% 
 	for(String index : al){
 		out.print("<li><a class='blue folder' href='../tagcloud/index.jsp?host=" + index + "' target='_blank'>" + index + "</a></li>");
+	}
+  %>
+	</ul>
+	
+	
+	<ul class="sticker-tiles">
+	<% 
+	for(String hostname : al2){
+		out.print("<li><a class='blue folder' href='../tagcloud/index.jsp?host=" + hostname + "' target='_blank'>" + hostname + "</a></li>");
 	}
   %>
 	</ul>

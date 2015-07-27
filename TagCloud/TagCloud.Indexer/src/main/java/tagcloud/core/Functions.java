@@ -10,6 +10,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.client.Requests;
+import org.elasticsearch.cluster.metadata.IndexMetaData;
+import org.elasticsearch.common.settings.ImmutableSettings;
+import org.elasticsearch.common.settings.Settings;
+
 public class Functions {
 
 	/**
@@ -181,5 +188,35 @@ public class Functions {
 //System.out.println(file);
 System.out.println(sb.toString());
 		return sb.toString();
+	}
+	
+	public boolean checkIfIndexExists(String indexName, Client client) {
+
+		IndexMetaData indexMetaData = client.admin().cluster()
+				.state(Requests.clusterStateRequest())
+				.actionGet()
+				.getState()
+				.getMetaData()
+				.index(indexName);
+
+		return (indexMetaData != null);
+	}
+	
+	public void createMissingIndex(String indexName, Client client) throws IOException{
+		if (!checkIfIndexExists(indexName, client)){
+			Settings indexSettings = ImmutableSettings.settingsBuilder()
+					.put("number_of_shards", 5)
+					.put("number_of_replicas", 1)
+					.build();			
+			
+			//create index if not exists
+			CreateIndexRequest indexRequest = new CreateIndexRequest(indexName, indexSettings);
+			indexRequest.settings(this.getJsonFile("_jsonfiles", "settings.json"));
+			indexRequest.mapping("website", this.getJsonFile("_jsonfiles", "mappings.json"));
+
+			client.admin().indices().create(indexRequest).actionGet();
+
+			System.out.println("index '" + indexName + "' created");
+		}
 	}
 }

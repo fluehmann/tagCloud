@@ -1,19 +1,10 @@
 package tagcloud.indexer;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
-import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.Requests;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
@@ -47,23 +38,8 @@ public class Indexer {
 	 * @throws IOException
 	 */
 	public boolean index(String index, String type, String id, HashMap<String, String> fields) throws ElasticsearchException, IOException {
-		//System.out.println("indexName before saving: " + index);
-		// check if indexName already exists
-		if (!checkIfIndexExists(index)){
-			Settings indexSettings = ImmutableSettings.settingsBuilder()
-					.put("number_of_shards", 5)
-					.put("number_of_replicas", 1)
-					.build();			
-			
-			//create index if not exists
-			CreateIndexRequest indexRequest = new CreateIndexRequest(index, indexSettings);
-			indexRequest.settings(helperfunc.getJsonFile("_jsonfiles", "settings.json"));
-			indexRequest.mapping("website", helperfunc.getJsonFile("_jsonfiles", "mappings.json"));
-
-			client.admin().indices().create(indexRequest).actionGet();
-
-			System.out.println("index '" + index + "' created");
-		}
+		// check if indexName already exists -> otherwise create new one
+		helperfunc.createMissingIndex(index, client);
 
 		XContentBuilder builder = jsonBuilder();
 		builder.startObject();
@@ -77,17 +53,35 @@ public class Indexer {
 		return true;
 	}
 
-	public boolean checkIfIndexExists(String indexName) {
-
-		IndexMetaData indexMetaData = client.admin().cluster()
-				.state(Requests.clusterStateRequest())
-				.actionGet()
-				.getState()
-				.getMetaData()
-				.index(indexName);
-
-		return (indexMetaData != null);
-	}
+//	public boolean checkIfIndexExists(String indexName, Client client) {
+//
+//		IndexMetaData indexMetaData = client.admin().cluster()
+//				.state(Requests.clusterStateRequest())
+//				.actionGet()
+//				.getState()
+//				.getMetaData()
+//				.index(indexName);
+//
+//		return (indexMetaData != null);
+//	}
+//	
+//	public void createMissingIndex(String indexName, Client client) throws IOException{
+//		if (!checkIfIndexExists(indexName, client)){
+//			Settings indexSettings = ImmutableSettings.settingsBuilder()
+//					.put("number_of_shards", 5)
+//					.put("number_of_replicas", 1)
+//					.build();			
+//			
+//			//create index if not exists
+//			CreateIndexRequest indexRequest = new CreateIndexRequest(indexName, indexSettings);
+//			indexRequest.settings(helperfunc.getJsonFile("_jsonfiles", "settings.json"));
+//			indexRequest.mapping("website", helperfunc.getJsonFile("_jsonfiles", "mappings.json"));
+//
+//			client.admin().indices().create(indexRequest).actionGet();
+//
+//			System.out.println("index '" + indexName + "' created");
+//		}
+//	}
 
 	/**
 	 * 

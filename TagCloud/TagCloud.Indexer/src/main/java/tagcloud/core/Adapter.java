@@ -72,4 +72,8 @@ public class Adapter implements IndexAdapter, RetrieveAdapter{
 		return retrv.retrieveIndeces();
 	}
 
+	public SearchResponse retrieveHostnamesDistinct() throws Exception {
+		return retrv.retrieveHostnamesDistinct();
+	}
+
 }

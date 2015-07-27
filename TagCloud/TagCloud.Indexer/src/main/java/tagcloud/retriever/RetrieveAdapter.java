@@ -9,4 +9,5 @@ public interface RetrieveAdapter {
 	public SearchResponse retrieveByIndexname(String indexName) throws Exception;
 	public SearchResponse retrieveSignificantTerms(String indexName) throws Exception;
 	public ObjectLookupContainer<String> retrieveIndeces() throws Exception;
+	public SearchResponse retrieveHostnamesDistinct() throws Exception;
 }

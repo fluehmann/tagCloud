@@ -1,6 +1,5 @@
 package tagcloud.server.controller;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -10,7 +9,7 @@ import tagcloud.core.Tagprocessing;
 import tagcloud.retriever.RetrieveAdapter;
 
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.search.aggregations.bucket.significant.SignificantTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 
 public class RetrieveController {
 
@@ -67,9 +66,26 @@ public class RetrieveController {
 			result.add(indeces[i].toString());
 			
 			// create stopword file
-			helperfunc.createFile("_blacklist", indeces[i].toString());
+			helperfunc.createFile("_blacklist", indeces[i].toString() + ".txt");
 		}
 		return result;
+	}
+	
+	/**
+	 * Get all hostnames distinct from te index
+	 * @return
+	 * @throws Exception
+	 */
+	public ArrayList<String> getHostnames() throws Exception {
+		ArrayList<String> hostnames = new ArrayList<String>();
+		SearchResponse sr = retriever.retrieveHostnamesDistinct();
+		Terms agg = sr.getAggregations().get("host_names_distinct");
+		for (Terms.Bucket entry : agg.getBuckets()){
+			hostnames.add(entry.getKey());
+			helperfunc.createFile("_blacklist", entry.getKey().toString() + ".txt");
+		}
+		
+		return hostnames;
 	}
 	
 	/**

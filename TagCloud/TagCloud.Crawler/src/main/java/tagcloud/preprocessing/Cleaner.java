@@ -3,7 +3,6 @@ package tagcloud.preprocessing;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 import org.elasticsearch.ElasticsearchException;
@@ -15,13 +14,13 @@ import tagcloud.indexer.IndexAdapter;
 
 public class Cleaner {
 	
-	public Cleaner(IndexAdapter x, Document doc, String url, String hostname) throws ElasticsearchException, IOException {
+	public Cleaner(IndexAdapter idxAdpt, Document doc, String url, String hostname) throws ElasticsearchException, IOException {
 //		IndexAdapter x = new Adapter("elasticsearch", "127.0.0.1");
 //		System.out.println(url + ".. is indexed!");
 		
 //		Send data over to to ElasticSearch
-		String indexName = hostname.replace("http://", "").replace("/", "");
-		x.indexDocument(indexName, "website", url, extractJson(url,doc));
+		String host = hostname.replace("http://", "").replace("/", "");
+		idxAdpt.indexDocument("tagcloud", "website", url, extractJson(host, url,doc));
 
 	}
 	
@@ -29,7 +28,7 @@ public class Cleaner {
 		
 	}
 	
-	public HashMap<String, String> extractJson(String url, Document doc){
+	public HashMap<String, String> extractJson(String hostname, String url, Document doc){
 		
 		
 		String raw = doc.html(); // convert doc to String
@@ -44,6 +43,7 @@ public class Cleaner {
 				
 		// Build up the JSON File to transmit to ES - here the magic happens
 		HashMap<String, String> json = new HashMap<String, String>();
+		json.put("hostname", hostname);
 		json.put("url", url);
 		json.put("content", plain);
 
