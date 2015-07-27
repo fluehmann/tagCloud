@@ -3,6 +3,10 @@
 	margin-left: 80px;
 }
 
+.content p em {
+	color: red;
+}
+
 /* BEGIN Sidebar */
 .no-list {
   list-style-type: none;

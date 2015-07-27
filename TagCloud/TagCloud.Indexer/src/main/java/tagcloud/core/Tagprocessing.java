@@ -2,6 +2,7 @@ package tagcloud.core;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -29,17 +30,24 @@ public class Tagprocessing {
 		
 		for (int i = 0; i < arr.length(); i++)
 		{
+			StringBuilder highlights = new StringBuilder();
 		    String indexUrl = arr.getJSONObject(i).getString("_id");
 		    // get nested json object
-		    String content = arr.getJSONObject(i).getJSONObject("_source").getString("content");
+		    //String content = arr.getJSONObject(i).getJSONObject("_source").getString("content");
+		    JSONArray highlightArr = arr.getJSONObject(i).getJSONObject("highlight").getJSONArray("content");
+		   
+		    for ( int j = 0; j < highlightArr.length(); j++ ){
+		    	if ( j > 0 ){
+		    		highlights.append(" .....");
+		    	}
+		    	highlights.append(highlightArr.getString(j));
+		    }
+
 		    Hashtable<String, String> dictionary = new Hashtable<String, String>(); 
 		    
 		    // values from json
 		    dictionary.put("url", indexUrl);
-		    dictionary.put("content", content);
-		    
-		    // values which are not stored in the documents on elasticsearch
-		    dictionary.put("keyword", "sdsdsd");
+		    dictionary.put("highlight", highlights.toString());
 			
 		    tags.add(dictionary);
 		}
