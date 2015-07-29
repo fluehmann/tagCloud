@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import tagcloud.core.Adapter;
+import tagcloud.crawler.CrawlerShell;
 import tagcloud.indexer.IndexAdapter;
 
 
@@ -21,13 +22,22 @@ import tagcloud.indexer.IndexAdapter;
  * 
  */
 //public class WebCrawler implements Crawler {
-public class WebCrawler {
+public class WebCrawler extends CrawlerShell {
+
+	// call super constructor
+	public WebCrawler(String hostname) {
+		super(hostname);
+	}
+
+
 
 	// Unleash ultimate power - hold your horses!
 //	private final int POOL_SIZE = Runtime.getRuntime().availableProcessors()*10;
 	private final int POOL_SIZE = Runtime.getRuntime().availableProcessors();
-	private final IndexAdapter idxAdptr;
-	private final String hostname;
+	
+	// old fields - now superFields
+//	private final IndexAdapter idxAdptr;
+//	private final String hostname;
 
 
 
@@ -39,12 +49,12 @@ public class WebCrawler {
 	private final AtomicInteger completedTasks = new AtomicInteger(0);
 
 
-
-	public WebCrawler(String hostname){
-		IndexAdapter idxAdptr = new Adapter("elasticsearch", "127.0.0.1");
-		this.idxAdptr = idxAdptr;
-		this.hostname = hostname;
-	}
+	// old constuctor - now superConstructor
+//	public WebCrawler(String hostname){
+//		IndexAdapter idxAdptr = new Adapter("elasticsearch", "127.0.0.1");
+//		this.idxAdptr = idxAdptr;
+//		this.hostname = hostname;
+//	}
 
 	/**
 	 * Crawls the www starting at {@code startURL}
@@ -53,7 +63,7 @@ public class WebCrawler {
 	 * @return a hashmap with URLs as Key and webPage Objects as values
 	 */
 	public void crawl(final String startURL) {
-
+		
 		final ExecutorService taskExecutor = Executors.newFixedThreadPool(POOL_SIZE);
 		final CompletionService<List<String>> taskQueue = new ExecutorCompletionService<List<String>>(taskExecutor);
 
@@ -125,10 +135,11 @@ public class WebCrawler {
 		try {
 			taskExecutor.shutdown();
 			System.out.println("Starting termination of Crawler...");
+			System.out.println("Finishing up running Threads");
 			
 			// wait 100 seconds to finish possible pending futures
 			taskExecutor.awaitTermination(100, TimeUnit.SECONDS);
-			java.awt.Toolkit.getDefaultToolkit().beep();
+			java.awt.Toolkit.getDefaultToolkit().beep(); // beep
 		} catch (InterruptedException e) {
 			System.err.println("Termination was interrupted");
 		}

@@ -138,11 +138,14 @@ public class Indexer {
 			    JsonSettings = sb.toString();
 			    
 			} catch (FileNotFoundException e) {
-				System.err.println("Settings-File not found: " + e.getMessage());
+//				System.err.println("Settings-File not found: " + e.getMessage());
+				e.printStackTrace();
 			} catch (UnsupportedEncodingException e) {
-				System.err.println("Settings-File Encoding Exception: " + e.getMessage());
+//				System.err.println("Settings-File Encoding Exception: " + e.getMessage());
+				e.printStackTrace();
 			} catch (IOException e) {
-				System.err.println("Failed to load Settings-File: " + e.getMessage());
+//				System.err.println("Failed to load Settings-File: " + e.getMessage());
+				e.printStackTrace();
 			}
 		return JsonSettings;
 	}

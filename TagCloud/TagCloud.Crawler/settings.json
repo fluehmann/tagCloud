@@ -1,22 +1,85 @@
 {
         "analysis": {
+        
+        	"filter": {
+        		"german_stop": {
+            		"type":             "stop",
+            		"stopwords":    "_german_" 
+        		},
+        		
+        		"english_stop": {
+            		"type":             "stop",
+            		"stopwords":    "_english_" 
+        		},
+        		
+        		"french_stop": {
+            		"type":             "stop",
+            		"stopwords":    "_french_" 
+        		},
+        		
+        		"german_stemmer": {
+            		"type":             "stemmer",
+            		"language":     "light_german"
+        		},
+        		
+        		"english_stemmer": {
+            		"type":             "stemmer",
+            		"language":     "light_english"
+        		},
+        		
+        		"french_stemmer": {
+            		"type":             "stemmer",
+            		"language":     "light_french"
+        		},
+        		
+        		"custom_stop_de": {
+        			"type": "stop",
+        			"stopwords": [ "wort1", "wort2" ]
+        		},
+        		
+        		"custom_stop_en": {
+        			"type": "stop",
+        			"stopwords": [ "term1", "term2" ]
+        		}
+        	},
+
+        	"char_filter" : {
+				"kill_numbers" : {
+                    "type": "pattern_replace",
+            		"pattern": "(\\d+)",
+            		"replace": ""
+				}
+			},	
+
             "analyzer": {
-                "normal": {
-                    "type":      "stop",
-                    "stopwords": "_german_",
-                    "stopwords": "_english_",
-                    "stemmer" : "light_german"
-                    
-                },
-                "german": {
-                	"type" : "stop",
-                	"stopwords" : "_german_"
-                },
-                	
-                "english": {
-                	"type" : "stop",
-                	"stopwords" : "_english_"
-                	}
-            }
-        }
-    }
+				"de": {
+					"char_filter": "kill_numbers",
+					"tokenizer": "standard",
+					"filter": [
+						"lowercase",
+						"german_stop",
+						"custom_stop_de"
+					]
+				},
+				
+		        "en": {
+		        	"char_filter": "kill_numbers",
+		            "tokenizer":    "standard",
+		            "filter": [
+		                "lowercase",
+						"english_stop",
+						"custom_stop_en"
+           			]
+        		},
+        		
+        		"fr": {
+        			"char_filter": "kill_numbers",
+		            "tokenizer":    "standard",
+		            "filter": [
+		                "lowercase",
+						"french_stop"
+           			]
+        		}
+			}
+		}
+}

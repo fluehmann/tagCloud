@@ -1,16 +1,18 @@
 {
-         "website": {
-            "properties": {
-               "content": {
-                  "type": "string",
-                  "analyzer": "normal"
-                  },
-               "timestamp": {
-                  "type": "string"
-               },
-               "url": {
-                  "type": "string"
-               }
-            }
-         }
-     } 
+	"website": {
+		"properties": {
+			"content": {
+				"type": "string",
+				"analyzer": "de"
+			},
+			
+			"timestamp": {
+				"type": "string"
+			},
+			
+			"url": {
+				"type": "string"
+			}
+		}
+	}
+} 
