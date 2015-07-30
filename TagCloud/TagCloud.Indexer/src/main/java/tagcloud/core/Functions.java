@@ -9,6 +9,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.client.Requests;
+import org.elasticsearch.cluster.metadata.IndexMetaData;
+import org.elasticsearch.common.settings.ImmutableSettings;
+import org.elasticsearch.common.settings.Settings;
+
+import tagcloud.database.Database;
 
 public class Functions {
 
@@ -180,6 +191,86 @@ public class Functions {
 //		String relative = new File(base).toURI().relativize(new File(path).toURI()).getPath();
 //System.out.println(file);
 System.out.println(sb.toString());
+		return sb.toString();
+	}
+	
+	/**
+	 * Check if a specific given index exists
+	 * @param indexName
+	 * @param client
+	 * @return
+	 */
+	public boolean checkIfIndexExists(String indexName, Client client) {
+
+		IndexMetaData indexMetaData = client.admin().cluster()
+				.state(Requests.clusterStateRequest())
+				.actionGet()
+				.getState()
+				.getMetaData()
+				.index(indexName);
+
+		return (indexMetaData != null);
+	}
+	
+	/**
+	 * Create new index given by name if not already exists
+	 * import prepared json settings and mappings files
+	 * @param indexName
+	 * @param client
+	 * @throws IOException
+	 */
+	public void createMissingIndex(String indexName, Client client) throws IOException{
+		if (!checkIfIndexExists(indexName, client)){
+			Settings indexSettings = ImmutableSettings.settingsBuilder()
+					.put("number_of_shards", 5)
+					.put("number_of_replicas", 1)
+					.build();			
+			
+			//create index if not exists
+			CreateIndexRequest indexRequest = new CreateIndexRequest(indexName, indexSettings);
+			indexRequest.settings(this.getJsonFile("_jsonfiles", "settings.json"));
+			indexRequest.mapping("website", this.getJsonFile("_jsonfiles", "mappings.json"));
+
+			client.admin().indices().create(indexRequest).actionGet();
+			
+			// Create databse if no exitst
+			
+			System.out.println("index '" + indexName + "' created");
+		}
+	}
+	
+	/**
+	 * Return the hostname without protocoll
+	 * @param hostname
+	 * @return
+	 */
+	public String removeProtocollFromHost(String hostname){
+		String newHost = "";
+		newHost = hostname.replace("http://", "")
+						  .replace("https://", "")
+						  .replace("/", "");
+		return newHost;
+	}
+	
+	/**
+	 * Get all excluded Terms as string, each term separated by "|" (RegEx notation)
+	 * @param tableName
+	 * @param db
+	 * @return
+	 * @throws SQLException
+	 */
+	public String getExcludedKeywords(String tableName, Database db) throws SQLException {
+		//Database db = Database.getDbCon(); 
+		String table = tableName.replace(".", "_");
+	System.out.println(table);
+		ResultSet rs = db.query("SELECT id, keyword FROM " + table + " ORDER BY keyword ASC;");
+		StringBuilder sb = new StringBuilder();
+
+		while ( rs.next() ){
+			//1=id, 2=keyword
+			sb.append(rs.getString(2) + "|");
+		}
+		
 		return sb.toString();
 	}
 }

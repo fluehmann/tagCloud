@@ -1,5 +1,7 @@
 package tagcloud.retriever;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,17 +18,21 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.significant.SignificantTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 
 import tagcloud.connection.ESConnection;
 import tagcloud.core.Functions;
+import tagcloud.database.Database;
 
 public class Retriever {
 	Client client;
 	Functions helperfunc;
+	Database db;
 
 	public Retriever(String clustername, String ip) {
 		client = new ESConnection().connect(clustername, ip);
 		helperfunc =  new Functions();
+		db = Database.getDbCon();
 	}
 
 	/**
@@ -40,12 +46,10 @@ public class Retriever {
 	 *            URL can be given
 	 * @return response from Elasticseach in json
 	 */
-	public GetResponse retrieve(String indexName, String indexType,
-			@Nullable String indexId) {
+	public GetResponse retrieve(String indexName, String indexType, @Nullable String indexId) {
 
 		// 1.Param = index; 2.Param = Type; 3.Param = id(optional)
-		GetResponse response = client.prepareGet(indexName, indexType, indexId)
-				.execute().actionGet();
+		GetResponse response = client.prepareGet(indexName, indexType, indexId).execute().actionGet();
 		return response;
 	}
 
@@ -59,14 +63,17 @@ public class Retriever {
 	 *            An Keyword which is part of the search term
 	 * @return Response from Elasticsearch in json
 	 */
-	public SearchResponse retrieveByKeyword(String indexName, String keyword) {
+	public SearchResponse retrieveByKeyword(String indexName, String hostname, String keyword) {
 
 //		QueryBuilder multiMatch = QueryBuilders.multiMatchQuery(keyword, "content");
 //		SearchResponse response = client.prepareSearch(indexName)
 //				.setQuery(multiMatch).execute().actionGet();
 		
-		QueryBuilder qb = QueryBuilders.matchPhraseQuery("content", keyword);
-		SearchResponse response =  client.prepareSearch(indexName)
+		QueryBuilder qb = QueryBuilders.boolQuery()
+				.must(QueryBuilders.matchPhraseQuery("hostname", helperfunc.removeProtocollFromHost(hostname)))
+				.must(QueryBuilders.matchQuery("content", keyword));
+		
+		SearchResponse response =  client.prepareSearch(helperfunc.removeProtocollFromHost(indexName))
 				.setQuery(qb)
 				.addHighlightedField("content")
 				.execute().actionGet();
@@ -83,12 +90,11 @@ public class Retriever {
 	 * @return Response from Elasticseach in json
 	 * @throws Exception
 	 */
-	public SearchResponse retrieveByIndexname(String indexName)
-			throws Exception {
+	public SearchResponse retrieveByIndexname(String indexName)	throws Exception {
 
 		// Execute the query
 		SearchResponse sr = null;
-		sr = client.prepareSearch(indexName)
+		sr = client.prepareSearch(helperfunc.removeProtocollFromHost(indexName))
 				.setQuery(QueryBuilders.matchAllQuery()).setSize(50).execute()
 				.actionGet();
 
@@ -109,6 +115,48 @@ public class Retriever {
 				.indices().keys();
 		return olc;
 	}
+	
+	/**
+	 * Select distinct hostnames from a specific index
+	 * Actually the index name is hardcoded as "tagcloud" -> could be passed by parameters
+	 * @return
+	 * @throws IOException 
+	 */
+	public SearchResponse retrieveHostnamesDistinct() throws IOException {
+		// fix variables -> can use as parameters if needed
+		String indexName = "tagcloud";
+		String indexType = "website";
+		String fieldName = "hostname";
+		
+		// check if indexName already exists -> otherwise create new one
+		helperfunc.createMissingIndex(indexName, client);
+		
+		AggregationBuilder<?> aggregation = AggregationBuilders
+				.terms("host_names_distinct")
+				.field(fieldName)
+				.size(0);
+		
+		SearchResponse sr = client.prepareSearch(indexName)
+				.setQuery(QueryBuilders.matchAllQuery())
+				.setSearchType(SearchType.COUNT)
+				.addAggregation(aggregation)
+				.execute()
+				.actionGet();
+		
+		Terms agg = sr.getAggregations().get("host_names_distinct");
+		if ( !agg.getBuckets().isEmpty() ){
+			for ( Terms.Bucket entry : agg.getBuckets() ){
+				try {
+					db.createTable(entry.getKey());
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return sr;
+	}
 
 	/**
 	 * 
@@ -116,31 +164,30 @@ public class Retriever {
 	 * @return
 	 * @throws Exception
 	 */
-	public SearchResponse retrieveSignificantTerms(String indexName)
-			throws Exception {
-
-		// create txt file in _blacklist folder if not exists
-		// name is same as indexName
-		// read each line append string to stringbuilder
-		// make stringbuilder to string -> use for exclude
-
+	public SearchResponse retrieveSignificantTerms(String indexName) throws Exception {
+		String tblName = helperfunc.removeProtocollFromHost(indexName);
 		
-
+		String hostname = tblName;
+		indexName = "tagcloud";
+		
+		String excludes = helperfunc.getExcludedKeywords(tblName, db);
+System.out.println(excludes);		
 		AggregationBuilder<?> aggregation = AggregationBuilders
 				.significantTerms("tagcloud_keywords")
 				.field("content")
-				.exclude(helperfunc.getExcludedTerms("_blacklist", indexName + ".txt"))
+				.exclude(excludes)
+				//.exclude(helperfunc.getExcludedTerms("_blacklist", hostname + ".txt"))
 				.size(30);
 
 		SearchResponse sr = client.prepareSearch(indexName)
-				.setQuery(QueryBuilders.matchAllQuery())
+				//.setQuery(QueryBuilders.matchAllQuery())
 				.setQuery(QueryBuilders.termQuery("_type", "website"))
+				.setQuery(QueryBuilders.matchQuery("hostname", hostname))
 				.setSearchType(SearchType.COUNT)
 				.addAggregation(aggregation)
 				// .get();
 				.execute().actionGet();
 
-		// sr is here your SearchResponse object
 //		SignificantTerms agg = sr.getAggregations().get("significant_keywords");
 
 		// For each entry

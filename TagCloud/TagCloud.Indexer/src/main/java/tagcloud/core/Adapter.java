@@ -45,8 +45,8 @@ public class Adapter implements IndexAdapter, RetrieveAdapter{
 	/**
 	 * 
 	 */
-	public SearchResponse retrieveByKeyword(String indexName, String keyword) {		
-		return retrv.retrieveByKeyword(indexName, keyword);
+	public SearchResponse retrieveByKeyword(String indexName, String hostname, String keyword) {		
+		return retrv.retrieveByKeyword(indexName, hostname, keyword);
 	}
 
 	/**
@@ -70,6 +70,10 @@ public class Adapter implements IndexAdapter, RetrieveAdapter{
 	 */
 	public ObjectLookupContainer<String> retrieveIndeces() throws Exception {
 		return retrv.retrieveIndeces();
+	}
+
+	public SearchResponse retrieveHostnamesDistinct() throws Exception {
+		return retrv.retrieveHostnamesDistinct();
 	}
 
 }

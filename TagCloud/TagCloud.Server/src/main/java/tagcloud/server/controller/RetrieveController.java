@@ -1,6 +1,5 @@
 package tagcloud.server.controller;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -10,7 +9,7 @@ import tagcloud.core.Tagprocessing;
 import tagcloud.retriever.RetrieveAdapter;
 
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.search.aggregations.bucket.significant.SignificantTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 
 public class RetrieveController {
 
@@ -38,16 +37,17 @@ public class RetrieveController {
 	}
 	
 	/**
-	 * 
+	 * Retrieve documents which match by given hostname and keyword (by clicking on a link in tagcloud)
 	 * @param hostname
 	 * @param keyword
 	 * @return
 	 * @throws Exception
 	 */
 	public ArrayList<Hashtable<String, String>> get(String hostname, String keyword) throws Exception {
-		String indexName = hostname.replace("http://", "").replace("/", "");
+		String indexName = "tagcloud";
+		String host = hostname.replace("http://", "").replace("/", "");
 		// SearchResponse as String (json)
-		String result = retriever.retrieveByKeyword(indexName, keyword).toString();
+		String result = retriever.retrieveByKeyword(indexName, hostname, keyword).toString();
 		
 		// parse json to ArrayList with key-value entries
 		return new Tagprocessing().getTags(result.toString());
@@ -67,9 +67,27 @@ public class RetrieveController {
 			result.add(indeces[i].toString());
 			
 			// create stopword file
-			helperfunc.createFile("_blacklist", indeces[i].toString());
+			//helperfunc.createFile("_blacklist", indeces[i].toString() + ".txt");
 		}
 		return result;
+	}
+	
+	/**
+	 * Get all hostnames distinct from te index
+	 * @return
+	 * @throws Exception
+	 */
+	public ArrayList<String> getHostnames() throws Exception {
+		ArrayList<String> hostnames = new ArrayList<String>();
+		SearchResponse sr = retriever.retrieveHostnamesDistinct();
+		Terms agg = sr.getAggregations().get("host_names_distinct");
+		for (Terms.Bucket entry : agg.getBuckets()){
+			hostnames.add(entry.getKey());
+			//not used anymore because mysql impl
+			//helperfunc.createFile("_blacklist", entry.getKey().toString() + ".txt");
+		}
+		
+		return hostnames;
 	}
 	
 	/**
@@ -85,7 +103,7 @@ public class RetrieveController {
 		String indexName = hostname.replace("http://", "").replace("/", "");
 		
 		SearchResponse result = retriever.retrieveSignificantTerms(indexName);
-		System.out.println("SignificantTerms: " + result.toString());
+//		System.out.println("SignificantTerms: " + result.toString());
 
 		// sr is here your SearchResponse object
 		//SignificantTerms agg = result.getAggregations().get("tagcloud_keywords");		
