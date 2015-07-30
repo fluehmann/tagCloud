@@ -51,10 +51,11 @@ aside.sidebar ul.sb_top_lv li.active {
   left: -125px;
 }
 aside.sidebar ul.sb_top_lv li.active a {
-  background: #3498db;
+  background: #00B4FF;
 }
 aside.sidebar ul.sb_top_lv li:hover {
   left: -70px;
+  background: #00B4FF;
 }
 aside.sidebar ul.sb_top_lv li:hover a {
   cursor: pointer;
@@ -69,6 +70,11 @@ aside.sidebar ul.sb_top_lv li a {
   background: #222;
   color: white;
 }
+
+aside.sidebar ul.sb_top_lv li a:hover {
+	background-color: #00B4FF;	
+}
+
 aside.sidebar ul.sb_top_lv li a .icon {
   float: right;
   height: 40px;
@@ -185,7 +191,7 @@ aside.sidebar ul.sb_top_lv li a span {
   width: 10px;
 }
 .sticker-tiles li a.blue:before {
-  background-color: #00aadd;
+  background-color: #00B4FF;
   box-shadow: 0 0 0 2px #00aadd;
 }
 .sticker-tiles li a.green:before {

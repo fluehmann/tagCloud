@@ -58,6 +58,7 @@
 					"filter": [
 						"lowercase",
 						"german_stop",
+                        "english_stop",
 						"custom_stop_de"
 					]
 				},

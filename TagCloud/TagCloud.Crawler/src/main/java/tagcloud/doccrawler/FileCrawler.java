@@ -33,12 +33,12 @@ public class FileCrawler extends CrawlerShell {
 		String suffix = FilenameUtils.getExtension(filePath);
 		// build json document from filepath and filecontent
 		HashMap<String, String> json = new HashMap<String, String>();
-		// json.put(filePath, importTextFile(filePath));
 
 		// determine which import-method to use
+		// can easily be enhanced with other file-types
 		switch (suffix.toLowerCase()) {
 		case "txt":
-			json.put(filePath, importTextFile(filePath));
+			json.put(fileName, importTextFile(filePath));
 			break;
 		case "docx":
 			System.err.println("." + suffix + " Files cannot be imported yet");
@@ -49,9 +49,7 @@ public class FileCrawler extends CrawlerShell {
 		default:
 			System.err.println("." + suffix + " Files cannot be imported yet");
 		}
-
-		// should be name and in the end the path and the creation date
-		sendToIndex(filePath, json);
+		sendToIndex(fileName, json);
 	}
 
 	// method to get the content of a file
@@ -88,8 +86,10 @@ public class FileCrawler extends CrawlerShell {
 			idxAdptr.indexDocument(fileName, "file", filePath, json);
 		} catch (ElasticsearchException e) {
 			e.printStackTrace();
+			System.out.println("Problem 1");
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.out.println("Problem 2");
 		}
 	}
 }

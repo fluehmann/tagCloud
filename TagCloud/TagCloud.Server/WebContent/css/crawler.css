@@ -1,9 +1,11 @@
 @import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
 
 html {
-	background: url(http://thekitemap.com/images/feedback-img.jpg) no-repeat;
+	background: url(http://download.unsplash.com/photo-1428908728789-d2de25dbd4e2) no-repeat;
 	background-size: cover;
 	height: 100%;
+	font-family: Helvetica, Arial, sans-serif;
+	
 }
 
 #form-main {
@@ -13,7 +15,7 @@ html {
 }
 
 #form-div {
-	background-color: rgba(72, 72, 72, 0.4);
+	background-color: #fff;
 	padding-left: 35px;
 	padding-right: 35px;
 	padding-top: 35px;
@@ -28,49 +30,83 @@ html {
 	-webkit-border-radius: 7px;
 }
 
-.crawl-input {
+#box {
+	    margin: auto;
+	    background-color: #fff;
+	    padding: 20px;
+	    width: 500px;
+	    min-height: 340px;
+	    margin-top: 100px;
+	    text-align: center;
+}
+
+#logowrapper{
+	width: 250px;
+    margin: auto;
+    margin-top: 50px;
+    margin-bottom: -155px;
+    text-align: center;
+}
+
+#logo {
+	margin: auto;
+	width: 100px;
+}
+
+.style-select {
+	height: 50px;
+	overflow: hidden;
+	background-color: #e7e7e7;
+	border-radius: 0;
+	border: none;
 	color: #3c3c3c;
-	font-family: Helvetica, Arial, sans-serif;
+	font-weight: 500;
+	font-size: 18px;
+	width: 100%;
+   }
+
+.crawl-input {
+	height: 50px;
+	color: #3c3c3c;
 	font-weight: 500;
 	font-size: 18px;
 	border-radius: 0;
 	line-height: 22px;
-	background-color: #fbfbfb;
-	padding: 13px 13px 13px 54px;
-	margin-bottom: 10px;
+	background-color: #e7e7e7;
+	padding: 13px 13px 13px 13px;
 	width: 100%;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-ms-box-sizing: border-box;
 	box-sizing: border-box;
-	border: 3px solid rgba(0, 0, 0, 0);
+	border: 3px solid #e7e7e7;
 }
 
 .crawl-input:focus {
 	background: #fff;
 	box-shadow: 0;
-	border: 3px solid #3498db;
-	color: #3498db;
+	border: 3px solid #00B4FF;
 	outline: none;
-	padding: 13px 13px 13px 54px;
+	padding: 13px 13px 13px 13px;
 }
 
 .focused {
-	color: #30aed6;
-	border: #30aed6 solid 3px;
+	color: #00B4FF;
+	border: #00B4FF solid 3px;
 }
 
 input:hover, textarea:hover, input:focus, textarea:focus {
-	background-color: white;
+	background-color: #fff;
+	border-color: #00B4FF;
 }
 
 #button-blue {
-	font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+	height: 80px;
 	float: left;
 	width: 100%;
-	border: #fbfbfb solid 4px;
+	border: #00B4FF solid 4px;
 	cursor: pointer;
-	background-color: #3498db;
+	background-color: #00B4FF;
 	color: white;
 	font-size: 24px;
 	padding-top: 22px;
@@ -84,11 +120,12 @@ input:hover, textarea:hover, input:focus, textarea:focus {
 
 #button-blue:hover {
 	background-color: rgba(0, 0, 0, 0);
-	color: #0493bd;
+	color: #00B4FF;
+	border-color: #00B4FF;
 }
 
 .submit:hover {
-	color: #3498db;
+	color: #00B4FF;
 }
 
 .ease {

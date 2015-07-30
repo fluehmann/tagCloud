@@ -57,8 +57,8 @@ public class Indexer {
 			
 			//create index if not exists
 			CreateIndexRequest indexRequest = new CreateIndexRequest(index, indexSettings);
-			indexRequest.settings(getSettingsJsonString());
-			indexRequest.mapping("website", getMappingsJsonString());
+//			indexRequest.settings(getSettingsJsonString());
+//			indexRequest.mapping(type, getMappingsJsonString());
 
 			client.admin().indices().create(indexRequest).actionGet();
 

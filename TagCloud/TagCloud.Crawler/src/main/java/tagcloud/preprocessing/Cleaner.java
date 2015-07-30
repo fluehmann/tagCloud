@@ -33,7 +33,7 @@ public class Cleaner {
 		
 		
 		String raw = doc.html(); // convert doc to String
-		raw = raw.replaceAll("&nbsp;","").trim(); // replace nonbreakingspace
+		raw = raw.replaceAll("&nbsp;"," ").trim(); // replace nonbreakingspace
 		raw = raw.replaceAll("&amp;","und").trim(); // replace &
 				
 		// Whitelist will strip html from the string & prevent from XSS attacks

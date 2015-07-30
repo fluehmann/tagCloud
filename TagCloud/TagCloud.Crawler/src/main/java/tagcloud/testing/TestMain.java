@@ -2,6 +2,9 @@ package tagcloud.testing;
 
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import tagcloud.doccrawler.FileCrawler;
 import tagcloud.indexer.IndexAdapter;
 import tagcloud.webcrawler.CrawlCallable;
@@ -34,7 +37,7 @@ public class TestMain {
 		// measure execution time of crawler
 		long startTime = System.nanoTime();
 		
-		new WebCrawler(url).crawl(url);
+//		new WebCrawler(url).crawl(url);
 //		new SingleWebCrawler(url).crawl(url);
 //		new FileCrawler(path).crawl(path);
 		
