@@ -14,6 +14,7 @@ import org.elasticsearch.common.xcontent.XContentBuilder;
 
 import tagcloud.connection.ESConnection;
 import tagcloud.core.Functions;
+import tagcloud.database.Database;
 import static org.elasticsearch.common.xcontent.XContentFactory.*;
 
 public class Indexer {

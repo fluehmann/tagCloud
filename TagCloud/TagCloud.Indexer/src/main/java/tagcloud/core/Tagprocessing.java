@@ -62,7 +62,7 @@ public class Tagprocessing {
 		for (int i = 0; i < arr.length(); i++)
 		{
 			String keyword = arr.getJSONObject(i).getString("key");
-			double score = arr.getJSONObject(i).getDouble("score")*1000;
+			double score = arr.getJSONObject(i).getDouble("score");
 		    Hashtable<String, String> dictionary = new Hashtable<String, String>(); 
 		    
 		    // values from json

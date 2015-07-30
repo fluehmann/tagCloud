@@ -19,8 +19,7 @@ public final class Database {
 		String password = "";
 		try {
 			Class.forName(driver).newInstance();
-			this.conn = (Connection) DriverManager.getConnection(url + dbName,
-					userName, password);
+			this.conn = (Connection) DriverManager.getConnection(url + dbName, userName, password);
 		} catch (Exception sqle) {
 			sqle.printStackTrace();
 		}
@@ -35,7 +34,6 @@ public final class Database {
 			db = new Database();
 		}
 		return db;
-
 	}
 
 	/**
@@ -63,6 +61,29 @@ public final class Database {
 		statement = db.conn.createStatement();
 		int result = statement.executeUpdate(insertQuery);
 		return result;
-
+	}
+	
+	/**
+	 * Delete a record from a table
+	 * @param deleteQuery
+	 * @return
+	 * @throws SQLException
+	 */
+	public int delete(String deleteQuery) throws SQLException {
+		statement = db.conn.createStatement();
+		int result = statement.executeUpdate(deleteQuery);
+		return result;
+	}
+	
+	public int createTable(String tableName) throws SQLException {
+		String table = tableName.replace(".", "_");
+	System.out.println(table);
+		statement = db.conn.createStatement();
+		int result = statement.executeUpdate("CREATE TABLE IF NOT EXISTS "+ table +" ("
+						 + "id INT NOT NULL AUTO_INCREMENT, "
+						 + "keyword VARCHAR(50) NOT NULL, "
+						 + "PRIMARY KEY (id)"
+						 + ")");
+		return result;
 	}
 }
