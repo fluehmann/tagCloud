@@ -1,5 +1,7 @@
+<%@page import="tagcloud.server.controller.TagController"%>
+<%@page import="java.util.HashMap"%>
 <%@ page import="tagcloud.server.controller.RetrieveController"%>
-<%@ page import="tagcloud.server.controller.CrawlController"%>
+<%@ page import="tagcloud.server.controller.TagController"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.List,java.util.ArrayList"%>
 <%@ page import="java.util.List,java.util.Iterator"%>
@@ -10,7 +12,9 @@
 
 	RetrieveController rcntrl = new RetrieveController();
 	ArrayList<Hashtable<String, String>> al = rcntrl.getSigTerms(hostname);
-	//rcntrl.getSigTerms(hostname);
+	
+	TagController tcntrl = new TagController();
+	Hashtable<Integer, String> table = tcntrl.getKeywordFromBlacklist(hostname);
 %>
 <!DOCTYPE html>
 <html>
@@ -19,6 +23,8 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jqcloud.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/dashboard.css" />
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/modal.css" />
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/addtoblacklist.css" />
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jqcloud.min.js"></script>
@@ -34,11 +40,29 @@
 		<% out.print("Gefundene URLs zu " + hostname); %>
 	</h1>
 
-	<div id="cloudtest">
+	<div id="cloudtest">	
 	</div>
-	<div id="cloud">
-		<% rcntrl.getSigTerms(hostname); %>
+	
+	<div class='container'>
+	  <h1>Ignore keyword</h1>
+	  <form method="post" action="handleKeyword.jsp?action=add">
+	  	<input name="hostname" type="hidden" value="<% out.print(hostname); %>">
+	  	<input class="search" name="ign_keyword" type="search">
+	  </form>
 	</div>
+	
+	<a href="#openModal">Open Modal</a>
+	<div id="openModal" class="modalDialog">
+	  <dialog>
+	    <a href="#" title="Close" class="close">X</a>
+	    <h2>Modal Box</h2>
+	    <%  for (int key : table.keySet()) {
+						out.print("<p><a href='handleKeyword.jsp?action=delete&hostname="+ hostname +"&key=" + key + "'>" + table.get(key) + "</a></p>");
+	    		}
+	    %>
+	  </dialog>
+	</div>
+	
 </div>
 </body>
 <script>
@@ -67,5 +91,4 @@ $('#cloudtest').jQCloud(words, {
 	  height: 600
 	});
 </script>
-<script src="http://d3js.org/d3.v3.min.js"></script>
 </html>

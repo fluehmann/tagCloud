@@ -29,7 +29,7 @@
 	<ul class="sticker-tiles">
 	<% 
 	for(String index : al){
-		out.print("<li><a class='blue folder' href='../tagcloud/index.jsp?host=" + index + "' target='_blank'>" + index + "</a></li>");
+		//out.print("<li><a class='blue folder' href='../tagcloud/index.jsp?host=" + index + "' target='_blank'>" + index + "</a></li>");
 	}
   %>
 	</ul>

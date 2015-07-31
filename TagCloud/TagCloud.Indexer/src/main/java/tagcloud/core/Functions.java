@@ -9,8 +9,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.client.Client;
@@ -21,7 +27,12 @@ import org.elasticsearch.common.settings.Settings;
 
 import tagcloud.database.Database;
 
-public class Functions {
+public class Functions extends HttpServlet {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Create a file if not exists in the data folder of the tomcat installation
@@ -47,8 +58,12 @@ public class Functions {
 			} else {
 				System.out.println("File '" + fileName + "' alredy exists");
 			}
+		} catch (FileNotFoundException e) {
+			System.err.println(fileName + " File not found: " + e.getMessage());
+		} catch (UnsupportedEncodingException e) {
+			System.err.println(fileName + " File Encoding Exception: " + e.getMessage());
 		} catch (IOException e) {
-			System.out.println("Pfad falsch");
+			System.err.println(fileName + " Failed to load File: " + e.getMessage());
 		}
 		return f;
 	}
@@ -91,71 +106,6 @@ public class Functions {
 		return excludedKeywords;
 	}
 
-//	public String getMappingsJsonString() {
-//		String JsonMappings = null;
-//		try {
-//
-//			File f = new File("mappings.json");
-//			String path = f.getAbsolutePath();
-//			InputStream fis = new FileInputStream(path);
-//
-//			StringBuilder sb = new StringBuilder();
-//			Reader r = new InputStreamReader(fis);
-//			int ch = r.read();
-//			while (ch >= 0) {
-//				sb.append((char) ch);
-//				ch = r.read();
-//			}
-//			r.close();
-//			JsonMappings = sb.toString();
-//			System.out.println(JsonMappings);
-//
-//		} catch (FileNotFoundException e) {
-//			System.err.println("Mapping-File not found: " + e.getMessage());
-//		} catch (UnsupportedEncodingException e) {
-//			System.err.println("Mapping-File Encoding Exception: "
-//					+ e.getMessage());
-//		} catch (IOException e) {
-//			System.err
-//					.println("Failed to load Mapping-File: " + e.getMessage());
-//		}
-//		return JsonMappings;
-//	}
-//
-//	// retrieve JSON Settings file
-//	public String getSettingsJsonString() {
-//		String JsonSettings = null;
-//		try {
-//			// InputStream fis;
-//			// fis = new FileInputStream("settings.json");
-//
-//			File f = new File("settings.json");
-//			String path = f.getAbsolutePath();
-//			InputStream fis = new FileInputStream(path);
-//
-//			StringBuilder sb = new StringBuilder();
-//			Reader r = new InputStreamReader(fis);
-//			int ch = r.read();
-//			while (ch >= 0) {
-//				sb.append((char) ch);
-//				ch = r.read();
-//			}
-//			r.close();
-//			JsonSettings = sb.toString();
-//			System.out.println(JsonSettings);
-//
-//		} catch (FileNotFoundException e) {
-//			System.err.println("Settings-File not found: " + e.getMessage());
-//		} catch (UnsupportedEncodingException e) {
-//			System.err.println("Settings-File Encoding Exception: "
-//					+ e.getMessage());
-//		} catch (IOException e) {
-//			System.err.println("Failed to load Settings-File: "
-//					+ e.getMessage());
-//		}
-//		return JsonSettings;
-//	}
-
 	/**
 	 * Read the content from a file and give it back as a string
 	 * @param folderName
@@ -164,20 +114,25 @@ public class Functions {
 	 * @throws IOException
 	 */
 	public String getJsonFile(String folderName, String fileName) throws IOException {
+//		ServletConfig conf = getServletConfig();
+//		ServletContext context = conf.getServletContext();
+		//InputStream fis = context.getClass().getClassLoader().getResourceAsStream(folderName + fileName);
 		
-//		File catalinaBase = new File(System.getProperty("catalina.home")).getAbsoluteFile();
-//		File folder = new File(catalinaBase, "data/" + folderName);
-//		
-//		//String path = System.getProperty("user.dir") + "/jsonfiles/";
-//		//File directory = new File(folder + "/" + fileName);
-//		
-//		File file = new File(folder + "/" + fileName);
-//		
-//		if (!file.exists()){
-//			folder.mkdirs();
-//			file.createNewFile();
-//		}
-		InputStream fis = new FileInputStream(createFile(folderName, fileName));
+//		ServletContext context = getContext();
+//		String fullPath = context.getRealPath("/WEB-INF/test/foo.txt");
+
+//		ServletContext context = getServletContext();
+//		URL resourceUrl = context.getResource("/WEB-INF/" + folderName + fileName);
+		//InputStream fis = context.getResourceAsStream("/" + fileName);
+//				String fullPath = context.getRealPath("/WEB-INF/" + fileName);
+//System.out.println("pfad: " + fullPath);
+
+//		InputStream fis = new FileInputStream(createFile(folderName, fileName));
+//InputStream fis = this.getClass().getClassLoader().getResourceAsStream("/"+fileName); 
+		
+		File catalinaBase = new File(System.getProperty("catalina.base")).getAbsoluteFile();
+		File path = new File(catalinaBase, "/wtpwebapps/TagCloud.Server/WEB-INF/lib/" + fileName);		
+		InputStream fis = new FileInputStream(path);
 
 		StringBuilder sb = new StringBuilder();
 		Reader r = new InputStreamReader(fis);
@@ -187,10 +142,7 @@ public class Functions {
 			ch = r.read();
 		}
 		r.close();
-//		String base = "/var/data";
-//		String relative = new File(base).toURI().relativize(new File(path).toURI()).getPath();
-//System.out.println(file);
-System.out.println(sb.toString());
+
 		return sb.toString();
 	}
 	
@@ -228,8 +180,8 @@ System.out.println(sb.toString());
 			
 			//create index if not exists
 			CreateIndexRequest indexRequest = new CreateIndexRequest(indexName, indexSettings);
-			indexRequest.settings(this.getJsonFile("_jsonfiles", "settings.json"));
-			indexRequest.mapping("website", this.getJsonFile("_jsonfiles", "mappings.json"));
+			indexRequest.settings(getJsonFile("/", "settings.json"));
+			indexRequest.mapping("website", getJsonFile("/", "mappings.json"));
 
 			client.admin().indices().create(indexRequest).actionGet();
 			

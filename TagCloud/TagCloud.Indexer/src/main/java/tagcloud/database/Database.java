@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Hashtable;
 
 public final class Database {
 	public Connection conn;
@@ -84,6 +86,35 @@ public final class Database {
 						 + "keyword VARCHAR(50) NOT NULL, "
 						 + "PRIMARY KEY (id)"
 						 + ")");
+		return result;
+	}
+	
+	public int addKeyword(String table, String keyword) throws SQLException {
+		statement = db.conn.createStatement();
+		int result = statement.executeUpdate("INSERT INTO "+ table +" ("
+						 + "keyword)"
+						 + " VALUES('" + keyword + "')"
+						 );
+		return result;
+	}
+	
+	public Hashtable<Integer, String> getKeywords(String table) throws SQLException {
+		Hashtable<Integer, String> keywords = new Hashtable<Integer, String>();
+		
+		statement = db.conn.createStatement();
+		ResultSet rs = statement.executeQuery("SELECT id, keyword FROM "+ table
+						 + " ORDER BY keyword ASC"
+						 );
+		
+		while ( rs.next() ){
+			keywords.put(rs.getInt(1), rs.getString(2));
+		}
+		return keywords;
+	}
+	
+	public int delKeyword(String table, String id) throws SQLException {
+		statement = db.conn.createStatement();
+		int result = statement.executeUpdate("DELETE FROM "+ table + " WHERE id = " + id);
 		return result;
 	}
 }

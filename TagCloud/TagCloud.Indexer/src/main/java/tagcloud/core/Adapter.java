@@ -2,6 +2,7 @@ package tagcloud.core;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.search.SearchResponse;
@@ -74,6 +75,10 @@ public class Adapter implements IndexAdapter, RetrieveAdapter{
 
 	public SearchResponse retrieveHostnamesDistinct() throws Exception {
 		return retrv.retrieveHostnamesDistinct();
+	}
+
+	public boolean hostnameExists(String hostname) throws InterruptedException, ExecutionException {
+		return retrv.hostnameExists(hostname);
 	}
 
 }

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchResponse;
@@ -146,6 +147,7 @@ public class Retriever {
 		Terms agg = sr.getAggregations().get("host_names_distinct");
 		if ( !agg.getBuckets().isEmpty() ){
 			for ( Terms.Bucket entry : agg.getBuckets() ){
+				System.out.println("DocCount: " + entry.getDocCount());
 				try {
 					db.createTable(entry.getKey());
 				} catch (SQLException e) {
@@ -198,6 +200,18 @@ System.out.println(excludes);
 //		}
 
 		return sr;
+	}
+	
+	public boolean hostnameExists(String hostname) throws InterruptedException, ExecutionException {
+		String indexName = "tagcloud";
+		SearchResponse sr = client.prepareSearch(indexName)
+				.setQuery(QueryBuilders.matchQuery("hostname", hostname))
+				.execute().get();
+		
+		if (sr.getHits().totalHits() >= 1) {
+			return true;
+		}
+		return false;
 	}
 
 	public List<Map<String, Object>> getAllDocs(String indexName, String indexType) {

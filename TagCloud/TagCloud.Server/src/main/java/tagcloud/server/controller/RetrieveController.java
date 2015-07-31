@@ -2,6 +2,7 @@ package tagcloud.server.controller;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.concurrent.ExecutionException;
 
 import tagcloud.core.Adapter;
 import tagcloud.core.Functions;
@@ -88,6 +89,10 @@ public class RetrieveController {
 		}
 		
 		return hostnames;
+	}
+	
+	public boolean hostnameExists(String hostname) throws InterruptedException, ExecutionException {
+		return retriever.hostnameExists(hostname);
 	}
 	
 	/**
