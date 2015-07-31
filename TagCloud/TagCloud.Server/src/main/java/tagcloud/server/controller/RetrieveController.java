@@ -66,9 +66,6 @@ public class RetrieveController {
 		ArrayList<String> result = new ArrayList<String>();
 		for(int i=0; i < indeces.length; i++){
 			result.add(indeces[i].toString());
-			
-			// create stopword file
-			//helperfunc.createFile("_blacklist", indeces[i].toString() + ".txt");
 		}
 		return result;
 	}
@@ -96,22 +93,15 @@ public class RetrieveController {
 	}
 	
 	/**
-	 * THIS METHOD IS NOT YET READY
 	 * Calls adapter class and get significant terms based on all documents by an given index
 	 * @param hostname same as index name
 	 * @throws Exception
 	 */
 	public ArrayList<Hashtable<String, String>> getSigTerms(String hostname) throws Exception {
-		//ArrayList<Hashtable<String, String>> tags = new ArrayList<Hashtable<String, String>>();
-		//Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		
 		String indexName = hostname.replace("http://", "").replace("/", "");
 		
-		SearchResponse result = retriever.retrieveSignificantTerms(indexName);
-//		System.out.println("SignificantTerms: " + result.toString());
-
-		// sr is here your SearchResponse object
-		//SignificantTerms agg = result.getAggregations().get("tagcloud_keywords");		
+		SearchResponse result = retriever.retrieveSignificantTerms(indexName);	
 		
 		return new Tagprocessing().getSignificantTags(result.toString());
 	}

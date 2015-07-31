@@ -1,7 +1,6 @@
 package tagcloud.server.controller;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Hashtable;
 
 import tagcloud.database.Database;

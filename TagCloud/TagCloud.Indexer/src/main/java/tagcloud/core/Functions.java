@@ -13,11 +13,6 @@ import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.Requests;
@@ -27,12 +22,7 @@ import org.elasticsearch.common.settings.Settings;
 
 import tagcloud.database.Database;
 
-public class Functions extends HttpServlet {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class Functions {
 
 	/**
 	 * Create a file if not exists in the data folder of the tomcat installation
@@ -114,21 +104,6 @@ public class Functions extends HttpServlet {
 	 * @throws IOException
 	 */
 	public String getJsonFile(String folderName, String fileName) throws IOException {
-//		ServletConfig conf = getServletConfig();
-//		ServletContext context = conf.getServletContext();
-		//InputStream fis = context.getClass().getClassLoader().getResourceAsStream(folderName + fileName);
-		
-//		ServletContext context = getContext();
-//		String fullPath = context.getRealPath("/WEB-INF/test/foo.txt");
-
-//		ServletContext context = getServletContext();
-//		URL resourceUrl = context.getResource("/WEB-INF/" + folderName + fileName);
-		//InputStream fis = context.getResourceAsStream("/" + fileName);
-//				String fullPath = context.getRealPath("/WEB-INF/" + fileName);
-//System.out.println("pfad: " + fullPath);
-
-//		InputStream fis = new FileInputStream(createFile(folderName, fileName));
-//InputStream fis = this.getClass().getClassLoader().getResourceAsStream("/"+fileName); 
 		
 		File catalinaBase = new File(System.getProperty("catalina.base")).getAbsoluteFile();
 		File path = new File(catalinaBase, "/wtpwebapps/TagCloud.Server/WEB-INF/lib/" + fileName);		
@@ -212,9 +187,8 @@ public class Functions extends HttpServlet {
 	 * @throws SQLException
 	 */
 	public String getExcludedKeywords(String tableName, Database db) throws SQLException {
-		//Database db = Database.getDbCon(); 
+
 		String table = tableName.replace(".", "_");
-	System.out.println(table);
 		ResultSet rs = db.query("SELECT id, keyword FROM " + table + " ORDER BY keyword ASC;");
 		StringBuilder sb = new StringBuilder();
 
