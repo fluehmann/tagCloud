@@ -88,6 +88,13 @@ public class RetrieveController {
 		return hostnames;
 	}
 	
+	/**
+	 * 
+	 * @param hostname
+	 * @return
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
 	public boolean hostnameExists(String hostname) throws InterruptedException, ExecutionException {
 		return retriever.hostnameExists(hostname);
 	}
@@ -97,11 +104,11 @@ public class RetrieveController {
 	 * @param hostname same as index name
 	 * @throws Exception
 	 */
-	public ArrayList<Hashtable<String, String>> getSigTerms(String hostname) throws Exception {
+	public ArrayList<Hashtable<String, String>> getSigTerms(String hostname, int size) throws Exception {
 		
 		String indexName = hostname.replace("http://", "").replace("/", "");
 		
-		SearchResponse result = retriever.retrieveSignificantTerms(indexName);	
+		SearchResponse result = retriever.retrieveSignificantTerms(indexName, size);	
 		
 		return new Tagprocessing().getSignificantTags(result.toString());
 	}

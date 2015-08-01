@@ -83,7 +83,7 @@ public final class Database {
 		statement = db.conn.createStatement();
 		int result = statement.executeUpdate("CREATE TABLE IF NOT EXISTS "+ table +" ("
 						 + "id INT NOT NULL AUTO_INCREMENT, "
-						 + "keyword VARCHAR(50) NOT NULL, "
+						 + "keyword VARCHAR(50) NULL, "
 						 + "PRIMARY KEY (id)"
 						 + ")");
 		return result;

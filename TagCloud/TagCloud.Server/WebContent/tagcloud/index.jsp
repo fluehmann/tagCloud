@@ -1,5 +1,4 @@
-<%@page import="tagcloud.server.controller.TagController"%>
-<%@page import="java.util.HashMap"%>
+<%@ page import="tagcloud.server.controller.TagController"%>
 <%@ page import="tagcloud.server.controller.RetrieveController"%>
 <%@ page import="tagcloud.server.controller.TagController"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
@@ -11,7 +10,7 @@
 	String hostname = request.getParameter("host");
 
 	RetrieveController rcntrl = new RetrieveController();
-	ArrayList<Hashtable<String, String>> al = rcntrl.getSigTerms(hostname);
+	ArrayList<Hashtable<String, String>> al = rcntrl.getSigTerms(hostname, 50);
 	
 	TagController tcntrl = new TagController();
 	Hashtable<Integer, String> table = tcntrl.getKeywordFromBlacklist(hostname);
@@ -81,7 +80,6 @@ var words = [
 			String link = "indexDetail.jsp?host=" + hostname + "&keyword=" + keyword;
 			
 			out.println("{text: '" + keyword + "', weight: " + score + ", link: '" + link + "'},");
-//			out.print("{text: " + item.get("keyword") + ", weight: " + 10 + ", link: '" + item.get("url") + "'},");
 		}
 		%>
 ];

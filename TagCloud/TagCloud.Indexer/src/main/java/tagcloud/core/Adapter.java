@@ -61,8 +61,8 @@ public class Adapter implements IndexAdapter, RetrieveAdapter{
 	 * Get significant terms by a given index name
 	 * @return SearchResponse object as json
 	 */
-	public SearchResponse retrieveSignificantTerms(String indexName) throws Exception {
-		return retrv.retrieveSignificantTerms(indexName);
+	public SearchResponse retrieveSignificantTerms(String indexName, int size) throws Exception {
+		return retrv.retrieveSignificantTerms(indexName, size);
 	}
 
 	/**

@@ -31,9 +31,9 @@ public class Retriever {
 	Database db;
 
 	public Retriever(String clustername, String ip) {
-		client = new ESConnection().connect(clustername, ip);
-		helperfunc =  new Functions();
-		db = Database.getDbCon();
+		client 		= new ESConnection().connect(clustername, ip);
+		helperfunc  =  new Functions();
+		db 			= Database.getDbCon();
 	}
 
 	/**
@@ -148,6 +148,7 @@ public class Retriever {
 		if ( !agg.getBuckets().isEmpty() ){
 			for ( Terms.Bucket entry : agg.getBuckets() ){
 				System.out.println("DocCount: " + entry.getDocCount());
+				System.out.println("website: " + entry.getKey());
 				try {
 					db.createTable(entry.getKey());
 				} catch (SQLException e) {
@@ -166,7 +167,7 @@ public class Retriever {
 	 * @return
 	 * @throws Exception
 	 */
-	public SearchResponse retrieveSignificantTerms(String indexName) throws Exception {
+	public SearchResponse retrieveSignificantTerms(String indexName, int size) throws Exception {
 		String tblName = helperfunc.removeProtocollFromHost(indexName);
 		
 		String hostname = tblName;
@@ -179,7 +180,7 @@ System.out.println(excludes);
 				.field("content")
 				.exclude(excludes)
 				//.exclude(helperfunc.getExcludedTerms("_blacklist", hostname + ".txt"))
-				.size(30);
+				.size(size);
 
 		SearchResponse sr = client.prepareSearch(indexName)
 				//.setQuery(QueryBuilders.matchAllQuery())

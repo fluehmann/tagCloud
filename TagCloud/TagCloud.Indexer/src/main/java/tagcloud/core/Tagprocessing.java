@@ -59,6 +59,12 @@ public class Tagprocessing {
 		JSONObject obj = new JSONObject(jsonResult);
 		JSONArray arr = obj.getJSONObject("aggregations").getJSONObject("tagcloud_keywords").getJSONArray("buckets");
 		
+		// normalize score
+		// get top entry
+		//double upper = arr.getJSONObject(0).getDouble("score");
+		// get last entry
+		//double lower = arr.getJSONObject(arr.length()-1).getDouble("score");		
+		
 		for (int i = 0; i < arr.length(); i++)
 		{
 			String keyword = arr.getJSONObject(i).getString("key");
@@ -67,13 +73,55 @@ public class Tagprocessing {
 		    
 		    // values from json
 		    dictionary.put("keyword", keyword);
-		    dictionary.put("score", Double.toString(score));
-//System.out.println(score);		    
-		    // values which are not stored in the documents on elasticsearch
-		    //dictionary.put("keyword", "sdsdsd");
+		    dictionary.put("score", normalizeScore(arr.length()-1, i));
+		    dictionary.put("scoreOrig", Double.toString(score));
 			
 		    tags.add(dictionary);
 		}
 		return tags;
+	}
+	
+	public String normalizeScore(int size, int pointer) {
+		final int GROUPS = 5;	// there are 5 groups of font sizes. Each tag will be assigned to one group
+		int units;		  		// how many entries a group should have
+		int score = 4;		
+		
+		if ( size <= GROUPS ){
+			return Integer.toString(score);
+		}
+		
+		units = size/GROUPS;
+		
+		// 5th group least relevance
+		if (pointer <= units*5){
+			score = 4;
+		}
+		
+		// 4th group
+		if (pointer <= units*4){
+			score = 6;
+		}
+		
+		// 3rd group
+		if (pointer <= units*3){
+			score = 8;
+		}
+		
+		// 2nd group
+		if (pointer <= units*2){
+			score = 10;
+		}
+		
+		// 1st group. Most relevance
+		if (pointer <= units){
+			score = 12;
+		}
+		
+		// 1st group. Most relevance
+		if (pointer <= units-(units*0.6)){
+			score = 15;
+		}
+		
+		return Integer.toString(score);
 	}
 }
