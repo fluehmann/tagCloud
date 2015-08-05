@@ -1,6 +1,5 @@
 <%@ page import="tagcloud.server.controller.TagController"%>
 <%@ page import="tagcloud.server.controller.RetrieveController"%>
-<%@ page import="tagcloud.server.controller.TagController"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.List,java.util.ArrayList"%>
 <%@ page import="java.util.List,java.util.Iterator"%>

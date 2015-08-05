@@ -25,12 +25,12 @@ import tagcloud.connection.ESConnection;
 import tagcloud.core.Functions;
 import tagcloud.database.Database;
 
-public class Retriever {
+public class RetrieverImpl implements IRetriever {
 	Client client;
 	Functions helperfunc;
 	Database db;
 
-	public Retriever(String clustername, String ip) {
+	public RetrieverImpl(String clustername, String ip) {
 		client 		= new ESConnection().connect(clustername, ip);
 		helperfunc  =  new Functions();
 		db 			= Database.getDbCon();

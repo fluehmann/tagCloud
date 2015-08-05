@@ -13,12 +13,12 @@ import tagcloud.connection.ESConnection;
 import tagcloud.core.Functions;
 import static org.elasticsearch.common.xcontent.XContentFactory.*;
 
-public class Indexer {
+public class IndexerImpl implements IIndexer {
 
 	Client client;
 	Functions helperfunc;
 
-	public Indexer(String clustername, String ip) {
+	public IndexerImpl(String clustername, String ip) {
 
 		client = new ESConnection().connect(clustername, ip);
 		helperfunc = new Functions();
@@ -34,7 +34,7 @@ public class Indexer {
 	 * @throws ElasticsearchException
 	 * @throws IOException
 	 */
-	public boolean index(String index, String type, String id, HashMap<String, String> fields) throws ElasticsearchException, IOException {
+	public boolean indexDocument(String index, String type, String id, HashMap<String, String> fields) throws ElasticsearchException, IOException {
 		
 		// check if indexName already exists -> otherwise create new one
 		helperfunc.createMissingIndex(index, client);

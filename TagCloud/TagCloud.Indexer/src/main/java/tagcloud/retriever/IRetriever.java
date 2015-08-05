@@ -5,7 +5,7 @@ import java.util.concurrent.ExecutionException;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.hppc.ObjectLookupContainer;
 
-public interface RetrieveAdapter {
+public interface IRetriever {
 
 	public SearchResponse retrieveByKeyword(String indexName, String hostname, String tag);
 	public SearchResponse retrieveByIndexname(String indexName) throws Exception;

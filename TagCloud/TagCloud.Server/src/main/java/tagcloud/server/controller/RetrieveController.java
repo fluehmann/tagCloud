@@ -7,18 +7,20 @@ import java.util.concurrent.ExecutionException;
 import tagcloud.core.Adapter;
 import tagcloud.core.Functions;
 import tagcloud.core.Tagprocessing;
-import tagcloud.retriever.RetrieveAdapter;
+import tagcloud.retriever.IRetriever;
+import tagcloud.retriever.RetrieverImpl;
 
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 
 public class RetrieveController {
 
-	RetrieveAdapter retriever;
+	protected IRetriever retriever;
 	Functions helperfunc;
 	
 	public RetrieveController() {
-		retriever = new Adapter("elasticsearch", "127.0.0.1");
+		this.retriever = new RetrieverImpl("elasticsearch", "127.0.0.1");
+//		this.retriever = new Adapter("elasticsearch", "127.0.0.1");
 		helperfunc = new Functions();
 	}
 	

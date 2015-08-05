@@ -13,6 +13,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.elasticsearch.ElasticsearchException;
 
 import tagcloud.crawler.CrawlerShell;
+import tagcloud.indexer.IIndexer;
 
 // implementation of a file crawler
 public class FileCrawler extends CrawlerShell {
@@ -83,7 +84,7 @@ public class FileCrawler extends CrawlerShell {
 	public void sendToIndex(String filePath, HashMap<String, String> json) {
 		// index document
 		try {
-			idxAdptr.indexDocument(fileName, "file", filePath, json);
+			indexer.indexDocument(fileName, "file", filePath, json);
 		} catch (ElasticsearchException e) {
 			e.printStackTrace();
 			System.out.println("Problem 1");

@@ -10,11 +10,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.safety.Whitelist;
 
-import tagcloud.indexer.IndexAdapter;
+import tagcloud.indexer.IIndexer;
 
 public class Cleaner {
 	
-	public Cleaner(IndexAdapter idxAdpt, Document doc, String url, String hostname) throws ElasticsearchException, IOException {
+	public Cleaner(IIndexer idxAdpt, Document doc, String url, String hostname) throws ElasticsearchException, IOException {
 //		IndexAdapter x = new Adapter("elasticsearch", "127.0.0.1");
 //		System.out.println(url + ".. is indexed!");
 		

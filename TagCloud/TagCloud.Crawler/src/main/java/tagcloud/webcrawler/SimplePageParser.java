@@ -11,16 +11,16 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import tagcloud.indexer.IndexAdapter;
+import tagcloud.indexer.IIndexer;
 import tagcloud.preprocessing.Cleaner;
 
 public class SimplePageParser {
 
-	private final IndexAdapter indexAdapter;
+	private final IIndexer indexer;
 	private final String hostname;
 	
-	public SimplePageParser(String hostname, IndexAdapter indexAdapter) {
-		this.indexAdapter = indexAdapter;
+	public SimplePageParser(String hostname, IIndexer indexer) {
+		this.indexer = indexer;
 		this.hostname = hostname;
 	}
 	
@@ -53,7 +53,7 @@ public class SimplePageParser {
 					}
 				}
 				
-			new Cleaner(indexAdapter, doc,startURL, hostname);
+			new Cleaner(indexer, doc,startURL, hostname);
 			
 			} catch (Exception e){
 				System.err.println("Crawling Error in SimplePageParser: " + startURL + ": " + e.getMessage());

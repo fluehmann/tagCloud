@@ -10,14 +10,17 @@ import org.jsoup.safety.Whitelist;
 
 import tagcloud.core.Adapter;
 import tagcloud.doccrawler.FileCrawler;
-import tagcloud.indexer.IndexAdapter;
+import tagcloud.indexer.IIndexer;
+import tagcloud.indexer.IndexerImpl;
 import tagcloud.webcrawler.WebCrawler;
 
 public class CrawlController {
-	IndexAdapter adapter;
+//	IIndexer adapter;
+	protected IIndexer indexer;
 
 	public CrawlController(HttpServletResponse response, String uri, String type){
 //		adapter = new Adapter("elasticsearch", "127.0.0.1");
+		this.indexer = new IndexerImpl("elasticsearch", "127.0.0.1");
 
 		if (uri.equals("") || uri.equals(null)) {
 			uri = "empty uri";

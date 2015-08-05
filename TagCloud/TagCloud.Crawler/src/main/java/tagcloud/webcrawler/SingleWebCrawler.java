@@ -7,6 +7,7 @@ import java.util.Queue;
 import java.util.Set;
 
 import tagcloud.crawler.CrawlerShell;
+import tagcloud.indexer.IIndexer;
 
 // implementation of a single threaded WebCrawler as an alternative to the mutlithreaded solution 
 public class SingleWebCrawler extends CrawlerShell {
@@ -20,7 +21,7 @@ public class SingleWebCrawler extends CrawlerShell {
 	public void crawl(String startURL) {
 
 		String nextUrl = null;
-		SimplePageParser parser = new SimplePageParser(hostname, idxAdptr);
+		SimplePageParser parser = new SimplePageParser(hostname, indexer);
 		
 		Set<String> urlsCrawled = new HashSet<String>();
 		Queue<String> urlsToCrawl = new PriorityQueue<String>();

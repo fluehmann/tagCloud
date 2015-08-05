@@ -16,7 +16,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import tagcloud.indexer.IndexAdapter;
+import tagcloud.indexer.IIndexer;
 import tagcloud.preprocessing.Cleaner;
 
 /**
@@ -35,12 +35,12 @@ import tagcloud.preprocessing.Cleaner;
 public class CrawlCallable implements Callable<List<String>> {
 
 	private final String startURL;
-	private final IndexAdapter indexAdapter;
+	private final IIndexer indexer;
 	private final String hostname;
 
-	public CrawlCallable(String hostname, String startURL, IndexAdapter indexAdapter) {
+	public CrawlCallable(String hostname, String startURL, IIndexer indexer) {
 		this.startURL = startURL;
-		this.indexAdapter = indexAdapter;
+		this.indexer = indexer;
 		this.hostname = hostname;
 	}
 
@@ -79,7 +79,7 @@ public class CrawlCallable implements Callable<List<String>> {
 				doc.select("head, script, style, link, .hidden").remove();
 
 				// Send the source to the cleaner to clean it and store it in the ES index
-				new Cleaner(indexAdapter,doc,startURL,hostname);
+				new Cleaner(indexer,doc,startURL,hostname);
 
 				// extract all links out of the websites source and add them to a list
 				Elements urls = doc.select("a[href]");

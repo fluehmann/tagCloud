@@ -12,9 +12,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import tagcloud.core.Adapter;
 import tagcloud.crawler.CrawlerShell;
-import tagcloud.indexer.IndexAdapter;
+import tagcloud.indexer.IIndexer;
 
 
 /**
@@ -39,7 +38,7 @@ public class WebCrawler extends CrawlerShell {
 //	private final IndexAdapter idxAdptr;
 //	private final String hostname;
 
-
+	private final int MAX_NR_OF_URLS = 500;
 
 	// Counters to control the progression of the ExecutorService.
 	// Each entry in the queue increments @submittedTasks
@@ -81,11 +80,11 @@ public class WebCrawler extends CrawlerShell {
 		// System.out.println("open: "+ openTasks.get() + " vs completed " + completedTasks.get());
 //		while (true) {
 //		while (completedTasks.get() != openTasks.get()-1) {
-		while (completedTasks.get() != urlsSubmitted.size()-1) {
+		while (urlsToVisit.size() < MAX_NR_OF_URLS || completedTasks.get() != urlsSubmitted.size()-1) {
 
 			// TaskQueue füllen mit Arbeit
 			for (String url : urlsToVisit) {
-				taskQueue.submit(new CrawlCallable(hostname, url, idxAdptr)); // füllen der Queue
+				taskQueue.submit(new CrawlCallable(hostname, url, indexer)); // füllen der Queue
 				urlsSubmitted.add(url); // rename to submittedTasks
 //				openTasks.incrementAndGet();
 			} 

@@ -8,15 +8,15 @@ import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.hppc.ObjectLookupContainer;
 
-import tagcloud.indexer.IndexAdapter;
-import tagcloud.indexer.Indexer;
-import tagcloud.retriever.RetrieveAdapter;
-import tagcloud.retriever.Retriever;
+import tagcloud.indexer.IIndexer;
+import tagcloud.indexer.IndexerImpl;
+import tagcloud.retriever.IRetriever;
+import tagcloud.retriever.RetrieverImpl;
 
-public class Adapter implements IndexAdapter, RetrieveAdapter{
+public class Adapter implements IIndexer, IRetriever{
 
-	private Indexer idx;
-	private Retriever retrv;
+	private IndexerImpl idx;
+	private RetrieverImpl retrv;
 	
 	/**
 	 * Establish connection to Elasticsearch node
@@ -24,8 +24,8 @@ public class Adapter implements IndexAdapter, RetrieveAdapter{
 	 * @param ip IP-address of server where Elasticseach is runnung on
 	 */
 	public Adapter(String clustername, String ip) {
-		idx = new Indexer(clustername, ip);
-		retrv = new Retriever(clustername, ip);
+		idx = new IndexerImpl(clustername, ip);
+		retrv = new RetrieverImpl(clustername, ip);
 	}
 
 	/**
@@ -34,13 +34,15 @@ public class Adapter implements IndexAdapter, RetrieveAdapter{
 	 * @param type Define a type of the document
 	 * @param id A unique identifier for the document. The URI is a logical choice
 	 * @param json Pre-created json as string with field-value entries
+	 * @return 
 	 */
-	public void indexDocument(String indexName, String type, String id, HashMap<String, String> json) throws ElasticsearchException, IOException {
+	public boolean indexDocument(String indexName, String type, String id, HashMap<String, String> json) throws ElasticsearchException, IOException {
 		
-		Boolean status = idx.index(indexName, type, id, json);
+		Boolean status = idx.indexDocument(indexName, type, id, json);
 		if (status){
 			System.out.println("Document stored: " + id);
 		}
+		return status;
 	}
 	
 	/**

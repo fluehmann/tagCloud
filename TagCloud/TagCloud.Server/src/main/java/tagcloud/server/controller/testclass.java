@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import tagcloud.core.Tagprocessing;
-import tagcloud.retriever.Retriever;
+import tagcloud.retriever.RetrieverImpl;
 import tagcloud.server.controller.RetrieveController;
 import tagcloud.connection.ESConnection;
 import tagcloud.core.Tagprocessing;
@@ -19,7 +19,7 @@ public class testclass {
 
 
 		
-		SearchResponse x = new Retriever("elasticsearch", "127.0.0.1").retrieveByIndexname("www.20min.ch");
+		SearchResponse x = new RetrieverImpl("elasticsearch", "127.0.0.1").retrieveByIndexname("www.20min.ch");
 		
 		ArrayList<Hashtable<String, String>> y = new Tagprocessing().getTags(x.toString());
 		System.out.println(y);
