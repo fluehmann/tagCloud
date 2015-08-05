@@ -18,10 +18,4 @@ public class ESConnection implements IConnection {
 							.addTransportAddress(new InetSocketTransportAddress(ip, PORT));
 		return client;
 	}
-
-	public void disconnect() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
