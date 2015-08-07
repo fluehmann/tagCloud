@@ -17,6 +17,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title><% out.print(hostname); %> - Tagcloud | Tagcloud mit Elasticsearch</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jqcloud.css">
@@ -47,13 +48,16 @@
 	  	<input name="hostname" type="hidden" value="<% out.print(hostname); %>">
 	  	<input class="search" name="ign_keyword" type="search">
 	  </form>
+	  
+	  <p style="margin-top: 200px;">
+	  	<a href="#openModal">Blasklist anzeigenl</a>
+	  </p>
 	</div>
 	
-	<a href="#openModal">Open Modal</a>
 	<div id="openModal" class="modalDialog">
 	  <dialog>
 	    <a href="#" title="Close" class="close">X</a>
-	    <h2>Modal Box</h2>
+	    <h2>Keyword(s) in der Blacklist</h2>
 	    <%  for (int key : table.keySet()) {
 						out.print("<p><a href='handleKeyword.jsp?action=delete&hostname="+ hostname +"&key=" + key + "'>" + table.get(key) + "</a></p>");
 	    		}

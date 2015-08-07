@@ -1,6 +1,5 @@
 package tagcloud.crawler;
 
-import tagcloud.core.Adapter;
 import tagcloud.indexer.IIndexer;
 import tagcloud.indexer.IndexerImpl;
 

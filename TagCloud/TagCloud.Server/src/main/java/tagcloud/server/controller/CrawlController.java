@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
-import tagcloud.core.Adapter;
 import tagcloud.doccrawler.FileCrawler;
 import tagcloud.indexer.IIndexer;
 import tagcloud.indexer.IndexerImpl;

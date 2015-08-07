@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.concurrent.ExecutionException;
 
-import tagcloud.core.Adapter;
 import tagcloud.core.Functions;
 import tagcloud.core.Tagprocessing;
 import tagcloud.retriever.IRetriever;
