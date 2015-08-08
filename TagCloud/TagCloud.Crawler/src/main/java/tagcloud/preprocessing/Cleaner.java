@@ -14,13 +14,13 @@ import tagcloud.indexer.IIndexer;
 
 public class Cleaner {
 	
-	public Cleaner(IIndexer idxAdpt, Document doc, String url, String hostname) throws ElasticsearchException, IOException {
+	public Cleaner(IIndexer indexer, Document doc, String url, String hostname) throws ElasticsearchException, IOException {
 //		IndexAdapter x = new Adapter("elasticsearch", "127.0.0.1");
 //		System.out.println(url + ".. is indexed!");
 		
 //		Send data over to to ElasticSearch
 		String host = hostname.replace("http://", "").replace("/", "");
-		idxAdpt.indexDocument("tagcloud", "website", url, extractJson(host, url,doc));
+		indexer.indexDocument("tagcloud", "website", url, extractJson(host, url,doc));
 
 	}
 	
