@@ -47,7 +47,7 @@ public class IndexerImpl implements IIndexer {
 		builder.endObject();
 		// System.out.println("JSON: " + builder.string());   
 		client.prepareIndex(index, type, id).setSource(builder).execute().actionGet();
-
+		System.out.println("Document stored: " + id);
 		return true;
 	}
 
