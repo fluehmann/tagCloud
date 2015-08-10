@@ -23,6 +23,8 @@ import org.elasticsearch.common.settings.Settings;
 import tagcloud.database.Database;
 
 public class Functions {
+	
+	public final static String INDEX_NAME = "tagcloud";
 
 	/**
 	 * Create a file if not exists in the data folder of the tomcat installation
@@ -136,7 +138,12 @@ public class Functions {
 				.getMetaData()
 				.index(indexName);
 
-		return (indexMetaData != null);
+		if (indexMetaData != null){
+			System.out.println("index exists");
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -147,9 +154,12 @@ public class Functions {
 	 * @throws IOException
 	 */
 	public void createMissingIndex(String indexName, Client client) throws IOException{
-		if (!checkIfIndexExists(indexName, client)){
+		System.out.println(checkIfIndexExists(indexName, client));
+		boolean result = checkIfIndexExists(indexName, client);
+		
+		if (!result){
 			Settings indexSettings = ImmutableSettings.settingsBuilder()
-					.put("number_of_shards", 5)
+					.put("number_of_shards", 3)
 					.put("number_of_replicas", 1)
 					.build();			
 			
@@ -159,9 +169,7 @@ public class Functions {
 			indexRequest.mapping("website", getJsonFile("/", "mappings.json"));
 
 			client.admin().indices().create(indexRequest).actionGet();
-			
-			// Create databse if no exitst
-			
+						
 			System.out.println("index '" + indexName + "' created");
 		}
 	}

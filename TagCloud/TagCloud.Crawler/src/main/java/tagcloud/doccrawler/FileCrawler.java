@@ -13,7 +13,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.elasticsearch.ElasticsearchException;
 
 import tagcloud.crawler.CrawlerShell;
-import tagcloud.indexer.IIndexer;
 
 // implementation of a file crawler
 public class FileCrawler extends CrawlerShell {
@@ -39,7 +38,10 @@ public class FileCrawler extends CrawlerShell {
 		// can easily be enhanced with other file-types
 		switch (suffix.toLowerCase()) {
 		case "txt":
-			json.put(fileName, importTextFile(filePath));
+			json.put("url", filePath);
+			json.put("content", importTextFile(filePath));
+// TODO: reduzieren nur auf Hostname!!!!
+			json.put("hostname", hostname);
 			break;
 		case "docx":
 			System.err.println("." + suffix + " Files cannot be imported yet");
@@ -50,7 +52,7 @@ public class FileCrawler extends CrawlerShell {
 		default:
 			System.err.println("." + suffix + " Files cannot be imported yet");
 		}
-		sendToIndex(fileName, json);
+		sendToIndex(filePath, json);
 	}
 
 	// method to get the content of a file

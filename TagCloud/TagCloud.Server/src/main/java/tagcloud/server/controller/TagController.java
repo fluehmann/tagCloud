@@ -1,7 +1,7 @@
 package tagcloud.server.controller;
 
 import java.sql.SQLException;
-import java.util.Hashtable;
+import java.util.LinkedHashMap;
 
 import tagcloud.database.Database;
 
@@ -17,7 +17,7 @@ public class TagController {
 		db.addKeyword(table, keyword);
 	}
 	
-	public Hashtable<Integer, String> getKeywordFromBlacklist(String hostname) throws SQLException {
+	public LinkedHashMap<Integer, String> getKeywordFromBlacklist(String hostname) throws SQLException {
 		String table = hostname.replace(".", "_");
 		return db.getKeywords(table);
 	}

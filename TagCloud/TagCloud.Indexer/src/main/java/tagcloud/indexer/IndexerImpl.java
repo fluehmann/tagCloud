@@ -35,9 +35,11 @@ public class IndexerImpl implements IIndexer {
 	 * @throws IOException
 	 */
 	public boolean indexDocument(String index, String type, String id, HashMap<String, String> fields) throws ElasticsearchException, IOException {
+		// solution with one index
+		index = Functions.INDEX_NAME;
 		
 		// check if indexName already exists -> otherwise create new one
-		helperfunc.createMissingIndex(index, client);
+		//helperfunc.createMissingIndex(index, client);
 
 		XContentBuilder builder = jsonBuilder();
 		builder.startObject();
@@ -51,17 +53,17 @@ public class IndexerImpl implements IIndexer {
 		return true;
 	}
 
-	public boolean checkIfIndexExists(String indexName) {
-
-		IndexMetaData indexMetaData = client.admin().cluster()
-				.state(Requests.clusterStateRequest())
-				.actionGet()
-				.getState()
-				.getMetaData()
-				.index(indexName);
-
-		return (indexMetaData != null);
-	}
+//	public boolean checkIfIndexExists(String indexName) {
+//
+//		IndexMetaData indexMetaData = client.admin().cluster()
+//				.state(Requests.clusterStateRequest())
+//				.actionGet()
+//				.getState()
+//				.getMetaData()
+//				.index(indexName);
+//
+//		return (indexMetaData != null);
+//	}
 
 	/**
 	 * 

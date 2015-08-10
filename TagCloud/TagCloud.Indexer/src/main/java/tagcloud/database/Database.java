@@ -5,8 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.LinkedHashMap;
 
 public final class Database {
 	public Connection conn;
@@ -98,8 +97,8 @@ public final class Database {
 		return result;
 	}
 	
-	public Hashtable<Integer, String> getKeywords(String table) throws SQLException {
-		Hashtable<Integer, String> keywords = new Hashtable<Integer, String>();
+	public LinkedHashMap<Integer, String> getKeywords(String table) throws SQLException {
+		LinkedHashMap<Integer, String> keywords = new LinkedHashMap<Integer, String>();
 		
 		statement = db.conn.createStatement();
 		ResultSet rs = statement.executeQuery("SELECT id, keyword FROM "+ table
@@ -108,6 +107,7 @@ public final class Database {
 		
 		while ( rs.next() ){
 			keywords.put(rs.getInt(1), rs.getString(2));
+			System.out.println(rs.getInt(1) + " " + rs.getString(2));
 		}
 		return keywords;
 	}

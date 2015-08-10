@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import tagcloud.crawler.CrawlerShell;
-import tagcloud.indexer.IIndexer;
 
 
 /**
