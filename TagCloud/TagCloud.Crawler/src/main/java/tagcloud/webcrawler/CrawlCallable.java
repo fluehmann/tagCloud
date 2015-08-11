@@ -92,7 +92,7 @@ public class CrawlCallable implements Callable<List<String>> {
 				}
 				
 				// Remove Menu-Elements
-				doc.select("ul li a[href]").remove();
+				doc.select("li a[href]").remove();
 				doc.select("span").remove();
 				
 				// Send the source to the cleaner to clean it and store it in the ES index
