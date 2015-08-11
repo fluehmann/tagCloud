@@ -12,7 +12,12 @@
 			
 			"url": {
 				"type": "string"
-			}
+			},
+			
+			"hostname" : {
+				"type": "string",
+				"index": "not_analyzed"
+			}	
 		}
 	}
 } 
