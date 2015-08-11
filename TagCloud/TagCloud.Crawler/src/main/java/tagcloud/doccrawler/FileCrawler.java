@@ -28,7 +28,7 @@ public class FileCrawler extends CrawlerShell {
 
 		File f = new File(filePath);
 		if ((fileName = f.getName()) == null) {
-			fileName = "ES_File_" + (1 + (int) (Math.random() * (99)));
+			fileName = "ES_File_" + (1 + (int) (Math.random() * (999)));
 		}
 
 		String suffix = FilenameUtils.getExtension(filePath);
@@ -37,18 +37,30 @@ public class FileCrawler extends CrawlerShell {
 
 		// determine which import-method to use
 		// can easily be enhanced with other file-types
-		switch (suffix.toLowerCase()) {
-		case "txt":
+		// Due to incopatibility in older Java-Versions switch is replaced by if/else if statements
+//		switch (suffix.toLowerCase()) {
+//		case "txt":
+//			json.put(fileName, importTextFile(filePath));
+//			break;
+//		case "docx":
+//			System.err.println("." + suffix + " Files cannot be imported yet");
+//			break;
+//		case "pdf":
+//			System.err.println("." + suffix + " Files cannot be imported yet");
+//			break;
+//		default:
+//			System.err.println("." + suffix + " Files cannot be imported yet");
+//		}
+		
+		String sfx = suffix.toLowerCase();
+		if (sfx.equals("txt")){
 			json.put(fileName, importTextFile(filePath));
-			break;
-		case "docx":
+		} else if(sfx.equals("docx")) {
 			System.err.println("." + suffix + " Files cannot be imported yet");
-			break;
-		case "pdf":
+		} else if(sfx.equals("pdf")) {
 			System.err.println("." + suffix + " Files cannot be imported yet");
-			break;
-		default:
-			System.err.println("." + suffix + " Files cannot be imported yet");
+		} else {
+			System.err.println("File cannot be imported");
 		}
 		sendToIndex(fileName, json);
 	}
@@ -84,7 +96,8 @@ public class FileCrawler extends CrawlerShell {
 	public void sendToIndex(String filePath, HashMap<String, String> json) {
 		// index document
 		try {
-			indexer.indexDocument(fileName, "file", filePath, json);
+//			indexer.indexDocument("tagcloud", "website", url, extractJson(host, url,doc));
+			indexer.indexDocument("tagcloud", "file", fileName, json);
 		} catch (ElasticsearchException e) {
 			e.printStackTrace();
 			System.out.println("Problem 1");

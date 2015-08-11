@@ -53,7 +53,7 @@ public class RetrieverImpl implements IRetriever {
 		GetResponse response = client.prepareGet(indexName, indexType, indexId).execute().actionGet();
 		return response;
 	}
-
+	
 	/**
 	 * Get documents which match by a specific tag and show the results as a link to the source website
 	 * in addition show a snipped of the text which contains this keyword

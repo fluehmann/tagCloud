@@ -6,14 +6,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import tagcloud.doccrawler.FileCrawler;
-import tagcloud.indexer.IndexAdapter;
 import tagcloud.webcrawler.CrawlCallable;
 import tagcloud.webcrawler.SingleWebCrawler;
 import tagcloud.webcrawler.WebCrawler;
 
 public class TestMain {
 
-	private static IndexAdapter x;
 
 	public static void main(String[] args) throws Exception {
 		
