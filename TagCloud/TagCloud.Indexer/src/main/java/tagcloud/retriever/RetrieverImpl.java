@@ -2,9 +2,6 @@ package tagcloud.retriever;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.elasticsearch.action.get.GetResponse;
@@ -15,10 +12,8 @@ import org.elasticsearch.common.Nullable;
 import org.elasticsearch.common.hppc.ObjectLookupContainer;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.aggregations.bucket.significant.SignificantTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 
 import tagcloud.connection.ESConnection;
@@ -32,7 +27,7 @@ public class RetrieverImpl implements IRetriever {
 
 	public RetrieverImpl(String clustername, String ip) {
 		client 		= new ESConnection().connect(clustername, ip);
-		helperfunc  =  new Functions();
+		helperfunc  = new Functions();
 		db 			= Database.getDbCon();
 	}
 
@@ -74,7 +69,7 @@ public class RetrieverImpl implements IRetriever {
 				.must(QueryBuilders.matchPhraseQuery("hostname", helperfunc.removeProtocollFromHost(hostname)))
 				.must(QueryBuilders.matchQuery("content", keyword));
 		
-		SearchResponse response =  client.prepareSearch(helperfunc.removeProtocollFromHost(indexName))
+		SearchResponse response =  client.prepareSearch(indexName)
 				.setQuery(qb)
 				.addHighlightedField("content")
 				.execute().actionGet();
@@ -125,88 +120,89 @@ public class RetrieverImpl implements IRetriever {
 	 */
 	public SearchResponse retrieveHostnamesDistinct() throws IOException {
 		// fix variables -> can use as parameters if needed
-		String indexName = "tagcloud";
-		String indexType = "website";
+		String indexName = Functions.INDEX_NAME;
 		String fieldName = "hostname";
+		boolean indexExists = helperfunc.checkIfIndexExists(indexName, client);
+		boolean indexCreated = false;
 		
 		// check if indexName already exists -> otherwise create new one
-		helperfunc.createMissingIndex(indexName, client);
+		if (!indexExists) {
+			helperfunc.createMissingIndex(indexName, client);
+			indexCreated = true;
+		}
 		
-		AggregationBuilder<?> aggregation = AggregationBuilders
-				.terms("host_names_distinct")
-				.field(fieldName)
-				.size(0);
-		
-		SearchResponse sr = client.prepareSearch(indexName)
-				.setQuery(QueryBuilders.matchAllQuery())
-				.setSearchType(SearchType.COUNT)
-				.addAggregation(aggregation)
-				.execute()
-				.actionGet();
-		
-		Terms agg = sr.getAggregations().get("host_names_distinct");
-		if ( !agg.getBuckets().isEmpty() ){
-			for ( Terms.Bucket entry : agg.getBuckets() ){
-				System.out.println("DocCount: " + entry.getDocCount());
-				System.out.println("website: " + entry.getKey());
-				try {
-					db.createTable(entry.getKey());
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+		if (indexExists || indexCreated) {
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			AggregationBuilder<?> aggregation = AggregationBuilders
+					.terms("host_names_distinct")
+					.field(fieldName)
+					.size(0);
+			
+			SearchResponse sr = client.prepareSearch(indexName)
+					.setQuery(QueryBuilders.matchAllQuery())
+					.setSearchType(SearchType.COUNT)
+					.addAggregation(aggregation)
+					.execute()
+					.actionGet();
+			
+			Terms agg = sr.getAggregations().get("host_names_distinct");
+			if ( !agg.getBuckets().isEmpty() ){
+				for ( Terms.Bucket entry : agg.getBuckets() ){
+					System.out.println("DocCount: " + entry.getDocCount());
+					System.out.println("website: " + entry.getKey());
+					
+					try {
+						db.createTable(entry.getKey());
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 				}
 			}
-		}
 
-		return sr;
+			return sr;
+		}
+		return null;
 	}
 
 	/**
 	 * 
-	 * @param indexName
+	 * @param host
 	 * @return
 	 * @throws Exception
 	 */
-	public SearchResponse retrieveSignificantTerms(String indexName, int size) throws Exception {
-		String tblName = helperfunc.removeProtocollFromHost(indexName);
+	public SearchResponse retrieveSignificantTerms(String host, int size) throws Exception {
+		String tblName = helperfunc.removeProtocollFromHost(host);
 		
 		String hostname = tblName;
-		indexName = "tagcloud";
 		
 		String excludes = helperfunc.getExcludedKeywords(tblName, db);
-System.out.println(excludes);		
+		System.out.println(excludes);
+		
 		AggregationBuilder<?> aggregation = AggregationBuilders
 				.significantTerms("tagcloud_keywords")
 				.field("content")
 				.exclude(excludes)
-				//.exclude(helperfunc.getExcludedTerms("_blacklist", hostname + ".txt"))
 				.size(size);
 
-		SearchResponse sr = client.prepareSearch(indexName)
-				//.setQuery(QueryBuilders.matchAllQuery())
+		SearchResponse sr = client.prepareSearch(Functions.INDEX_NAME)
 				.setQuery(QueryBuilders.termQuery("_type", "website"))
 				.setQuery(QueryBuilders.matchQuery("hostname", hostname))
 				.setSearchType(SearchType.COUNT)
 				.addAggregation(aggregation)
-				// .get();
 				.execute().actionGet();
-
-//		SignificantTerms agg = sr.getAggregations().get("significant_keywords");
-
-		// For each entry
-//		for (SignificantTerms.Bucket entry : agg.getBuckets()) {
-//			entry.getKey(); // Term
-//			entry.getDocCount(); // Doc count
-//			System.out.println(entry.getKey() + "  " + entry.getDocCount());
-//		}
 
 		return sr;
 	}
 	
 	public boolean hostnameExists(String hostname) throws InterruptedException, ExecutionException {
-		String indexName = "tagcloud";
-		SearchResponse sr = client.prepareSearch(indexName)
-				.setQuery(QueryBuilders.matchQuery("hostname", hostname))
+
+		SearchResponse sr = client.prepareSearch(Functions.INDEX_NAME)
+				.setQuery(QueryBuilders.matchQuery("hostname", helperfunc.removeProtocollFromHost(hostname)))
 				.execute().get();
 		
 		if (sr.getHits().totalHits() >= 1) {
@@ -215,21 +211,22 @@ System.out.println(excludes);
 		return false;
 	}
 
-	public List<Map<String, Object>> getAllDocs(String indexName, String indexType) {
-		int scrollSize = 500;
-		List<Map<String, Object>> esData = new ArrayList<Map<String, Object>>();
-		SearchResponse response = null;
-		int i = 0;
-		while (response == null || response.getHits().hits().length != 0) {
-			response = client.prepareSearch(indexName).setTypes(indexType)
-					.setQuery(QueryBuilders.matchAllQuery())
-					.setSize(scrollSize).setFrom(i * scrollSize).execute()
-					.actionGet();
-			for (SearchHit hit : response.getHits()) {
-				esData.add(hit.getSource());
-			}
-			i++;
-		}
-		return esData;
-	}
+//	public List<Map<String, Object>> getAllDocs(String indexName, String indexType) {
+//		int scrollSize = 500;
+//		List<Map<String, Object>> esData = new ArrayList<Map<String, Object>>();
+//		SearchResponse response = null;
+//		int i = 0;
+//		while (response == null || response.getHits().hits().length != 0) {
+//			response = client.prepareSearch(indexName).setTypes(indexType)
+//					.setQuery(QueryBuilders.matchAllQuery())
+//					.setSize(scrollSize).setFrom(i * scrollSize).execute()
+//					.actionGet();
+//			
+//			for (SearchHit hit : response.getHits()) {
+//				esData.add(hit.getSource());
+//			}
+//			i++;
+//		}
+//		return esData;
+//	}
 }

@@ -19,7 +19,6 @@ public class RetrieveController {
 	
 	public RetrieveController() {
 		this.retriever = new RetrieverImpl("elasticsearch", "127.0.0.1");
-//		this.retriever = new Adapter("elasticsearch", "127.0.0.1");
 		helperfunc = new Functions();
 	}
 	
@@ -30,9 +29,8 @@ public class RetrieveController {
 	 * @throws Exception
 	 */
 	public ArrayList<Hashtable<String, String>> get(String hostname) throws Exception {
-		String indexName = hostname.replace("http://", "").replace("/", "");
 		// SearchResponse as String (json)
-		String result = retriever.retrieveByIndexname(indexName).toString();
+		String result = retriever.retrieveByIndexname(hostname).toString();
 		
 		// parse json to ArrayList with key-value entries
 		return new Tagprocessing().getTags(result.toString());
@@ -46,10 +44,8 @@ public class RetrieveController {
 	 * @throws Exception
 	 */
 	public ArrayList<Hashtable<String, String>> get(String hostname, String keyword) throws Exception {
-		String indexName = "tagcloud";
-		String host = hostname.replace("http://", "").replace("/", "");
 		// SearchResponse as String (json)
-		String result = retriever.retrieveByKeyword(indexName, hostname, keyword).toString();
+		String result = retriever.retrieveByKeyword(Functions.INDEX_NAME, hostname, keyword).toString();
 		
 		// parse json to ArrayList with key-value entries
 		return new Tagprocessing().getTags(result.toString());
@@ -80,10 +76,9 @@ public class RetrieveController {
 		ArrayList<String> hostnames = new ArrayList<String>();
 		SearchResponse sr = retriever.retrieveHostnamesDistinct();
 		Terms agg = sr.getAggregations().get("host_names_distinct");
+		
 		for (Terms.Bucket entry : agg.getBuckets()){
 			hostnames.add(entry.getKey());
-			//not used anymore because mysql impl
-			//helperfunc.createFile("_blacklist", entry.getKey().toString() + ".txt");
 		}
 		
 		return hostnames;
@@ -107,9 +102,7 @@ public class RetrieveController {
 	 */
 	public ArrayList<Hashtable<String, String>> getSigTerms(String hostname, int size) throws Exception {
 		
-		String indexName = hostname.replace("http://", "").replace("/", "");
-		
-		SearchResponse result = retriever.retrieveSignificantTerms(indexName, size);	
+		SearchResponse result = retriever.retrieveSignificantTerms(hostname, size);	
 		
 		return new Tagprocessing().getSignificantTags(result.toString());
 	}

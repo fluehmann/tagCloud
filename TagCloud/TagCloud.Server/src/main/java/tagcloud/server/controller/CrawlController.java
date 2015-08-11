@@ -33,7 +33,8 @@ public class CrawlController {
 			new WebCrawler(safeUri).crawl(safeUri);
 			success(response);
 			
-		} else if (type.equals("file") && typeExists(safeUri) && new File(safeUri).exists()){
+		} else if (type.equals("file") && typeExists(safeUri)){
+			System.out.println(new File(safeUri).exists());
 			new FileCrawler(safeUri).crawl(safeUri);
 			success(response);
 			

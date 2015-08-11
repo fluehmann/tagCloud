@@ -10,6 +10,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.safety.Whitelist;
 
+import tagcloud.core.Functions;
 import tagcloud.indexer.IIndexer;
 
 public class Cleaner {
@@ -20,7 +21,7 @@ public class Cleaner {
 		
 //		Send data over to to ElasticSearch
 		String host = hostname.replace("http://", "").replace("/", "");
-		indexer.indexDocument("tagcloud", "website", url, extractJson(host, url,doc));
+		indexer.indexDocument(Functions.INDEX_NAME, "website", url, extractJson(host, url,doc));
 
 	}
 	

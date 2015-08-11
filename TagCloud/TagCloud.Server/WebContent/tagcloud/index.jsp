@@ -4,6 +4,7 @@
 <%@ page import="java.util.List,java.util.ArrayList"%>
 <%@ page import="java.util.List,java.util.Iterator"%>
 <%@ page import="java.util.List,java.util.Hashtable"%>
+<%@ page import="java.util.List,java.util.LinkedHashMap"%>
 
 <%
 	String hostname = request.getParameter("host");
@@ -12,14 +13,13 @@
 	ArrayList<Hashtable<String, String>> al = rcntrl.getSigTerms(hostname, 50);
 	
 	TagController tcntrl = new TagController();
-	Hashtable<Integer, String> table = tcntrl.getKeywordFromBlacklist(hostname);
+	LinkedHashMap<Integer, String> table = tcntrl.getKeywordFromBlacklist(hostname);
 %>
 <!DOCTYPE html>
 <html>
 <head>
 <title><% out.print(hostname); %> - Tagcloud | Tagcloud mit Elasticsearch</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jqcloud.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/dashboard.css" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/modal.css" />
@@ -36,7 +36,7 @@
 <!-- End Sidebar -->
 <div class="content">
 	<h1>
-		<% out.print("Gefundene URLs zu " + hostname); %>
+		<% out.print("Gefundene Stichworte zu " + hostname); %>
 	</h1>
 
 	<div id="cloudtest">	
@@ -50,7 +50,7 @@
 	  </form>
 	  
 	  <p style="margin-top: 200px;">
-	  	<a href="#openModal">Blasklist anzeigenl</a>
+	  	<a href="#openModal">Blasklist anzeigen</a>
 	  </p>
 	</div>
 	
