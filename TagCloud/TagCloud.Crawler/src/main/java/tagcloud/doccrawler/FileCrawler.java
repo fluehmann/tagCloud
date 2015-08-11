@@ -87,8 +87,8 @@ public class FileCrawler extends CrawlerShell {
 			System.err.println("The file '" + fileName + "' was not found. "
 					+ e.getMessage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Error: " 
+					+ e.getMessage());
 		}
 		return content;
 	}
@@ -96,7 +96,6 @@ public class FileCrawler extends CrawlerShell {
 	public void sendToIndex(String filePath, HashMap<String, String> json) {
 		// index document
 		try {
-//			indexer.indexDocument("tagcloud", "website", url, extractJson(host, url,doc));
 			indexer.indexDocument("tagcloud", "file", fileName, json);
 		} catch (ElasticsearchException e) {
 			e.printStackTrace();

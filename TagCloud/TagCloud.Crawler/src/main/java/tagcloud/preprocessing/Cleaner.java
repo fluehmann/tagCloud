@@ -36,9 +36,8 @@ public class Cleaner {
 		raw = raw.replaceAll("&nbsp;"," ").trim(); // replace nonbreakingspace
 		raw = raw.replaceAll("&amp;","und").trim(); // replace &
 				
-		// Whitelist will strip html from the string & prevent from XSS attacks
-		// Choose a different Whitelist to keep more tags & information:
-		// Whitelist whitelist = Whitelist.none();
+		// Whitelist will strip all html from the string
+		// Choose a different Whitelist to keep more tags & information.
 		Whitelist whitelist = Whitelist.none();
 		String plain = Jsoup.clean(raw, url, whitelist);
 				

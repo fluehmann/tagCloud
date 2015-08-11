@@ -58,12 +58,6 @@ public class CrawlCallable implements Callable<List<String>> {
 		// set to store links that have been found on website
 		Set<String> extractedLinks = new HashSet<String>();
 
-		// manually entered blacklist for certain urls
-		Set<String> blackList = new HashSet<String>();
-			blackList.add("http://www.himmelblau.ch/");
-			blackList.add("http://www.himmelblau.ch/angebote/");
-			blackList.add("http://www.himmelblau.ch/team/");
-		
 		// check if content of URL is HTML
 		String contentType = conn.getContentType();
 		if (contentType != null && contentType.startsWith("text/html")) {
@@ -76,11 +70,8 @@ public class CrawlCallable implements Callable<List<String>> {
 				Document doc = Jsoup.parse(pageInputStream, null, startURL);
 
 				// remove useless parts of website
-				doc.select("head, script, style, link, .hidden").remove();
-
-				// Send the source to the cleaner to clean it and store it in the ES index
-				new Cleaner(indexer,doc,startURL,hostname);
-
+				doc.select("img, link, input, form, nav, header, footer, iframe, head, script, style, link, .hidden").remove();
+				
 				// extract all links out of the websites source and add them to a list
 				Elements urls = doc.select("a[href]");
 				for (Element link : urls) {
@@ -92,13 +83,20 @@ public class CrawlCallable implements Callable<List<String>> {
 							!linkString.contains("#") &&
 							!linkString.contains("@") &&
 							!linkString.contains("publikationen") &&
-							!linkString.startsWith("http://www.fhnw.ch/ph"))
+							!linkString.startsWith("http://www.fhnw.ch/ph") &&
+							!linkString.endsWith("accessibility-info") &&
+							!linkString.startsWith("http://www.fhnw.ch/ppt"))
 							{
 						extractedLinks.add(linkString);
 					}
 				}
-				// slows down the crawler significantly
-				extractedLinks.removeAll(blackList);	
+				
+				// Remove Menu-Elements
+				doc.select("ul li a[href]").remove();
+				doc.select("span").remove();
+				
+				// Send the source to the cleaner to clean it and store it in the ES index
+				new Cleaner(indexer,doc,startURL,hostname);
 				
 			} catch (Exception e){
 				System.err.println("Error ocurred while crawling in CrawlCallable: " + e.getMessage());
