@@ -32,11 +32,11 @@ public class RetrieverImpl implements IRetriever {
 	}
 
 	/**
-	 * 
+	 * Get document specified by indexName and type
 	 * @param indexName
 	 *            Hostname
 	 * @param indexType
-	 *            specify the index type ("page" or "document")
+	 *            specify the index type ("website" or "file")
 	 * @param indexId
 	 *            (oprional) if needed or known, an unique identifier such as
 	 *            URL can be given
@@ -135,7 +135,6 @@ public class RetrieverImpl implements IRetriever {
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			AggregationBuilder<?> aggregation = AggregationBuilders
@@ -170,9 +169,10 @@ public class RetrieverImpl implements IRetriever {
 	}
 
 	/**
-	 * 
+	 * Get significant terms from elasticsearch
 	 * @param host
-	 * @return
+	 * @param size
+	 * @return SearchResponse Obj
 	 * @throws Exception
 	 */
 	public SearchResponse retrieveSignificantTerms(String host, int size) throws Exception {
@@ -191,6 +191,7 @@ public class RetrieverImpl implements IRetriever {
 
 		SearchResponse sr = client.prepareSearch(Functions.INDEX_NAME)
 				.setQuery(QueryBuilders.termQuery("_type", "website"))
+//				.setQuery(QueryBuilders.termQuery("_type", "file"))
 				.setQuery(QueryBuilders.matchQuery("hostname", hostname))
 				.setSearchType(SearchType.COUNT)
 				.addAggregation(aggregation)
@@ -199,6 +200,11 @@ public class RetrieverImpl implements IRetriever {
 		return sr;
 	}
 	
+	/**
+	 * Check if a host already exists in the index
+	 * @param hostname
+	 * @return bool
+	 */
 	public boolean hostnameExists(String hostname) throws InterruptedException, ExecutionException {
 
 		SearchResponse sr = client.prepareSearch(Functions.INDEX_NAME)
@@ -210,23 +216,4 @@ public class RetrieverImpl implements IRetriever {
 		}
 		return false;
 	}
-
-//	public List<Map<String, Object>> getAllDocs(String indexName, String indexType) {
-//		int scrollSize = 500;
-//		List<Map<String, Object>> esData = new ArrayList<Map<String, Object>>();
-//		SearchResponse response = null;
-//		int i = 0;
-//		while (response == null || response.getHits().hits().length != 0) {
-//			response = client.prepareSearch(indexName).setTypes(indexType)
-//					.setQuery(QueryBuilders.matchAllQuery())
-//					.setSize(scrollSize).setFrom(i * scrollSize).execute()
-//					.actionGet();
-//			
-//			for (SearchHit hit : response.getHits()) {
-//				esData.add(hit.getSource());
-//			}
-//			i++;
-//		}
-//		return esData;
-//	}
 }

@@ -54,6 +54,12 @@ public class Tagprocessing {
 		return tags;
 	}
 	
+	/**
+	 * Use given json string and extract the nescesary values.
+	 * Put extracted values in a list for further usage
+	 * @param jsonResult
+	 * @return
+	 */
 	public ArrayList<Hashtable<String, String>> getSignificantTags(String jsonResult) {
 		
 		JSONObject obj = new JSONObject(jsonResult);
@@ -61,9 +67,9 @@ public class Tagprocessing {
 		
 		// normalize score
 		// get top entry
-		//double upper = arr.getJSONObject(0).getDouble("score");
+		// double upper = arr.getJSONObject(0).getDouble("score");
 		// get last entry
-		//double lower = arr.getJSONObject(arr.length()-1).getDouble("score");		
+		// double lower = arr.getJSONObject(arr.length()-1).getDouble("score");		
 		
 		for (int i = 0; i < arr.length(); i++)
 		{
@@ -81,6 +87,13 @@ public class Tagprocessing {
 		return tags;
 	}
 	
+	/**
+	 * Assign each entry to a group which represents a number
+	 * Each group has a value which is used by jQCloud in the frontend
+	 * @param size
+	 * @param pointer
+	 * @return
+	 */
 	public String normalizeScore(int size, int pointer) {
 		final int GROUPS = 5;	// there are 5 groups of font sizes. Each tag will be assigned to one group
 		int units;		  		// how many entries a group should have

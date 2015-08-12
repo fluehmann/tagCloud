@@ -5,8 +5,6 @@ import java.util.HashMap;
 
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.client.Requests;
-import org.elasticsearch.cluster.metadata.IndexMetaData;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 
 import tagcloud.connection.ESConnection;
@@ -25,7 +23,7 @@ public class IndexerImpl implements IIndexer {
 	}
 
 	/**
-	 * 
+	 * Try to save a document in Elasticsearch
 	 * @param index Name of the index which is usually the hostname in our case
 	 * @param type Define which type of source we want to index. We differ between "page" and "document"
 	 * @param id An unique identifier of each indexed source. An URL would be a good choice for web usage
@@ -65,23 +63,5 @@ public class IndexerImpl implements IIndexer {
 //		return (indexMetaData != null);
 //	}
 
-	/**
-	 * 
-	 * @param fields
-	 * @return
-	 */
-	private String[] getTags(HashMap<String, String> fields){
-		//ArrayList<String> tags;
-		String body = null;
-		for( String key : fields.keySet() ) {
-			if ( key == "body" ){
-				body = fields.get(key);
-				break;
-			}
-		}
 
-		String[] tags = body.split(" ");
-
-		return tags;		
-	}
 }

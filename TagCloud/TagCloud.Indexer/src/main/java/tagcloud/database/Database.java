@@ -27,7 +27,7 @@ public final class Database {
 	}
 
 	/**
-	 *
+	 * Return object instance
 	 * @return MysqlConnect Database connection object
 	 */
 	public static synchronized Database getDbCon() {
@@ -38,7 +38,7 @@ public final class Database {
 	}
 
 	/**
-	 *
+	 * Take SQL statement as string
 	 * @param query
 	 *            String The query to be executed
 	 * @return a ResultSet object containing the results or null if not
@@ -76,6 +76,12 @@ public final class Database {
 		return result;
 	}
 	
+	/**
+	 * Try to create a new table if not already exists
+	 * @param tableName
+	 * @return
+	 * @throws SQLException
+	 */
 	public int createTable(String tableName) throws SQLException {
 		String table = tableName.replace(".", "_");
 	System.out.println(table);
@@ -88,6 +94,13 @@ public final class Database {
 		return result;
 	}
 	
+	/**
+	 * Add keyword into blacklist table to ignore those in tagcloud
+	 * @param table
+	 * @param keyword
+	 * @return
+	 * @throws SQLException
+	 */
 	public int addKeyword(String table, String keyword) throws SQLException {
 		statement = db.conn.createStatement();
 		int result = statement.executeUpdate("INSERT INTO "+ table +" ("
@@ -97,6 +110,12 @@ public final class Database {
 		return result;
 	}
 	
+	/**
+	 * Return all blacklisted keywords from a specific host
+	 * @param table
+	 * @return
+	 * @throws SQLException
+	 */
 	public LinkedHashMap<Integer, String> getKeywords(String table) throws SQLException {
 		LinkedHashMap<Integer, String> keywords = new LinkedHashMap<Integer, String>();
 		
@@ -112,6 +131,13 @@ public final class Database {
 		return keywords;
 	}
 	
+	/**
+	 * Remove keyword from the blacklist. it could appear in the tagcloud
+	 * @param table
+	 * @param id
+	 * @return
+	 * @throws SQLException
+	 */
 	public int delKeyword(String table, String id) throws SQLException {
 		statement = db.conn.createStatement();
 		int result = statement.executeUpdate("DELETE FROM "+ table + " WHERE id = " + id);

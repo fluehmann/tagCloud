@@ -37,9 +37,6 @@ public class Functions {
 		File catalinaBase = new File(System.getProperty("catalina.home")).getAbsoluteFile();
 		File folder = new File(catalinaBase, "data/" + folderName);
 
-		//System.out.println("home: " + System.getProperty("catalina.home"));
-		//System.out.println("base: " + System.getProperty("catalina.base"));
-		//System.out.println(folder);
 		try {
 			f = new File(folder + "/" + fileName);
 

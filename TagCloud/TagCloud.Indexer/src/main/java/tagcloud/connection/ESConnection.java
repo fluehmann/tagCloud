@@ -10,6 +10,11 @@ public class ESConnection implements IConnection {
 
 	private static final int PORT = 9300;
 	
+	/**
+	 * Establish connection to a specific cluster, reachable thruogh the given ip
+	 * @param clustername
+	 * @param ip
+	 */
 	public Client connect(String clustername, String ip) {
 		
 		Settings settings = ImmutableSettings.settingsBuilder().put("cluster.name", clustername).build();

@@ -23,7 +23,7 @@ public class RetrieveController {
 	}
 	
 	/**
-	 * Calls adapter class and return documents by a given index name. the amount of results depends on the settings
+	 * Return documents by a given index name. the amount of results depends on the settings
 	 * @param hostname Is equal to index name
 	 * @return
 	 * @throws Exception
@@ -52,7 +52,7 @@ public class RetrieveController {
 	}
 	
 	/**
-	 * Calls adapter class und retrieve all existing index names on this node in an arraylist
+	 * Retrieve all existing index names on this node in an arraylist
 	 * @return
 	 * @throws Exception
 	 */
@@ -85,7 +85,7 @@ public class RetrieveController {
 	}
 	
 	/**
-	 * 
+	 * Check if given hostname exists in the index
 	 * @param hostname
 	 * @return
 	 * @throws InterruptedException
@@ -96,7 +96,7 @@ public class RetrieveController {
 	}
 	
 	/**
-	 * Calls adapter class and get significant terms based on all documents by an given index
+	 * Get significant terms based on all documents by an given index
 	 * @param hostname same as index name
 	 * @throws Exception
 	 */

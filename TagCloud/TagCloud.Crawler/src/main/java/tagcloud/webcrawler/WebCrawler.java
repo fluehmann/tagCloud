@@ -27,16 +27,9 @@ public class WebCrawler extends CrawlerShell {
 		super(hostname);
 	}
 
-
-
 	// Unleash ultimate power - hold your horses!
 //	private final int POOL_SIZE = Runtime.getRuntime().availableProcessors()*10;
 	private final int POOL_SIZE = Runtime.getRuntime().availableProcessors();
-	
-	// old fields - now superFields
-//	private final IndexAdapter idxAdptr;
-//	private final String hostname;
-
 	private final int MAX_NR_OF_URLS = 500;
 
 	// Counters to control the progression of the ExecutorService.
@@ -46,13 +39,6 @@ public class WebCrawler extends CrawlerShell {
 //	private final AtomicInteger openTasks = new AtomicInteger(0);
 	private final AtomicInteger completedTasks = new AtomicInteger(0);
 
-
-	// old constuctor - now superConstructor
-//	public WebCrawler(String hostname){
-//		IndexAdapter idxAdptr = new Adapter("elasticsearch", "127.0.0.1");
-//		this.idxAdptr = idxAdptr;
-//		this.hostname = hostname;
-//	}
 
 	/**
 	 * Crawls the www starting at {@code startURL}

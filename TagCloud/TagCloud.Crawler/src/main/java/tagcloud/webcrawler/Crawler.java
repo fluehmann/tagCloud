@@ -1,5 +1,3 @@
-
-
 package tagcloud.webcrawler;
 
 
@@ -15,8 +13,5 @@ public interface Crawler {
      * @return a list of uris that are reachable from {@code src}
      */
     public void crawl(String src);
-    
-    
-
 
 }

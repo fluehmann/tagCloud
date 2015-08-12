@@ -14,11 +14,9 @@ import tagcloud.indexer.IndexerImpl;
 import tagcloud.webcrawler.WebCrawler;
 
 public class CrawlController {
-//	IIndexer adapter;
 	protected IIndexer indexer;
 
 	public CrawlController(HttpServletResponse response, String uri, String type){
-//		adapter = new Adapter("elasticsearch", "127.0.0.1");
 		this.indexer = new IndexerImpl("elasticsearch", "127.0.0.1");
 
 		if (uri.equals("") || uri.equals(null)) {
@@ -45,7 +43,11 @@ public class CrawlController {
 	}
 	
 	
-	// check if a entered url is a valid website
+	/**
+	 * check if a entered url is a valid website
+	 * @param url
+	 * @return
+	 */
 	public boolean websiteExists(String url) {
 		boolean exists = true;
 		try {
@@ -57,7 +59,11 @@ public class CrawlController {
 		return exists;
 	}
 	
-	//check if a entered filetype is implemented
+	/**
+	 * check if a entered filetype is implemented
+	 * @param path
+	 * @return
+	 */
 	public boolean typeExists(String path){
 		boolean exists = true;
 		if(!path.endsWith(".txt")){
@@ -66,7 +72,10 @@ public class CrawlController {
 		return exists;
 	}
 	
-	// display success page
+	/**
+	 * display success page
+	 * @param res
+	 */
 	public void success(HttpServletResponse res) {
 		try {
 			res.sendRedirect("success.jsp");
@@ -75,7 +84,10 @@ public class CrawlController {
 		}
 	}
 	
-	// display error page
+	/**
+	 * display error page
+	 * @param res
+	 */
 	public void error(HttpServletResponse res) {
 		try {
 			res.sendRedirect("error.jsp");

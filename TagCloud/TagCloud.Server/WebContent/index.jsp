@@ -1,3 +1,3 @@
 <%
-response.sendRedirect("indeces/index.jsp");
+response.sendRedirect("dashboard/index.jsp");
 %>

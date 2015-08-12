@@ -15,22 +15,24 @@ import tagcloud.indexer.IIndexer;
 
 public class Cleaner {
 	
-	public Cleaner(IIndexer indexer, Document doc, String url, String hostname) throws ElasticsearchException, IOException {
-//		IndexAdapter x = new Adapter("elasticsearch", "127.0.0.1");
-//		System.out.println(url + ".. is indexed!");
-		
+	public Cleaner(IIndexer indexer, Document doc, String url, String hostname) throws ElasticsearchException, IOException {		
 //		Send data over to to ElasticSearch
 		String host = hostname.replace("http://", "").replace("/", "");
 		indexer.indexDocument(Functions.INDEX_NAME, "website", url, extractJson(host, url,doc));
-
 	}
 	
 	public void sendToIndex(){
 		
 	}
 	
+	/**
+	 * 
+	 * @param hostname
+	 * @param url
+	 * @param doc
+	 * @return
+	 */
 	public HashMap<String, String> extractJson(String hostname, String url, Document doc){
-		
 		
 		String raw = doc.html(); // convert doc to String
 		raw = raw.replaceAll("&nbsp;"," ").trim(); // replace nonbreakingspace

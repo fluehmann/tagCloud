@@ -13,7 +13,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.elasticsearch.ElasticsearchException;
 
 import tagcloud.crawler.CrawlerShell;
-import tagcloud.indexer.IIndexer;
 
 // implementation of a file crawler
 public class FileCrawler extends CrawlerShell {
@@ -24,6 +23,10 @@ public class FileCrawler extends CrawlerShell {
 		super(hostname);
 	}
 
+
+	/**
+	 * 
+	 */
 	public void crawl(String filePath) {
 
 		File f = new File(filePath);
@@ -37,20 +40,7 @@ public class FileCrawler extends CrawlerShell {
 
 		// determine which import-method to use
 		// can easily be enhanced with other file-types
-		// Due to incopatibility in older Java-Versions switch is replaced by if/else if statements
-//		switch (suffix.toLowerCase()) {
-//		case "txt":
-//			json.put(fileName, importTextFile(filePath));
-//			break;
-//		case "docx":
-//			System.err.println("." + suffix + " Files cannot be imported yet");
-//			break;
-//		case "pdf":
-//			System.err.println("." + suffix + " Files cannot be imported yet");
-//			break;
-//		default:
-//			System.err.println("." + suffix + " Files cannot be imported yet");
-//		}
+		// Due to incopatibility in older Java-Versions switch-case is replaced by if/else if statements
 		
 		String sfx = suffix.toLowerCase();
 		if (sfx.equals("txt")){
@@ -65,7 +55,11 @@ public class FileCrawler extends CrawlerShell {
 		sendToIndex(fileName, json);
 	}
 
-	// method to get the content of a file
+	/**
+	 * method to get the content of a file
+	 * @param filePath
+	 * @return
+	 */
 	public String importTextFile(String filePath) {
 
 		String content = "empty file";
@@ -93,6 +87,11 @@ public class FileCrawler extends CrawlerShell {
 		return content;
 	}
 
+	/**
+	 * 
+	 * @param filePath
+	 * @param json
+	 */
 	public void sendToIndex(String filePath, HashMap<String, String> json) {
 		// index document
 		try {

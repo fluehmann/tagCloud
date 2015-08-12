@@ -24,6 +24,12 @@ public class SimplePageParser {
 		this.hostname = hostname;
 	}
 	
+	/**
+	 * 
+	 * @param startURL
+	 * @return
+	 * @throws Exception
+	 */
 	public Set<String> parsePageByUrlAndGetLinks(String startURL) throws Exception {
 
 		// Open connection to startURL

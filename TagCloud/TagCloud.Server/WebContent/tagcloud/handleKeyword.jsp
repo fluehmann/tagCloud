@@ -16,7 +16,4 @@
   		tcntrl.delKeywordFromBlacklist(hostname, id);
   		response.sendRedirect("index.jsp?host=" + hostname);
   }
-	
-	
-	
 %>
