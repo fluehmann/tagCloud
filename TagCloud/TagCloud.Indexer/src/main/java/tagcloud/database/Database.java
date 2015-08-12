@@ -86,7 +86,7 @@ public final class Database {
 		String table = tableName.replace(".", "_");
 	System.out.println(table);
 		statement = db.conn.createStatement();
-		int result = statement.executeUpdate("CREATE TABLE IF NOT EXISTS "+ table +" ("
+		int result = statement.executeUpdate("CREATE TABLE IF NOT EXISTS `estagcloud`.`"+ table +"` ("
 						 + "id INT NOT NULL AUTO_INCREMENT, "
 						 + "keyword VARCHAR(50) NULL, "
 						 + "PRIMARY KEY (id)"
@@ -103,7 +103,7 @@ public final class Database {
 	 */
 	public int addKeyword(String table, String keyword) throws SQLException {
 		statement = db.conn.createStatement();
-		int result = statement.executeUpdate("INSERT INTO "+ table +" ("
+		int result = statement.executeUpdate("INSERT INTO `estagcloud`.`"+ table +"` ("
 						 + "keyword)"
 						 + " VALUES('" + keyword + "')"
 						 );
@@ -120,8 +120,8 @@ public final class Database {
 		LinkedHashMap<Integer, String> keywords = new LinkedHashMap<Integer, String>();
 		
 		statement = db.conn.createStatement();
-		ResultSet rs = statement.executeQuery("SELECT id, keyword FROM "+ table
-						 + " ORDER BY keyword ASC"
+		ResultSet rs = statement.executeQuery("SELECT id, keyword FROM `estagcloud`.`"+ table
+						 + "` ORDER BY keyword ASC"
 						 );
 		
 		while ( rs.next() ){
@@ -140,7 +140,7 @@ public final class Database {
 	 */
 	public int delKeyword(String table, String id) throws SQLException {
 		statement = db.conn.createStatement();
-		int result = statement.executeUpdate("DELETE FROM "+ table + " WHERE id = " + id);
+		int result = statement.executeUpdate("DELETE FROM `estagcloud`.`"+ table + "` WHERE id = " + id);
 		return result;
 	}
 }
