@@ -34,7 +34,7 @@ public class CrawlController {
 			success(response);
 			
 		} else if (type.equals("file") && typeExists(safeUri)){
-			System.out.println(new File(safeUri).exists());
+			System.out.println("file exists: " + new File(uri).exists());
 			new FileCrawler(safeUri).crawl(safeUri);
 			success(response);
 			

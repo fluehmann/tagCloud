@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -182,9 +184,20 @@ public class Functions {
 	public String removeProtocollFromHost(String hostname){
 		String newHost = "";
 		newHost = hostname.replace("http://", "")
-						  .replace("https://", "")
-						  .replace("/", "");
+						  .replace("https://", "");
 		return newHost;
+	}
+	
+	/**
+	 * Return Hostname from a given URL
+	 * @param url
+	 * @return
+	 * @throws URISyntaxException
+	 */
+	public static String getDomainName(String url) throws URISyntaxException {
+	    URI uri = new URI(url);
+	    String domain = uri.getHost();
+	    return domain.startsWith("www.") ? domain.substring(4) : domain;
 	}
 	
 	/**

@@ -7,11 +7,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 
 import org.apache.commons.io.FilenameUtils;
 import org.elasticsearch.ElasticsearchException;
 
+import tagcloud.core.Functions;
 import tagcloud.crawler.CrawlerShell;
 
 // implementation of a file crawler
@@ -44,7 +46,15 @@ public class FileCrawler extends CrawlerShell {
 		
 		String sfx = suffix.toLowerCase();
 		if (sfx.equals("txt")){
-			json.put(fileName, importTextFile(filePath));
+			
+			try {
+				json.put("hostname", Functions.getDomainName(filePath));
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+			
+			json.put("content", importTextFile(filePath));
+			
 		} else if(sfx.equals("docx")) {
 			System.err.println("." + suffix + " Files cannot be imported yet");
 		} else if(sfx.equals("pdf")) {
@@ -52,7 +62,7 @@ public class FileCrawler extends CrawlerShell {
 		} else {
 			System.err.println("File cannot be imported");
 		}
-		sendToIndex(fileName, json);
+		sendToIndex(filePath, json);
 	}
 
 	/**
@@ -61,13 +71,14 @@ public class FileCrawler extends CrawlerShell {
 	 * @return
 	 */
 	public String importTextFile(String filePath) {
-
+		
+		StringBuilder sb = new StringBuilder();
 		String content = "empty file";
-
 		InputStream fis;
+		
 		try {
 			fis = new FileInputStream(filePath);
-			StringBuilder sb = new StringBuilder();
+			
 			Reader r = new InputStreamReader(fis);
 			int ch = r.read();
 			while (ch >= 0) {
@@ -95,7 +106,7 @@ public class FileCrawler extends CrawlerShell {
 	public void sendToIndex(String filePath, HashMap<String, String> json) {
 		// index document
 		try {
-			indexer.indexDocument("tagcloud", "file", fileName, json);
+			indexer.indexDocument(Functions.INDEX_NAME, "file", filePath, json);
 		} catch (ElasticsearchException e) {
 			e.printStackTrace();
 			System.out.println("Problem 1");
