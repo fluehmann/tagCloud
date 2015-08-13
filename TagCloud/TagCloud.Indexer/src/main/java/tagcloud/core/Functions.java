@@ -25,6 +25,7 @@ import tagcloud.database.Database;
 public class Functions {
 	
 	public final static String INDEX_NAME = "tagcloud";
+	public final static String DATABASE_NAME = "estagcloud";
 
 	/**
 	 * Create a file if not exists in the data folder of the tomcat installation

@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedHashMap;
 
+import tagcloud.core.Functions;
+
 public final class Database {
 	public Connection conn;
 	private Statement statement;
@@ -14,7 +16,7 @@ public final class Database {
 
 	private Database() {
 		String url = "jdbc:mysql://localhost:3306/";
-		String dbName = "estagcloud";
+		String dbName = Functions.DATABASE_NAME;
 		String driver = "com.mysql.jdbc.Driver";
 		String userName = "root";
 		String password = "";
@@ -86,7 +88,7 @@ public final class Database {
 		String table = tableName.replace(".", "_");
 	System.out.println(table);
 		statement = db.conn.createStatement();
-		int result = statement.executeUpdate("CREATE TABLE IF NOT EXISTS `estagcloud`.`"+ table +"` ("
+		int result = statement.executeUpdate("CREATE TABLE IF NOT EXISTS `" + Functions.DATABASE_NAME + "`.`"+ table +"` ("
 						 + "id INT NOT NULL AUTO_INCREMENT, "
 						 + "keyword VARCHAR(50) NULL, "
 						 + "PRIMARY KEY (id)"
@@ -103,7 +105,7 @@ public final class Database {
 	 */
 	public int addKeyword(String table, String keyword) throws SQLException {
 		statement = db.conn.createStatement();
-		int result = statement.executeUpdate("INSERT INTO `estagcloud`.`"+ table +"` ("
+		int result = statement.executeUpdate("INSERT INTO `" + Functions.DATABASE_NAME + "`.`"+ table +"` ("
 						 + "keyword)"
 						 + " VALUES('" + keyword + "')"
 						 );
@@ -120,7 +122,7 @@ public final class Database {
 		LinkedHashMap<Integer, String> keywords = new LinkedHashMap<Integer, String>();
 		
 		statement = db.conn.createStatement();
-		ResultSet rs = statement.executeQuery("SELECT id, keyword FROM `estagcloud`.`"+ table
+		ResultSet rs = statement.executeQuery("SELECT id, keyword FROM `" + Functions.DATABASE_NAME + "`.`"+ table
 						 + "` ORDER BY keyword ASC"
 						 );
 		
@@ -140,7 +142,7 @@ public final class Database {
 	 */
 	public int delKeyword(String table, String id) throws SQLException {
 		statement = db.conn.createStatement();
-		int result = statement.executeUpdate("DELETE FROM `estagcloud`.`"+ table + "` WHERE id = " + id);
+		int result = statement.executeUpdate("DELETE FROM `" + Functions.DATABASE_NAME + "`.`"+ table + "` WHERE id = " + id);
 		return result;
 	}
 }
