@@ -24,8 +24,10 @@ import tagcloud.database.Database;
 
 public class Functions {
 	
-	public final static String INDEX_NAME = "tagcloud";
-	public final static String DATABASE_NAME = "estagcloud";
+	public static String INDEX_NAME = "tagcloud";
+	public static String DATABASE_NAME = "tagcloud";
+	public static String CLUSTER_NAME = "elasticsearch";
+	public static String IP_ELASTICSEARCH = "127.0.0.1";
 
 	/**
 	 * Create a file if not exists in the data folder of the tomcat installation

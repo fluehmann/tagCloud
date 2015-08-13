@@ -84,11 +84,11 @@ public final class Database {
 	 * @return
 	 * @throws SQLException
 	 */
-	public int createTable(String tableName) throws SQLException {
+	public boolean createTable(String tableName) throws SQLException {
 		String table = tableName.replace(".", "_");
 	System.out.println(table);
 		statement = db.conn.createStatement();
-		int result = statement.executeUpdate("CREATE TABLE IF NOT EXISTS `" + Functions.DATABASE_NAME + "`.`"+ table +"` ("
+		boolean result = statement.execute("CREATE TABLE IF NOT EXISTS `" + Functions.DATABASE_NAME + "`.`"+ table +"` ("
 						 + "id INT NOT NULL AUTO_INCREMENT, "
 						 + "keyword VARCHAR(50) NULL, "
 						 + "PRIMARY KEY (id)"

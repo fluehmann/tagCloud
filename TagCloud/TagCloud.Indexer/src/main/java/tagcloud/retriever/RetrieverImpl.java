@@ -191,7 +191,7 @@ public class RetrieverImpl implements IRetriever {
 
 		SearchResponse sr = client.prepareSearch(Functions.INDEX_NAME)
 				.setQuery(QueryBuilders.termQuery("_type", "website"))
-//				.setQuery(QueryBuilders.termQuery("_type", "file"))
+				.setQuery(QueryBuilders.termQuery("_type", "file"))
 				.setQuery(QueryBuilders.matchQuery("hostname", hostname))
 				.setSearchType(SearchType.COUNT)
 				.addAggregation(aggregation)

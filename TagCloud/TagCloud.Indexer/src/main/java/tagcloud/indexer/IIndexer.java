@@ -8,4 +8,5 @@ import org.elasticsearch.ElasticsearchException;
 public interface IIndexer {
 
 	public boolean indexDocument(String indexName, String type, String id, HashMap<String, String> json) throws ElasticsearchException, IOException;
+	public void createDummy() throws IOException;
 }

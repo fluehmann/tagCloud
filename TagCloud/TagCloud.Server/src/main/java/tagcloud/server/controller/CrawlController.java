@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
+import tagcloud.core.Functions;
 import tagcloud.doccrawler.FileCrawler;
 import tagcloud.indexer.IIndexer;
 import tagcloud.indexer.IndexerImpl;
@@ -16,9 +17,10 @@ import tagcloud.webcrawler.WebCrawler;
 public class CrawlController {
 	protected IIndexer indexer;
 
-	public CrawlController(HttpServletResponse response, String uri, String type){
-		this.indexer = new IndexerImpl("elasticsearch", "127.0.0.1");
-
+	public CrawlController(HttpServletResponse response, String uri, String type) throws IOException{
+		this.indexer = new IndexerImpl(Functions.CLUSTER_NAME, Functions.IP_ELASTICSEARCH);
+		this.indexer.createDummy();
+		
 		if (uri.equals("") || uri.equals(null)) {
 			uri = "empty uri";
 		}

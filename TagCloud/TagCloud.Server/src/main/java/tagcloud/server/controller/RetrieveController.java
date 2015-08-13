@@ -18,7 +18,7 @@ public class RetrieveController {
 	Functions helperfunc;
 	
 	public RetrieveController() {
-		this.retriever = new RetrieverImpl("elasticsearch", "127.0.0.1");
+		this.retriever = new RetrieverImpl(Functions.CLUSTER_NAME, Functions.IP_ELASTICSEARCH);
 		helperfunc = new Functions();
 	}
 	
@@ -78,7 +78,9 @@ public class RetrieveController {
 		Terms agg = sr.getAggregations().get("host_names_distinct");
 		
 		for (Terms.Bucket entry : agg.getBuckets()){
-			hostnames.add(entry.getKey());
+			if ( !entry.getKey().equals("localhost") ){
+				hostnames.add(entry.getKey());
+			}
 		}
 		
 		return hostnames;

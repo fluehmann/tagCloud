@@ -35,9 +35,6 @@ public class IndexerImpl implements IIndexer {
 	public boolean indexDocument(String index, String type, String id, HashMap<String, String> fields) throws ElasticsearchException, IOException {
 		// solution with one index
 		index = Functions.INDEX_NAME;
-		
-		// check if indexName already exists -> otherwise create new one
-		//helperfunc.createMissingIndex(index, client);
 
 		XContentBuilder builder = jsonBuilder();
 		builder.startObject();
@@ -49,6 +46,24 @@ public class IndexerImpl implements IIndexer {
 		client.prepareIndex(index, type, id).setSource(builder).execute().actionGet();
 		System.out.println("Document stored: " + id);
 		return true;
+	}
+
+	
+	/**
+	 * Temporary solution to show tagcloud with only one host.
+	 * Fake fore- and background set by adding this dummy document
+	 */
+	public void createDummy() throws IOException {
+		
+		// check if indexName already exists -> otherwise create new one
+		helperfunc.createMissingIndex(Functions.INDEX_NAME, client);
+		
+		XContentBuilder builder = jsonBuilder();
+		builder.startObject();
+		builder.field("hostname", "localhost");
+		builder.field("content", "this is a dummy entry on localhost");
+		builder.endObject();
+		client.prepareIndex(Functions.INDEX_NAME, "website", "localhost").setSource(builder).execute().actionGet();
 	}
 
 //	public boolean checkIfIndexExists(String indexName) {

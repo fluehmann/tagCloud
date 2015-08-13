@@ -9,8 +9,7 @@
 	//String hostname = request.getParameter("host");
 
 	RetrieveController rcntrl = new RetrieveController();
-	ArrayList<String> al = rcntrl.getIndeces();
-	ArrayList<String> al2 = rcntrl.getHostnames();
+	ArrayList<String> al = rcntrl.getHostnames();
 %>
 <!DOCTYPE html>
 <html>
@@ -23,20 +22,11 @@
 <!-- Begin Sidebar -->
 <%@include file="../sidebar.jsp" %>
 <!-- End Sidebar -->
-<div class="content">
-
-	<ul class="sticker-tiles">
-	<% 
-	for(String index : al){
-		//out.print("<li><a class='blue folder' href='../tagcloud/index.jsp?host=" + index + "' target='_blank'>" + index + "</a></li>");
-	}
-  %>
-	</ul>
-	
+<div class="content">	
 	
 	<ul class="sticker-tiles">
 	<% 
-	for(String hostname : al2){
+	for(String hostname : al){
 		out.print("<li><a class='blue folder' href='../tagcloud/index.jsp?host=" + hostname + "' target='_blank'>" + hostname + "</a></li>");
 	}
   %>
