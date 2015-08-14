@@ -16,7 +16,16 @@ import org.elasticsearch.ElasticsearchException;
 import tagcloud.core.Functions;
 import tagcloud.crawler.CrawlerShell;
 
-// implementation of a file crawler
+/**
+ * Implementation of a File Crawler.
+ * Inherits all fields from the abstract superclass CrawlerShell.
+ * FileCralwer can crawl files located on a webserver.
+ * FileCrawler is inteded to be extended to being able to crawl all different 
+ * kinds of files. There exists a type variable that can be specified via the UI.
+ * 
+ * @param hostname: the name of the website where the file belongs to
+ * 
+ * */
 public class FileCrawler extends CrawlerShell {
 
 	private String fileName;
@@ -27,6 +36,8 @@ public class FileCrawler extends CrawlerShell {
 
 
 	/**
+	 * Crawl method will get the user input from the crawlcontroller.
+	 * @param filePath: the exact uri of the file including suffix and protocol
 	 * 
 	 */
 	public void crawl(String filePath) {
@@ -36,14 +47,13 @@ public class FileCrawler extends CrawlerShell {
 			fileName = "ES_File_" + (1 + (int) (Math.random() * (999)));
 		}
 
+		// get File-suffix
 		String suffix = FilenameUtils.getExtension(filePath);
 		// build json document from filepath and filecontent
 		HashMap<String, String> json = new HashMap<String, String>();
-
+		
 		// determine which import-method to use
 		// can easily be enhanced with other file-types
-		// Due to incopatibility in older Java-Versions switch-case is replaced by if/else if statements
-		
 		String sfx = suffix.toLowerCase();
 		if (sfx.equals("txt")){
 			
@@ -51,6 +61,7 @@ public class FileCrawler extends CrawlerShell {
 				json.put("hostname", Functions.getDomainName(filePath));
 				json.put("content", importTextFile(filePath));
 				
+				// send file to index
 				if ( new URL(filePath).openConnection().getContentLength() != -1 ){
 					sendToIndex(filePath, json);
 				}
@@ -69,9 +80,9 @@ public class FileCrawler extends CrawlerShell {
 	}
 
 	/**
-	 * method to get the content of a file
+	 * Method to retrieve the content of a file
 	 * @param filePath
-	 * @return
+	 * @return content of a file
 	 */
 	public String importTextFile(String filePath) {
 		
@@ -102,12 +113,12 @@ public class FileCrawler extends CrawlerShell {
 	}
 
 	/**
-	 * 
+	 * Method to send the content of a file to be stored in Elasticsearch
 	 * @param filePath
 	 * @param json
 	 */
 	public void sendToIndex(String filePath, HashMap<String, String> json) {
-		// index document
+
 		try {
 			indexer.indexDocument(Functions.INDEX_NAME, "file", filePath, json);
 		} catch (ElasticsearchException e) {

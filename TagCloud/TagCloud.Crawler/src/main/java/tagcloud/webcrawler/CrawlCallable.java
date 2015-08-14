@@ -24,12 +24,11 @@ import tagcloud.preprocessing.Cleaner;
  * The list of Links will then be inserted into the queue of links to visit.
  * The CrawlCallable will transmit the content of a website to the cleaner class
  * where it will be cleaned and stored to the ElasticSearch Index.
+ * Moreover @CrawlCallable will send a list with all discovered urls back to the webcrawler.
  * 
  * @param hostname: the name of the website
  * @param startURL: the URL that needs to be crawled
  * @param x: the IndexAdapter object that specifies the index where the site has to be stored
- * 
- * @author: Simon Flühmann, FHWN, June 2015
  */
 public class CrawlCallable implements Callable<List<String>> {
 
@@ -61,7 +60,7 @@ public class CrawlCallable implements Callable<List<String>> {
 		String contentType = conn.getContentType();
 		if (contentType != null && contentType.startsWith("text/html")) {
 
-			// Build up InputStream to start loading source
+			// build up InputStream to start loading source
 			BufferedInputStream pageInputStream = null;
 			
 			try {
@@ -90,11 +89,12 @@ public class CrawlCallable implements Callable<List<String>> {
 					}
 				}
 				
-				// Remove Menu-Elements
+				// attempt to remove navigation elements from a website
+				// better use a regex to identify navigation-elements reliably 
 				doc.select("li a[href]").remove();
 				doc.select("span").remove();
 				
-				// Send the source to the cleaner to clean it and store it in the ES index
+				// send the source to the cleaner to clean it and store it in the ES index
 				new Cleaner(indexer,doc,startURL,hostname);
 				
 			} catch (Exception e){
@@ -111,7 +111,8 @@ public class CrawlCallable implements Callable<List<String>> {
 		}
 
 		// convert Set to ArrayList to conform to Callable-Interface
-		// return the list with all the extracted links from the website
+		// return the list with all the extracted links from the website back to the webcrawler
+		// in order to submit new tasks.
 		List<String> linkList = new ArrayList<String>(extractedLinks);
 		return linkList;
 	}

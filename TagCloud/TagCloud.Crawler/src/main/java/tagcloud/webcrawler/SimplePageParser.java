@@ -25,14 +25,14 @@ public class SimplePageParser {
 	}
 	
 	/**
+	 * @deprecated - use @CrawlCallable with @Webcrawler concurrent implementation instead
+	 * Encapsulates task of a single-threaded webcrawler.
 	 * 
 	 * @param startURL
-	 * @return
-	 * @throws Exception
 	 */
 	public Set<String> parsePageByUrlAndGetLinks(String startURL) throws Exception {
 
-		// Open connection to startURL
+		// open connection to startURL
 		URL url = new URL(startURL);
 		URLConnection conn = url.openConnection();
 		conn.setRequestProperty("User-Agent", "TagCloudWebCrawler/0.1 Mozilla/5.0");
@@ -58,7 +58,8 @@ public class SimplePageParser {
 						extractedLinks.add(linkString);
 					}
 				}
-				
+			
+			// start cleaning content and send data over to Elasticsearch
 			new Cleaner(indexer, doc,startURL, hostname);
 			
 			} catch (Exception e){

@@ -2,8 +2,8 @@ package tagcloud.webcrawler;
 
 
 /**
+ * @deprecated - use @CrawlerShell instead
  * Interface for crawlers. All crawler types need to implement this interface.
- * @author simonfluhmann
  */
 public interface Crawler {
 			

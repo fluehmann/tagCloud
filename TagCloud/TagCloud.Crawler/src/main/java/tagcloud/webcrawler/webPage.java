@@ -10,9 +10,8 @@ import org.jsoup.select.Elements;
 
 
 /**
+ * @deprecated - useless class
  * Class to represent a Webpage
- * is used in callable
- * @author simonfluhmann
  *
  */
 public class webPage {
@@ -27,7 +26,6 @@ public class webPage {
 		dateCrawled = LocalDateTime.now();
 		extractLinks();
 	}
-	
 	
 	/**
 	 * will extract all Links out of a jsoup document that was passed as parameter
