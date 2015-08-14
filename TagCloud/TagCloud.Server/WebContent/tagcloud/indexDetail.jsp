@@ -3,11 +3,13 @@
 <%@ page import="java.util.List,java.util.ArrayList"%>
 <%@ page import="java.util.List,java.util.Iterator"%>
 <%@ page import="java.util.List,java.util.Hashtable"%>
+<%@ page import="java.net.URLDecoder" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%
+	request.setCharacterEncoding("UTF-8");
 	String hostname = request.getParameter("host");
-  String keyword = request.getParameter("keyword");
+  String keyword = URLDecoder.decode(request.getParameter("keyword"), "UTF-8");
 
 	RetrieveController rcntrl = new RetrieveController();
 	ArrayList<Hashtable<String, String>> al = rcntrl.get(hostname, keyword);
@@ -16,7 +18,7 @@
 <html>
 <head>
 <title>Links zu "<% out.print(keyword); %>" auf <% out.print(hostname); %> | Tagcloud mit Elasticsearch</title>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jqcloud.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/dashboard.css" />
