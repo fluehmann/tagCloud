@@ -42,13 +42,13 @@
 	</div>
 	
 	<div class='container'>
-	  <h1>Ignore keyword</h1>
+	  <h1>Stoppwort hinzufügen</h1>
 	  <form method="post" action="handleKeyword.jsp?action=add">
 	  	<input name="hostname" type="hidden" value="<% out.print(hostname); %>">
 	  	<input class="search" name="ign_keyword" type="search">
 	  </form>
 	  
-	  <p style="margin-top: 200px;">
+	  <p style="margin-top: 30px;">
 	  	<a href="#openModal">Blasklist anzeigen</a>
 	  </p>
 	</div>
@@ -68,13 +68,6 @@
 </body>
 <script>
 var words = [
-		/*{text: "Lorem", weight: 13},
-		{text: "Ipsum", weight: 10.5},
-		{text: "Dolor", weight: 9.4},
-		{text: "Sit", weight: 8},
-		{text: "Amet", weight: 6.2},
-		{text: "Consectetur", weight: 5},
-		{text: "Adipiscing", weight: 5},*/
 		<%
 		for (Hashtable<String, String> item : al) {
 			String keyword = item.get("keyword");

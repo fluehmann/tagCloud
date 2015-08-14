@@ -15,11 +15,12 @@ public final class Database {
 	public static Database db;
 
 	private Database() {
-		String url = "jdbc:mysql://localhost:3306/";
-		String dbName = Functions.DATABASE_NAME;
-		String driver = "com.mysql.jdbc.Driver";
-		String userName = "root";
-		String password = "";
+		
+		String dbName 		= Functions.DATABASE_NAME;
+		String driver 		= "com.mysql.jdbc.Driver";
+		String url 			= "jdbc:mysql://localhost:3306/";
+		String userName 	= "root";
+		String password 	= "";
 		try {
 			Class.forName(driver).newInstance();
 			this.conn = (Connection) DriverManager.getConnection(url + dbName, userName, password);
