@@ -1,0 +1,15 @@
+{
+	"file": {
+		"properties": {
+			"content": {
+				"type": "string",
+				"analyzer": "de"
+			},
+			
+			"hostname": {
+				"type": "string",
+				"index": "not_analyzed"
+			}
+		}
+	}
+}

@@ -19,7 +19,8 @@ public final class Database {
 		String dbName = Functions.DATABASE_NAME;
 		String driver = "com.mysql.jdbc.Driver";
 		String userName = "root";
-		String password = "";
+		// osx - leave blank for windows
+		String password = "root";
 		try {
 			Class.forName(driver).newInstance();
 			this.conn = (Connection) DriverManager.getConnection(url + dbName, userName, password);
