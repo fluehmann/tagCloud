@@ -161,7 +161,7 @@ public class Functions {
 		
 		if (!result){
 			Settings indexSettings = ImmutableSettings.settingsBuilder()
-					.put("number_of_shards", 3)
+					.put("number_of_shards", 5)
 					.put("number_of_replicas", 1)
 					.build();			
 			
@@ -169,6 +169,7 @@ public class Functions {
 			CreateIndexRequest indexRequest = new CreateIndexRequest(indexName, indexSettings);
 			indexRequest.settings(getJsonFile("/", "settings.json"));
 			indexRequest.mapping("website", getJsonFile("/", "mappings.json"));
+			indexRequest.mapping("file", getJsonFile("/", "filemapping.json"));
 
 			client.admin().indices().create(indexRequest).actionGet();
 						
