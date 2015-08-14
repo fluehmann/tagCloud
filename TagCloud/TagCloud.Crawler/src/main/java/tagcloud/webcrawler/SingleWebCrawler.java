@@ -8,11 +8,14 @@ import java.util.Set;
 
 import tagcloud.crawler.CrawlerShell;
 
-// implementation of a single threaded WebCrawler as an alternative to the mutlithreaded solution 
+/**
+ * @deprecated - use @CrawlCallable with @Webcrawler concurrent implementation instead
+ * Encapsulates task of a single-threaded webcrawler.
+ * 
+ * @param startURL
+ */
 public class SingleWebCrawler extends CrawlerShell {
 
-
-	// call super constructor
 	public SingleWebCrawler(String hostname) {
 		super(hostname);
 	}

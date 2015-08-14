@@ -14,43 +14,47 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import tagcloud.crawler.CrawlerShell;
 
-
 /**
- * Implementation of a Webcrawler
+ * Implementation of a concurrent webcrawler.
+ * Uses producer/consumer structure to accomplish the task of crawling a website.
+ * While urls are crawled concurrently, new urls are added to a queue.
+ * The work of crawling a url is encapsulated in a Callable @CrawlCallable.
+ * The number of threads is limited to the number of available processors.
+ * Field tests have shown that using too many threads at once will result in complaints
+ * from the IT-department of the crawled website.
+ * Crawling huge websites like http://www.fhnw.ch may take a while...
  * 
+ * @param hostname: name of a website
  */
-//public class WebCrawler implements Crawler {
 public class WebCrawler extends CrawlerShell {
 
-	// call super constructor
+	// call super constructor in abstract class CrawlerShell
 	public WebCrawler(String hostname) {
 		super(hostname);
 	}
 
-	// Unleash ultimate power - hold your horses!
+	// unleash ultimate power - hold your horses!
 //	private final int POOL_SIZE = Runtime.getRuntime().availableProcessors()*10;
 	private final int POOL_SIZE = Runtime.getRuntime().availableProcessors();
 	private final int MAX_NR_OF_URLS = 500;
 
-	// Counters to control the progression of the ExecutorService.
-	// Each entry in the queue increments @submittedTasks
-	// Each submitted task increments @completedTasks
-	// ExecutorService terminates as soon as @completedTasks = @submittedTasks
-//	private final AtomicInteger openTasks = new AtomicInteger(0);
+	// counter variable to control the progression of the ExecutorService.
+	// each submitted task increments @completedTasks
+	// executorService terminates as soon as @completedTasks == @submittedTasks
 	private final AtomicInteger completedTasks = new AtomicInteger(0);
 
-
 	/**
-	 * Crawls the www starting at {@code startURL}
+	 * Method to crawl the www starting at @startURL.
+	 * For each url a @CrawlCallable is submitted to the que @taskQueue.
+	 * Threads will then execute the work encapsulated in the Callable concurrently.
 	 * 
-	 * @param startURL the URI to start crawling any resource
-	 * @return a hashmap with URLs as Key and webPage Objects as values
+	 * @param startURL: the URI to start crawling any resource
 	 */
 	public void crawl(final String startURL) {
 		
+		// start an ExecutionCompletionService with an thread pool implementation
 		final ExecutorService taskExecutor = Executors.newFixedThreadPool(POOL_SIZE);
 		final CompletionService<List<String>> taskQueue = new ExecutorCompletionService<List<String>>(taskExecutor);
-
 
 		// contains all urls that have been submitted to the @taskQueue
 		final Set<String> urlsSubmitted = new HashSet<String>();
@@ -59,40 +63,38 @@ public class WebCrawler extends CrawlerShell {
 		final Set<String> urlsToVisit = new HashSet<String>();
 		urlsToVisit.add(startURL);
 
-		// As long as the URL list with urls to visit contains elements
+		// as long as the URL list with urls to visit contains elements
 		// submit a new thread/task for every url in the list
-		// start all the tasks as new Callables - clear list when tasks were submitted
-		// System.out.println("open: "+ openTasks.get() + " vs completed " + completedTasks.get());
-//		while (true) {
-//		while (completedTasks.get() != openTasks.get()-1) {
+		// threads will execute the call() in CrawlCallable concurrently
+		// clear list when tasks were submitted
 		while (urlsToVisit.size() < MAX_NR_OF_URLS || completedTasks.get() != urlsSubmitted.size()-1) {
 
-			// TaskQueue füllen mit Arbeit
+			// submit new tasks to the queue
 			for (String url : urlsToVisit) {
-				taskQueue.submit(new CrawlCallable(hostname, url, indexer)); // füllen der Queue
-				urlsSubmitted.add(url); // rename to submittedTasks
-//				openTasks.incrementAndGet();
+				taskQueue.submit(new CrawlCallable(hostname, url, indexer));
+				urlsSubmitted.add(url);
 			} 
-			// clear todo list - all tasks started
+			// clear list - all tasks started
 			urlsToVisit.clear(); 
 
 
 			try {
 				List<String> urlsList;
-				if ((urlsList = taskQueue.take().get()) != null){ //start work
-					// take first result 
+				// take first result from the future - wait for it
+				if ((urlsList = taskQueue.take().get()) != null){
 					completedTasks.incrementAndGet();
 				}
 				if (urlsList != null) {
 					for (String url : urlsList) {
-						// add new url to url task queue
+						// add new url to the url todo-list
 						if (url.startsWith(startURL) && !urlsSubmitted.contains(url)) {
 							urlsToVisit.add(url);
 						}
 					}
 
 					Future<List<String>> myFuture;
-					while ((myFuture = taskQueue.poll()) != null) { // start work 
+					// take result from the future object - don't wait just try
+					while ((myFuture = taskQueue.poll()) != null) {
 						completedTasks.incrementAndGet();
 
 						for (String url : myFuture.get()) {
@@ -117,6 +119,7 @@ public class WebCrawler extends CrawlerShell {
 		}
 
 		try {
+			// shutdown the ExecutorCompletionService as soon as it has crawled the complete website
 			taskExecutor.shutdown();
 			System.out.println("Starting termination of Crawler...");
 			System.out.println("Finishing up running Threads");
