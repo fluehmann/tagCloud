@@ -1,13 +1,13 @@
 package tagcloud.doccrawler;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashMap;
 
 import org.apache.commons.io.FilenameUtils;
@@ -49,12 +49,15 @@ public class FileCrawler extends CrawlerShell {
 			
 			try {
 				json.put("hostname", Functions.getDomainName(filePath));
-			} catch (URISyntaxException e) {
+				json.put("content", importTextFile(filePath));
+				
+				if ( new URL(filePath).openConnection().getContentLength() != -1 ){
+					sendToIndex(filePath, json);
+				}
+			} catch (URISyntaxException | IOException e) {
 				e.printStackTrace();
 			}
-			
-			json.put("content", importTextFile(filePath));
-			
+
 		} else if(sfx.equals("docx")) {
 			System.err.println("." + suffix + " Files cannot be imported yet");
 		} else if(sfx.equals("pdf")) {
@@ -62,7 +65,7 @@ public class FileCrawler extends CrawlerShell {
 		} else {
 			System.err.println("File cannot be imported");
 		}
-		sendToIndex(filePath, json);
+		
 	}
 
 	/**
@@ -77,7 +80,7 @@ public class FileCrawler extends CrawlerShell {
 		InputStream fis;
 		
 		try {
-			fis = new FileInputStream(filePath);
+			fis = new URL(filePath).openStream();
 			
 			Reader r = new InputStreamReader(fis);
 			int ch = r.read();
